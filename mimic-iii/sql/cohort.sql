@@ -79,9 +79,6 @@ inner join admissions adm
 -- used later to filter out patients under certain services
 inner join serv se
     on ie.hadm_id = se.hadm_id and se.rn = 1
--- get first time of ventilation
-left join firstvent fv
-  on ie.icustay_id = fv.icustay_id
 -- get first instance of dnr
 left join dnr
   on ie.icustay_id = dnr.icustay_id
