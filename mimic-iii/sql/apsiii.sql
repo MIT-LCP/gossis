@@ -168,15 +168,14 @@ with bg as
 )
 , vent as
 (
-  -- join blood gas to ventilation durations to determine if patient was vent
-  -- also join to cpap table for the same purpose
+  -- join to ventilation durations to determine if patient was vent on 1st day
   select ie.icustay_id
   , max(case when vd.icustay_id is not null then 1 else 0 end) as mechvent
   from icustays ie
   left join ventdurations vd
     on ie.icustay_id = vd.icustay_id
-    and ie.starttime >= vd.starttime - interval '1' day
-    and ie.starttime <= vd.endtime
+    and ie.intime >= vd.starttime - interval '1' day
+    and ie.intime <= vd.endtime
   group by ie.icustay_id
 )
 , cohort as
