@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS gossis CASCADE;
 CREATE TABLE gosiss as
 select
   -- patient identifiers
