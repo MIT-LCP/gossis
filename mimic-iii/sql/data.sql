@@ -2,8 +2,8 @@ DROP TABLE IF EXISTS gossis CASCADE;
 CREATE TABLE gosiss as
 select
   -- patient identifiers
-    'mimic_' || cast(pt.icustay_id as varchar(40)) as encounterId
-  , 'mimic_' || cast(pt.subject_id as varchar(40)) as patientId
+    'mimic_' || cast(ie.icustay_id as varchar(40)) as encounterId
+  , 'mimic_' || cast(ie.subject_id as varchar(40)) as patientId
 
   -- hierarchical factors - hospital
   , cast('USA' as varchar(10)) as country
@@ -13,22 +13,22 @@ select
   , cast(null as varchar(10)) as hospital_type
 
   -- hierarchical factors - ICU
-  , cast(NULL as smallint) as icuId
+  , ie.first_wardid as icuId
   , ie.first_careunit as icu_type
   , cast(NULL as varchar(10)) as icu_stay_type
 
   -- demographics
   , ROUND( (CAST(ie.intime AS DATE) - CAST(pt.dob AS DATE))  / 365.242, 4) AS age
   , pt.gender
-  , htwt.weight as weight
-  , htwt.height as height
-  , case when coalesce(htwt.weight,htwt.height) is not null
-      and htwt.height > 0
-        then htwt.weight / (htwt.height*htwt.height)
+  , demo.WEIGHT_min as weight
+  , demo.HEIGHT_min as height
+  , case when coalesce(demo.WEIGHT_min,demo.HEIGHT_min) is not null
+      and demo.HEIGHT_min > 0
+        then demo.WEIGHT_min / (demo.HEIGHT_min * demo.HEIGHT_min)
       end as bmi
   , adm.ethnicity
-  , cast(NULL as smallint) as pregnant
-  , cast(NULL as smallint) as smoking_status
+  , cast(demo.PREGNANT as smallint) as pregnant
+  , cast(demo.SMOKING as smallint) as smoking_status
 
   -- hospital course
   , adm.admission_location as hospital_admit_source
@@ -39,9 +39,9 @@ select
 
   , cast(NULL as varchar(10)) as icu_admit_source
   , adm.admission_type as icu_admit_type
-  , cast(NULL as varchar(10)) as icu_disch_location
+  , cast(last_careunit as varchar(10)) as icu_disch_location
   , ROUND( (CAST(ie.intime AS DATE) - CAST(adm.admittime AS DATE)) , 4) as pre_icu_los_days
-  , ROUND( (CAST(ie.outtime AS DATE) - CAST(ie.intime AS DATE)) , 4) as icu_los_days
+  , ie.los as icu_los_days
   , case when adm.deathtime <= ie.outtime then 1 else 0 end as ICU_death
 
   , case when adm.admission_type = 'ELECTIVE' then 1 else 0 end as elective_surgery
@@ -66,74 +66,86 @@ select
   -- TODO: Define comorbidities
 
   -- Physiology - FIRST DAY
-  , v_d1.heartrate_min as d1_heartrate_min
-  , v_d1.heartrate_max as d1_heartrate_max
-  , v_d1.resprate_min as d1_resprate_min
-  , v_d1.resprate_max as d1_resprate_max
-  , v_d1.spo2_min as d1_spo2_min
-  , v_d1.spo2_max as d1_spo2_max
-  , v_d1.temp_min as d1_temp_min
-  , v_d1.temp_max as d1_temp_max
-  , v_d1.sysbp_invasive_min as d1_sysbp_invasive_min
-  , v_d1.sysbp_invasive_max as d1_sysbp_invasive_max
-  , v_d1.diasbp_invasive_min as d1_diasbp_invasive_min
-  , v_d1.diasbp_invasive_max as d1_diasbp_invasive_max
-  , v_d1.mbp_invasive_min as d1_mbp_invasive_min
-  , v_d1.mbp_invasive_max as d1_mbp_invasive_max
-  , v_d1.sysbp_noninvasive_min as d1_sysbp_noninvasive_min
-  , v_d1.sysbp_noninvasive_max as d1_sysbp_noninvasive_max
-  , v_d1.diasbp_noninvasive_min as d1_diasbp_noninvasive_min
-  , v_d1.diasbp_noninvasive_max as d1_diasbp_noninvasive_max
-  , v_d1.mbp_noninvasive_min as d1_mbp_noninvasive_min
-  , v_d1.mbp_noninvasive_max as d1_mbp_noninvasive_max
+  , v_d1.HeartRate_Min as d1_heartrate_min
+  , v_d1.HeartRate_Max as d1_heartrate_max
+  , v_d1.RespRate_Min as d1_resprate_min
+  , v_d1.RespRate_Max as d1_resprate_max
+  , v_d1.SpO2_Min as d1_spo2_min
+  , v_d1.SpO2_Max as d1_spo2_max
+  , v_d1.TempC_Min as d1_temp_min
+  , v_d1.TempC_Max as d1_temp_max
+  , v_d1.SysBPInv_Min as d1_sysbp_invasive_min
+  , v_d1.SysBPInv_Max as d1_sysbp_invasive_max
+  , v_d1.DiasBPInv_Min as d1_diasbp_invasive_min
+  , v_d1.DiasBPInv_Max as d1_diasbp_invasive_max
+  , cast(NULL as double precision) as d1_mbp_invasive_min
+  , cast(NULL as double precision) as d1_mbp_invasive_max
+  , v_d1.SysBPNI_Min as d1_sysbp_noninvasive_min
+  , v_d1.SysBPNI_Max as d1_sysbp_noninvasive_max
+  , v_d1.DiasBPNI_Min as d1_diasbp_noninvasive_min
+  , v_d1.DiasBPNI_Max as d1_diasbp_noninvasive_max
+  , cast(NULL as double precision) as d1_mbp_noninvasive_min
+  , cast(NULL as double precision) as d1_mbp_noninvasive_max
+  , v_d1.SysBP_Min as d1_sysbp_min
+  , v_d1.SysBP_Max as d1_sysbp_max
+  , v_d1.DiasBP_Min as d1_diasbp_min
+  , v_d1.DiasBP_Max as d1_diasbp_max
+  , v_d1.MBP_Min as d1_mbp_min
+  , v_d1.MBP_Max as d1_mbp_max
 
-  , case when v_d1.sysbp_invasive_min  <= v_d1.sysbp_noninvasive_min   then v_d1.sysbp_invasive_min
-          else coalesce(v_d1.sysbp_noninvasive_min , v_d1.sysbp_invasive_min)  end as d1_sysbp_min
-  , case when v_d1.sysbp_invasive_max  >= v_d1.sysbp_noninvasive_max   then v_d1.sysbp_invasive_max
-          else coalesce(v_d1.sysbp_noninvasive_max , v_d1.sysbp_invasive_max)  end as d1_sysbp_max
-  , case when v_d1.diasbp_invasive_min <= v_d1.diasbp_noninvasive_min  then v_d1.diasbp_invasive_min
-          else coalesce(v_d1.diasbp_noninvasive_min, v_d1.diasbp_invasive_min) end as d1_diasbp_min
-  , case when v_d1.diasbp_invasive_max >= v_d1.diasbp_noninvasive_max  then v_d1.diasbp_invasive_max
-          else coalesce(v_d1.diasbp_noninvasive_max, v_d1.diasbp_invasive_max) end as d1_diasbp_max
-  , case when v_d1.mbp_invasive_min    <= v_d1.mbp_noninvasive_min     then v_d1.mbp_invasive_min
-          else coalesce(v_d1.mbp_noninvasive_min   , v_d1.mbp_invasive_min)    end as d1_mbp_min
-  , case when v_d1.mbp_invasive_max    >= v_d1.mbp_noninvasive_max     then v_d1.mbp_invasive_max
-          else coalesce(v_d1.mbp_noninvasive_max   , v_d1.mbp_invasive_max)    end as d1_mbp_max
+  --, case when v_d1.sysbp_invasive_min  <= v_d1.sysbp_noninvasive_min   then v_d1.sysbp_invasive_min
+  --        else coalesce(v_d1.sysbp_noninvasive_min , v_d1.sysbp_invasive_min)  end as d1_sysbp_min
+  --, case when v_d1.sysbp_invasive_max  >= v_d1.sysbp_noninvasive_max   then v_d1.sysbp_invasive_max
+  --        else coalesce(v_d1.sysbp_noninvasive_max , v_d1.sysbp_invasive_max)  end as d1_sysbp_max
+  --, case when v_d1.diasbp_invasive_min <= v_d1.diasbp_noninvasive_min  then v_d1.diasbp_invasive_min
+  --        else coalesce(v_d1.diasbp_noninvasive_min, v_d1.diasbp_invasive_min) end as d1_diasbp_min
+  --, case when v_d1.diasbp_invasive_max >= v_d1.diasbp_noninvasive_max  then v_d1.diasbp_invasive_max
+  --        else coalesce(v_d1.diasbp_noninvasive_max, v_d1.diasbp_invasive_max) end as d1_diasbp_max
+  --, case when v_d1.mbp_invasive_min    <= v_d1.mbp_noninvasive_min     then v_d1.mbp_invasive_min
+  --        else coalesce(v_d1.mbp_noninvasive_min   , v_d1.mbp_invasive_min)    end as d1_mbp_min
+  --, case when v_d1.mbp_invasive_max    >= v_d1.mbp_noninvasive_max     then v_d1.mbp_invasive_max
+  --        else coalesce(v_d1.mbp_noninvasive_max   , v_d1.mbp_invasive_max)    end as d1_mbp_max
 
   -- Physiology - FIRST HOUR
-  , v_h1.heartrate_min as h1_heartrate_min
-  , v_h1.heartrate_max as h1_heartrate_max
-  , v_h1.resprate_min as h1_resprate_min
-  , v_h1.resprate_max as h1_resprate_max
-  , v_h1.spo2_min as h1_spo2_min
-  , v_h1.spo2_max as h1_spo2_max
-  , v_h1.temp_min as h1_temp_min
-  , v_h1.temp_max as h1_temp_max
-  , v_h1.sysbp_invasive_min as h1_sysbp_invasive_min
-  , v_h1.sysbp_invasive_max as h1_sysbp_invasive_max
-  , v_h1.diasbp_invasive_min as h1_diasbp_invasive_min
-  , v_h1.diasbp_invasive_max as h1_diasbp_invasive_max
-  , v_h1.mbp_invasive_min as h1_mbp_invasive_min
-  , v_h1.mbp_invasive_max as h1_mbp_invasive_max
-  , v_h1.sysbp_noninvasive_min as h1_sysbp_noninvasive_min
-  , v_h1.sysbp_noninvasive_max as h1_sysbp_noninvasive_max
-  , v_h1.diasbp_noninvasive_min as h1_diasbp_noninvasive_min
-  , v_h1.diasbp_noninvasive_max as h1_diasbp_noninvasive_max
-  , v_h1.mbp_noninvasive_min as h1_mbp_noninvasive_min
-  , v_h1.mbp_noninvasive_max as h1_mbp_noninvasive_max
+  , v_h1.HeartRate_Min as h1_heartrate_min
+  , v_h1.HeartRate_Max as h1_heartrate_max
+  , v_h1.RespRate_Min as h1_resprate_min
+  , v_h1.RespRate_Max as h1_resprate_max
+  , v_h1.SpO2_Min as h1_spo2_min
+  , v_h1.SpO2_Max as h1_spo2_max
+  , v_h1.TempC_Min as h1_temp_min
+  , v_h1.TempC_Max as h1_temp_max
+  , v_h1.SysBPInv_Min as h1_sysbp_invasive_min
+  , v_h1.SysBPInv_Max as h1_sysbp_invasive_max
+  , v_h1.DiasBPInv_Min as h1_diasbp_invasive_min
+  , v_h1.DiasBPInv_Max as h1_diasbp_invasive_max
+  , cast(NULL as double precision) as h1_mbp_invasive_min
+  , cast(NULL as double precision) as h1_mbp_invasive_max
+  , v_h1.SysBPNI_Min as h1_sysbp_noninvasive_min
+  , v_h1.SysBPNI_Max as h1_sysbp_noninvasive_max
+  , v_h1.DiasBPNI_Min as h1_diasbp_noninvasive_min
+  , v_h1.DiasBPNI_Max as h1_diasbp_noninvasive_max
+  , cast(NULL as double precision) as h1_mbp_noninvasive_min
+  , cast(NULL as double precision) as h1_mbp_noninvasive_max
+  , v_h1.SysBP_Min as h1_sysbp_min
+  , v_h1.SysBP_Max as h1_sysbp_max
+  , v_h1.DiasBP_Min as h1_diasbp_min
+  , v_h1.DiasBP_Max as h1_diasbp_max
+  , v_h1.MBP_Min as h1_mbp_min
+  , v_h1.MBP_Max as h1_mbp_max
 
-  , case when v_h1.sysbp_invasive_min  <= v_h1.sysbp_noninvasive_min   then v_h1.sysbp_invasive_min
-          else coalesce(v_h1.sysbp_noninvasive_min , v_h1.sysbp_invasive_min)  end as h1_sysbp_min
-  , case when v_h1.sysbp_invasive_max  >= v_h1.sysbp_noninvasive_max   then v_h1.sysbp_invasive_max
-          else coalesce(v_h1.sysbp_noninvasive_max , v_h1.sysbp_invasive_max)  end as h1_sysbp_max
-  , case when v_h1.diasbp_invasive_min <= v_h1.diasbp_noninvasive_min  then v_h1.diasbp_invasive_min
-          else coalesce(v_h1.diasbp_noninvasive_min, v_h1.diasbp_invasive_min) end as h1_diasbp_min
-  , case when v_h1.diasbp_invasive_max >= v_h1.diasbp_noninvasive_max  then v_h1.diasbp_invasive_max
-          else coalesce(v_h1.diasbp_noninvasive_max, v_h1.diasbp_invasive_max) end as h1_diasbp_max
-  , case when v_h1.mbp_invasive_min    <= v_h1.mbp_noninvasive_min     then v_h1.mbp_invasive_min
-          else coalesce(v_h1.mbp_noninvasive_min   , v_h1.mbp_invasive_min)    end as h1_mbp_min
-  , case when v_h1.mbp_invasive_max    >= v_h1.mbp_noninvasive_max     then v_h1.mbp_invasive_max
-          else coalesce(v_h1.mbp_noninvasive_max   , v_h1.mbp_invasive_max)    end as h1_mbp_max
+--  , case when v_h1.sysbp_invasive_min  <= v_h1.sysbp_noninvasive_min   then v_h1.sysbp_invasive_min
+--          else coalesce(v_h1.sysbp_noninvasive_min , v_h1.sysbp_invasive_min)  end as h1_sysbp_min
+--  , case when v_h1.sysbp_invasive_max  >= v_h1.sysbp_noninvasive_max   then v_h1.sysbp_invasive_max
+--          else coalesce(v_h1.sysbp_noninvasive_max , v_h1.sysbp_invasive_max)  end as h1_sysbp_max
+--  , case when v_h1.diasbp_invasive_min <= v_h1.diasbp_noninvasive_min  then v_h1.diasbp_invasive_min
+--          else coalesce(v_h1.diasbp_noninvasive_min, v_h1.diasbp_invasive_min) end as h1_diasbp_min
+--  , case when v_h1.diasbp_invasive_max >= v_h1.diasbp_noninvasive_max  then v_h1.diasbp_invasive_max
+--          else coalesce(v_h1.diasbp_noninvasive_max, v_h1.diasbp_invasive_max) end as h1_diasbp_max
+--  , case when v_h1.mbp_invasive_min    <= v_h1.mbp_noninvasive_min     then v_h1.mbp_invasive_min
+--          else coalesce(v_h1.mbp_noninvasive_min   , v_h1.mbp_invasive_min)    end as h1_mbp_min
+--  , case when v_h1.mbp_invasive_max    >= v_h1.mbp_noninvasive_max     then v_h1.mbp_invasive_max
+--          else coalesce(v_h1.mbp_noninvasive_max   , v_h1.mbp_invasive_max)    end as h1_mbp_max
 
   -- Labs - FIRST DAY
   , lab_d1.albumin_min as d1_albumin_min
@@ -253,7 +265,7 @@ inner join admissions adm
   ie.hadm_id = adm.hadm_id
 inner join patients pt
   on ie.subject_id = pt.subject_id
-left join heightweight htwt
+left join demographics demo
   on ie.icustay_id = htwt.icustay_id
 left join gosiss_lab_d1 lab_d1
   on ie.icustay_id = lab_d1.icustay_id
@@ -263,9 +275,9 @@ left join gosiss_bg_d1 bg_d1
   on ie.icustay_id = bg_d1.icustay_id
 left join gosiss_bg_h1 bg_h1
   on ie.icustay_id = bg_h1.icustay_id
-left join gosiss_vital_d1 v_d1
+left join vitalsfirstday v_d1
   on ie.icustay_id = v_d1.icustay_id
-left join gosiss_vital_h1 v_h1
+left join vitalsfirsthour v_h1
   on ie.icustay_id = v_h1.icustay_id
 left join apsiii
   on ie.icustay_id = apsiii.icustay_id;

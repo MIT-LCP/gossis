@@ -30,6 +30,21 @@ SELECT pvt.subject_id, pvt.hadm_id, pvt.icustay_id
 , min(case when VitalID = 8 then valuenum else null end) as Glucose_Min
 , max(case when VitalID = 8 then valuenum else null end) as Glucose_Max
 , avg(case when VitalID = 8 then valuenum else null end) as Glucose_Mean
+, min(case when VitalID = 9 then valuenum else null end) as SysBPInv_Min
+, max(case when VitalID = 9 then valuenum else null end) as SysBPInv_Max
+, avg(case when VitalID = 9 then valuenum else null end) as SysBPInv_Mean
+, min(case when VitalID = 10 then valuenum else null end) as DiasBPInv_Min
+, max(case when VitalID = 10 then valuenum else null end) as DiasBPInv_Max
+, avg(case when VitalID = 10 then valuenum else null end) as DiasBPInv_Mean
+, min(case when VitalID = 11 then valuenum else null end) as SysBPNI_Min
+, max(case when VitalID = 11 then valuenum else null end) as SysBPNI_Max
+, avg(case when VitalID = 11 then valuenum else null end) as SysBPNI_Mean
+, min(case when VitalID = 12 then valuenum else null end) as DiasBPNI_Min
+, max(case when VitalID = 12 then valuenum else null end) as DiasBPNI_Max
+, avg(case when VitalID = 12 then valuenum else null end) as DiasBPNI_Mean
+, min(case when VitalID = 13 then valuenum else null end) as MBP_Min
+, max(case when VitalID = 13 then valuenum else null end) as MBP_Max
+, avg(case when VitalID = 13 then valuenum else null end) as MBP_Mean
 
 FROM  (
   select ie.subject_id, ie.hadm_id, ie.icustay_id
@@ -43,6 +58,11 @@ FROM  (
     when itemid in (223762,676) and valuenum > 10 and valuenum < 50  then 6 -- TempC
     when itemid in (646,220277) and valuenum > 0 and valuenum <= 100 then 7 -- SpO2
     when itemid in (807,811,1529,3745,3744,225664,220621,226537) and valuenum > 0 then 8 -- Glucose
+    when itemid in (51,6701,220050) and valuenum > 0 and valuenum < 400 then 9 -- SysBPInv
+    when itemid in (8368,8555,220051) and valuenum > 0 and valuenum < 300 then 10 -- DiasBPInv
+    when itemid in (455,220179) and valuenum > 0 and valuenum < 400 then 11 -- SysBPNI
+    when itemid in (8441,220180) and valuenum > 0 and valuenum < 300 then 12 -- DiasBPNI
+    when itemid in (442,8440,224167,227242,227243,224643) and valuenum > 0 and valuenum < 400 then 13 -- MBP
 
     else null end as VitalID
       -- convert F to C
@@ -75,6 +95,11 @@ FROM  (
   8555, --	Arterial BP #2 [Diastolic]
   220180, --	Non Invasive Blood Pressure diastolic
   220051, --	Arterial Blood Pressure diastolic
+
+  224167, --    Manual Blood Pressure Systolic Left
+  227242, --    Manual Blood Pressure Diastolic Right
+  227243, --    Manual Blood Pressure Systolic Right
+  224643, --    Manual Blood Pressure Diastolic Left
 
 
   -- MEAN ARTERIAL PRESSURE
