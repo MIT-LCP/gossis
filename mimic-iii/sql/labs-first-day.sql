@@ -45,6 +45,10 @@ SELECT
   , max(CASE WHEN label = 'BUN' THEN valuenum ELSE null end) as BUN_max
   , min(CASE WHEN label = 'WBC' THEN valuenum ELSE null end) as WBC_min
   , max(CASE WHEN label = 'WBC' THEN valuenum ELSE null end) as WBC_max
+  , min(CASE WHEN label = 'HCO3' THEN valuenum ELSE null end) as HCO3_min
+  , max(CASE WHEN label = 'HCO3' THEN valuenum ELSE null end) as HCO3_max
+  , min(CASE WHEN label = 'CALCIUM' THEN valuenum ELSE null end) as CALCIUM_min
+  , max(CASE WHEN label = 'CALCIUM' THEN valuenum ELSE null end) as CALCIUM_max
 
 
 FROM
@@ -79,6 +83,8 @@ FROM
         WHEN itemid = 51006 THEN 'BUN'
         WHEN itemid = 51300 THEN 'WBC'
         WHEN itemid = 51301 THEN 'WBC'
+	WHEN itemid = 50882 THEN 'HCO3'
+	WHEN itemid = 50893 THEN 'CALCIUM'
       ELSE null
     END AS label
   , -- add in some sanity checks on the values
@@ -111,6 +117,8 @@ FROM
       WHEN itemid = 51006 and valuenum >   300 THEN null -- 'BUN'
       WHEN itemid = 51300 and valuenum >  1000 THEN null -- 'WBC'
       WHEN itemid = 51301 and valuenum >  1000 THEN null -- 'WBC'
+      WHEN itemid = 50882 and valuenum >    60 THEN null -- 'HCO3'
+      WHEN itemid = 50893 and valuenum >    15 THEN null -- 'CALCIUM'
     ELSE le.valuenum
     END AS valuenum
 
@@ -147,7 +155,9 @@ FROM
       50824, -- SODIUM, WHOLE BLOOD | BLOOD GAS | BLOOD | 71503
       51006, -- UREA NITROGEN | CHEMISTRY | BLOOD | 791925
       51301, -- WHITE BLOOD CELLS | HEMATOLOGY | BLOOD | 753301
-      51300  -- WBC COUNT | HEMATOLOGY | BLOOD | 2371
+      51300, -- WBC COUNT | HEMATOLOGY | BLOOD | 2371
+      50882, -- BICARBONATE | CHEMISTRY | BLOOD | 780648
+      50893  -- CALCIUM, TOTAL | CHEMISTRY | BLOOD | 591932
     )
     AND valuenum IS NOT null AND valuenum > 0 -- lab values cannot be 0 and cannot be negative
 ) pvt

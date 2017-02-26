@@ -148,32 +148,36 @@ select
 --          else coalesce(v_h1.mbp_noninvasive_max   , v_h1.mbp_invasive_max)    end as h1_mbp_max
 
   -- Labs - FIRST DAY
-  , lab_d1.albumin_min as d1_albumin_min
-  , lab_d1.albumin_max as d1_albumin_max
-  , lab_d1.bilirubin_min as d1_bilirubin_min
-  , lab_d1.bilirubin_max as d1_bilirubin_max
-  , lab_d1.bun_min as d1_bun_min
-  , lab_d1.bun_max as d1_bun_max
-  , lab_d1.creatinine_min as d1_creatinine_min
-  , lab_d1.creatinine_max as d1_creatinine_max
-  , lab_d1.glucose_min as d1_glucose_min
-  , lab_d1.glucose_max as d1_glucose_max
-  , lab_d1.hco3_min as d1_hco3_min
-  , lab_d1.hco3_max as d1_hco3_max
-  , lab_d1.hematocrit_min as d1_hematocrit_min
-  , lab_d1.hematocrit_max as d1_hematocrit_max
-  , lab_d1.hemaglobin_min as d1_hemaglobin_min
-  , lab_d1.hemaglobin_max as d1_hemaglobin_max
-  , lab_d1.lactate_min as d1_lactate_min
-  , lab_d1.lactate_max as d1_lactate_max
-  , lab_d1.platelets_min as d1_platelets_min
-  , lab_d1.platelets_max as d1_platelets_max
-  , lab_d1.potassium_min as d1_potassium_min
-  , lab_d1.potassium_max as d1_potassium_max
-  , lab_d1.sodium_min as d1_sodium_min
-  , lab_d1.sodium_max as d1_sodium_max
-  , lab_d1.wbc_min as d1_wbc_min
-  , lab_d1.wbc_max as d1_wbc_max
+  , lab_d1.ALBUMIN_min as d1_albumin_min
+  , lab_d1.ALBUMIN_max as d1_albumin_max
+  , lab_d1.BILIRUBIN_min as d1_bilirubin_min
+  , lab_d1.BILIRUBIN_max as d1_bilirubin_max
+  , lab_d1.BUN_min as d1_bun_min
+  , lab_d1.BUN_max as d1_bun_max
+--, lab_d1.CALCIUM_min as d1_calcium_min
+--, lab_d1.CALCIUM_max as d1_calcium_max
+  , lab_d1.CREATININE_min as d1_creatinine_min
+  , lab_d1.CREATININE_max as d1_creatinine_max
+  , lab_d1.GLUCOSE_min as d1_glucose_min
+  , lab_d1.GLUCOSE_max as d1_glucose_max
+ -- ,lab_d1.INR_min as d1_inr_min
+ -- ,lab_d1.INR_max as d1_inr_max
+  , lab_d1.HCO3_min as d1_hco3_min
+  , lab_d1.HCO3_max as d1_hco3_max
+  , lab_d1.HEMATOCRIT_min as d1_hematocrit_min
+  , lab_d1.HEMATOCRIT_max as d1_hematocrit_max
+  , lab_d1.HEMOGLOBIN_min as d1_hemaglobin_min
+  , lab_d1.HEMOGLOBIN_max as d1_hemaglobin_max
+  , lab_d1.LACTATE_min as d1_lactate_min
+  , lab_d1.LACTATE_max as d1_lactate_max
+  , lab_d1.PLATELET_min as d1_platelets_min
+  , lab_d1.PLATELET_max as d1_platelets_max
+  , lab_d1.POTASSIUM_min as d1_potassium_min
+  , lab_d1.POTASSIUM_max as d1_potassium_max
+  , lab_d1.SODIUM_min as d1_sodium_min
+  , lab_d1.SODIUM_max as d1_sodium_max
+  , lab_d1.WBC_min as d1_wbc_min
+  , lab_d1.WBC_max as d1_wbc_max
 
   -- blood gases, first day
   , bg_d1.ph_min as d1_arterial_ph_min
@@ -267,7 +271,7 @@ inner join patients pt
   on ie.subject_id = pt.subject_id
 left join demographics demo
   on ie.icustay_id = htwt.icustay_id
-left join gosiss_lab_d1 lab_d1
+left join labsfirstday lab_d1
   on ie.icustay_id = lab_d1.icustay_id
 left join gosiss_lab_h1 lab_h1
   on ie.icustay_id = lab_h1.icustay_id
