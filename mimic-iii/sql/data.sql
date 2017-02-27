@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS gossis CASCADE;
+DROP TABLE IF EXISTS gosiss CASCADE;
 CREATE TABLE gosiss as
 select
   -- patient identifiers
@@ -20,11 +20,11 @@ select
   -- demographics
   , ROUND( (CAST(ie.intime AS DATE) - CAST(pt.dob AS DATE))  / 365.242, 4) AS age
   , pt.gender
-  , demo.WEIGHT_min as weight
-  , demo.HEIGHT_min as height
-  , case when coalesce(demo.WEIGHT_min,demo.HEIGHT_min) is not null
-      and demo.HEIGHT_min > 0
-        then demo.WEIGHT_min / (demo.HEIGHT_min * demo.HEIGHT_min)
+  , demo.weight as weight
+  , demo.height as height
+  , case when coalesce(demo.weight,demo.height) is not null
+      and demo.height > 0
+        then demo.weight / (demo.height * demo.height)
       end as bmi
   , adm.ethnicity
   , cast(demo.PREGNANT as smallint) as pregnant
@@ -180,75 +180,80 @@ select
   , lab_d1.WBC_max as d1_wbc_max
 
   -- blood gases, first day
-  , bg_d1.ph_min as d1_arterial_ph_min
-  , bg_d1.ph_max as d1_arterial_ph_max
-  , bg_d1.pao2_min as d1_arterial_po2_min
-  , bg_d1.pao2_max as d1_arterial_po2_max
-  , bg_d1.paco2_min as d1_arterial_pco2_min
-  , bg_d1.paco2_max as d1_arterial_pco2_max
-  , bg_d1.PaO2FiO2Ratio_min as d1_PaO2FiO2Ratio_min
+  , bg_d1.PH_min as d1_arterial_ph_min
+  , bg_d1.PH as d1_arterial_ph_max
+  , bg_d1.PO2_min as d1_arterial_po2_min
+  , bg_d1.PO2 as d1_arterial_po2_max
+  , bg_d1.PCO2_min as d1_arterial_pco2_min
+  , bg_d1.PCO2 as d1_arterial_pco2_max
+  , bg_d1.PaO2FiO2 as d1_PaO2FiO2Ratio_min
 
   -- Labs - FIRST HOUR
-  , lab_h1.albumin_min as h1_albumin_min
-  , lab_h1.albumin_max as h1_albumin_max
-  , lab_h1.bilirubin_min as h1_bilirubin_min
-  , lab_h1.bilirubin_max as h1_bilirubin_max
-  , lab_h1.bun_min as h1_bun_min
-  , lab_h1.bun_max as h1_bun_max
-  , lab_h1.creatinine_min as h1_creatinine_min
-  , lab_h1.creatinine_max as h1_creatinine_max
-  , lab_h1.glucose_min as h1_glucose_min
-  , lab_h1.glucose_max as h1_glucose_max
-  , lab_h1.hco3_min as h1_hco3_min
-  , lab_h1.hco3_max as h1_hco3_max
-  , lab_h1.hematocrit_min as h1_hematocrit_min
-  , lab_h1.hematocrit_max as h1_hematocrit_max
-  , lab_h1.hemaglobin_min as h1_hemaglobin_min
-  , lab_h1.hemaglobin_max as h1_hemaglobin_max
-  , lab_h1.lactate_min as h1_lactate_min
-  , lab_h1.lactate_max as h1_lactate_max
-  , lab_h1.platelets_min as h1_platelets_min
-  , lab_h1.platelets_max as h1_platelets_max
-  , lab_h1.potassium_min as h1_potassium_min
-  , lab_h1.potassium_max as h1_potassium_max
-  , lab_h1.sodium_min as h1_sodium_min
-  , lab_h1.sodium_max as h1_sodium_max
-  , lab_h1.wbc_min as h1_wbc_min
-  , lab_h1.wbc_max as h1_wbc_max
+  , lab_h1.ALBUMIN_min as h1_albumin_min
+  , lab_h1.ALBUMIN_max as h1_albumin_max
+  , lab_h1.BILIRUBIN_min as h1_bilirubin_min
+  , lab_h1.BILIRUBIN_max as h1_bilirubin_max
+  , lab_h1.BUN_min as h1_bun_min
+  , lab_h1.BUN_max as h1_bun_max
+--, lab_h1.CALCIUM_min as h1_calcium_min
+--, lab_h1.CALCIUM_max as h1_calcium_max
+  , lab_h1.CREATININE_min as h1_creatinine_min
+  , lab_h1.CREATININE_max as h1_creatinine_max
+  , lab_h1.GLUCOSE_min as h1_glucose_min
+  , lab_h1.GLUCOSE_max as h1_glucose_max
+ -- ,lab_h1.INR_min as h1_inr_min
+ -- ,lab_h1.INR_max as h1_inr_max
+  , lab_h1.HCO3_min as h1_hco3_min
+  , lab_h1.HCO3_max as h1_hco3_max
+  , lab_h1.HEMATOCRIT_min as h1_hematocrit_min
+  , lab_h1.HEMATOCRIT_max as h1_hematocrit_max
+  , lab_h1.HEMOGLOBIN_min as h1_hemaglobin_min
+  , lab_h1.HEMOGLOBIN_max as h1_hemaglobin_max
+  , lab_h1.LACTATE_min as h1_lactate_min
+  , lab_h1.LACTATE_max as h1_lactate_max
+  , lab_h1.PLATELET_min as h1_platelets_min
+  , lab_h1.PLATELET_max as h1_platelets_max
+  , lab_h1.POTASSIUM_min as h1_potassium_min
+  , lab_h1.POTASSIUM_max as h1_potassium_max
+  , lab_h1.SODIUM_min as h1_sodium_min
+  , lab_h1.SODIUM_max as h1_sodium_max
+  , lab_h1.WBC_min as h1_wbc_min
+  , lab_h1.WBC_max as h1_wbc_max
 
   -- blood gases, first hour
-  , bg_h1.ph_min as h1_arterial_ph_min
-  , bg_h1.ph_max as h1_arterial_ph_max
-  , bg_h1.pao2_min as h1_arterial_po2_min
-  , bg_h1.pao2_max as h1_arterial_po2_max
-  , bg_h1.paco2_min as h1_arterial_pco2_min
-  , bg_h1.paco2_max as h1_arterial_pco2_max
-  , bg_h1.PaO2FiO2Ratio_min as h1_PaO2FiO2Ratio_min
+  , bg_h1.PH_min as h1_arterial_ph_min
+  , bg_h1.PH as h1_arterial_ph_max
+  , bg_h1.PO2_min as h1_arterial_po2_min
+  , bg_h1.PO2 as h1_arterial_po2_max
+  , bg_h1.PCO2_min as h1_arterial_pco2_min
+  , bg_h1.PCO2 as h1_arterial_pco2_max
+  , bg_h1.PaO2FiO2 as h1_PaO2FiO2Ratio_min
 
   -- APS III components
-  , apsiii.albumin as albumin_apache
-  , apsiii.bilirubin as bilirubin_apache
-  , apsiii.creatinine as creatinine_apache
-  , apsiii.fio2 as fio2_apache
-  , apsiii.glucose as glucose_apache
-  -- , apsiii. as bicarbonate_apache
-  , apsiii.hematocrit as hematocrit_apache
-  , apsiii.heartrate as heart_rate_apache
+  , apsiii.albumin_score as albumin_apache
+  , apsiii.bilirubin_score as bilirubin_apache
+  , apsiii.creatinine_score as creatinine_apache
+  --, apsiii.fio2 as fio2_apache
+  , cast(NULL as double precision) as fio2_apache
+  , apsiii.glucose_score as glucose_apache
+  -- , apsiii.hco3_score as bicarbonate_apache
+  , apsiii.hematocrit_score as hematocrit_apache
+  , apsiii.hr_score as heart_rate_apache
   -- , apsiii. as potassium_apache
-  , apsiii.meanbp as map_apache
-  , apsiii.sodium as sodium_apache
-  , apsiii.pco2 as paco2_apache
-  , apsiii.pao2 as pao2_apache
-  , apsiii.ph as ph_apache
-  , apsiii.respiratoryrate as resprate_apache
-  , apsiii.temperature as temp_apache
-  , apsiii.bun as bun_apache
-  , apsiii.urine as urineoutput_apache
-  , apsiii.wbc as wbc_apache
-  , apsiii.eyes as gcs_eyes_apache
-  , apsiii.motor as gcs_motor_apache
-  , apsiii.verbal as gcs_verbal_apache
-  , apsiii.meds as gcs_unable_apache
+  , apsiii.meanbp_score as map_apache
+  , apsiii.sodium_score as sodium_apache
+--  , apsiii.pco2 as paco2_apache
+--  , apsiii.pao2 as pao2_apache
+ -- , apsiii.ph as ph_apache
+  , apsiii.resprate_score as resprate_apache
+  , apsiii.temp_score as temp_apache
+  , apsiii.bun_score as bun_apache
+  , apsiii.uo_score as urineoutput_apache
+  , apsiii.wbc_score as wbc_apache
+  --, apsiii.eyes as gcs_eyes_apache
+  --, apsiii.motor as gcs_motor_apache
+  --, apsiii.verbal as gcs_verbal_apache
+  --, apsiii.meds as gcs_unable_apache
   -- , apsiii.dialysis as dialysis_apache
   -- , apsiii.intubated as intubated_apache
   -- , apsiii.vent as vent_apache
@@ -266,22 +271,22 @@ from icustays ie
 -- left join patient pt_prior
 --   on LAG(ie.icustay_id) OVER (partition by pt.uniquepid order by )
 inner join admissions adm
-  ie.hadm_id = adm.hadm_id
+  on ie.hadm_id = adm.hadm_id
 inner join patients pt
   on ie.subject_id = pt.subject_id
 left join demographics demo
-  on ie.icustay_id = htwt.icustay_id
+  on ie.icustay_id = demo.icustay_id
 left join labsfirstday lab_d1
   on ie.icustay_id = lab_d1.icustay_id
-left join gosiss_lab_h1 lab_h1
+left join labsfirsthour lab_h1
   on ie.icustay_id = lab_h1.icustay_id
-left join gosiss_bg_d1 bg_d1
+left join bloodgasfirstdayarterial bg_d1
   on ie.icustay_id = bg_d1.icustay_id
-left join gosiss_bg_h1 bg_h1
+left join bloodgasfirsthourarterial bg_h1
   on ie.icustay_id = bg_h1.icustay_id
 left join vitalsfirstday v_d1
   on ie.icustay_id = v_d1.icustay_id
 left join vitalsfirsthour v_h1
   on ie.icustay_id = v_h1.icustay_id
-left join apsiii
+left join gosiss_apsiii apsiii
   on ie.icustay_id = apsiii.icustay_id;

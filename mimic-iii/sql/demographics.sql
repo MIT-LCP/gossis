@@ -3,12 +3,12 @@
 DROP MATERIALIZED VIEW IF EXISTS demographics CASCADE;
 CREATE materialized VIEW demographics AS
 SELECT
-  pvt.subject_id, pvt.hadm_id, pvt.icustay_id
+  demo.subject_id, demo.hadm_id, demo.icustay_id
 
   , max(CASE WHEN label = 'WEIGHT' THEN valuenum ELSE null END) as WEIGHT
   , max(CASE WHEN label = 'HEIGHT' THEN valuenum ELSE null END) as HEIGHT
-  , CASE WHEN label = 'PREGNANT' THEN value ELSE null END) as PREGNANT
-  , CASE WHEN label = 'SMOKING' THEN value ELSE null END) as SMOKING
+  , max(CASE WHEN label = 'PREGNANT' THEN valuenum ELSE null END) as PREGNANT
+  , max(CASE WHEN label = 'SMOKING' THEN valuenum ELSE null END) as SMOKING
 
 FROM
 ( -- begin query that extracts the data
@@ -56,11 +56,11 @@ FROM
       226707, -- HEIGHT | IN | METAVISION
       225082, -- PREGNANT | FLAG | METAVISION
       227687, -- TOBACCO USE HISTORY | FLAG | METAVISION
-      225108, -- TOBACCO USE | FLAG | METAVISION
+      225108 -- TOBACCO USE | FLAG | METAVISION
     )
     AND valuenum IS NOT null AND valuenum > 0 -- lab values cannot be 0 and cannot be negative
-) pvt
-GROUP BY pvt.subject_id, pvt.hadm_id, pvt.icustay_id
-ORDER BY pvt.subject_id, pvt.hadm_id, pvt.icustay_id;
+) demo
+GROUP BY demo.subject_id, demo.hadm_id, demo.icustay_id
+ORDER BY demo.subject_id, demo.hadm_id, demo.icustay_id;
 
 commit;

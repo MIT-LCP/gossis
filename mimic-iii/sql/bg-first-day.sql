@@ -26,9 +26,12 @@ select pvt.SUBJECT_ID, pvt.HADM_ID, pvt.ICUSTAY_ID, pvt.CHARTTIME
 , max(case when label = 'FIO2' then valuenum else null end) as FIO2
 , max(case when label = 'SO2' then valuenum else null end) as SO2 -- OXYGENSATURATION
 , max(case when label = 'PCO2' then valuenum else null end) as PCO2
+, min(case when label = 'PCO2' then valuenum else null end) as PCO2_min
 , max(case when label = 'PEEP' then valuenum else null end) as PEEP
 , max(case when label = 'PH' then valuenum else null end) as PH
+, min(case when label = 'PH' then valuenum else null end) as PH_min
 , max(case when label = 'PO2' then valuenum else null end) as PO2
+, min(case when label = 'PO2_min' then valuenum else null end) as PO2_min
 , max(case when label = 'POTASSIUM' then valuenum else null end) as POTASSIUM
 , max(case when label = 'REQUIREDO2' then valuenum else null end) as REQUIREDO2
 , max(case when label = 'SODIUM' then valuenum else null end) as SODIUM
@@ -122,6 +125,44 @@ with stg_spo2 as
   )
   group by SUBJECT_ID, HADM_ID, ICUSTAY_ID, CHARTTIME
 )
+-- , peep_ce as
+-- (
+--   select SUBJECT_ID, HADM_ID, ICUSTAY_ID, CHARTTIME
+    -- max here is just used to group PEEP by charttime
+--    , max(case when valuenum <= 0 or valuenum > 20 then null else valuenum end) as PEEP
+--  from CHARTEVENTS
+--  where ITEMID in
+--  (
+--    60     -- AUTO-PEEP LEVEL
+--  , 437    -- LOW PEEP
+--  , 505    -- PEEP
+--  , 506    -- PEEP SET
+--  , 686    -- TOTAL PEEP LEVEL
+--  , 220339 -- PEEP SET
+--  , 224700 -- TOTAL PEEP LEVEL
+--  )
+--  group by SUBJECT_ID, HADM_ID, ICUSTAY_ID, CHARTTIME
+-- )
+-- , tidal_ce as
+-- (
+--   select SUBJECT_ID, HADM_ID, ICUSTAY_ID, CHARTTIME
+    -- max here is just used to group Tidal Volume by charttime
+--    , max(case when valuenum <= 0 or valuenum > 100 then null else valuenum end) as TidalVolume
+--  from CHARTEVENTS
+--  where ITEMID in
+--  (
+--    639    -- SIGH TIDAL VOLUME
+--  , 654    -- SPONT. TIDAL VOLUME
+--  , 681    -- TIDAL VOLUME
+--  , 682    -- TIDAL VOLUME (OBSER)
+--  , 683    -- TIDAL VOLUME (SET)
+--  , 684    -- TIDAL VOLUME (SPONT)
+--  , 224685 -- TIDAL VOLUME (SET)
+--  , 224684 -- TIDAL VOLUME (OBERVED)
+--  , 224686 -- TIDAL VOLUME (SPONTANEOUS)
+--  )
+--  group by SUBJECT_ID, HADM_ID, ICUSTAY_ID, CHARTTIME
+-- )
 , stg_fio2 as
 (
   select SUBJECT_ID, HADM_ID, ICUSTAY_ID, CHARTTIME
@@ -215,7 +256,7 @@ icustay_id, charttime
 
 -- oxygen related parameters
 , SO2, spo2 -- note spo2 is from chartevents
-, PO2, PCO2
+, PO2, PCO2, PO2_min, PCO2_min
 , fio2_chartevents, FIO2
 , AADO2
 -- also calculate AADO2
@@ -234,7 +275,7 @@ icustay_id, charttime
     else null
   end as PaO2FiO2
 -- acid-base parameters
-, PH, BASEEXCESS
+, PH, PH_min, BASEEXCESS
 , BICARBONATE, TOTALCO2
 
 -- blood count parameters
@@ -260,6 +301,7 @@ where lastRowFiO2 = 1 -- only the most recent FiO2
 -- restrict it to *only* arterial samples
 and (SPECIMEN = 'ART' or SPECIMEN_PROB > 0.75)
 order by icustay_id, charttime;
+
 DROP MATERIALIZED VIEW IF EXISTS bloodgasfirstdayarterial CASCADE;
 CREATE MATERIALIZED VIEW bloodgasfirstdayarterial AS
 with stg_spo2 as
@@ -369,7 +411,7 @@ icustay_id, charttime
 
 -- oxygen related parameters
 , SO2, spo2 -- note spo2 is from chartevents
-, PO2, PCO2
+, PO2, PCO2, PO2_min, PCO2_min
 , fio2_chartevents, FIO2
 , AADO2
 -- also calculate AADO2
@@ -388,7 +430,7 @@ icustay_id, charttime
     else null
   end as PaO2FiO2
 -- acid-base parameters
-, PH, BASEEXCESS
+, PH, PH_min, BASEEXCESS
 , BICARBONATE, TOTALCO2
 
 -- blood count parameters
