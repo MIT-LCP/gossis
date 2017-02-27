@@ -21,10 +21,10 @@ select
   , ROUND( (CAST(ie.intime AS DATE) - CAST(pt.dob AS DATE))  / 365.242, 4) AS age
   , pt.gender
   , demo.weight as weight
-  , demo.height as height
+  , demo.height*2.54 as height  --converted from inches to cm (for compatibility with other db's)
   , case when coalesce(demo.weight,demo.height) is not null
       and demo.height > 0
-        then demo.weight / (demo.height * demo.height)
+        then demo.weight / (demo.height * 0.01 * demo.height * 0.01)
       end as bmi
   , adm.ethnicity
   , cast(demo.PREGNANT as smallint) as pregnant
@@ -78,33 +78,20 @@ select
   , v_d1.SysBPInv_Max as d1_sysbp_invasive_max
   , v_d1.DiasBPInv_Min as d1_diasbp_invasive_min
   , v_d1.DiasBPInv_Max as d1_diasbp_invasive_max
-  , cast(NULL as double precision) as d1_mbp_invasive_min
-  , cast(NULL as double precision) as d1_mbp_invasive_max
+  , v_d1.MBPInv_Min as d1_mbp_invasive_min
+  , v_d1.MBPInv_Max as d1_mbp_invasive_max
   , v_d1.SysBPNI_Min as d1_sysbp_noninvasive_min
   , v_d1.SysBPNI_Max as d1_sysbp_noninvasive_max
   , v_d1.DiasBPNI_Min as d1_diasbp_noninvasive_min
   , v_d1.DiasBPNI_Max as d1_diasbp_noninvasive_max
-  , cast(NULL as double precision) as d1_mbp_noninvasive_min
-  , cast(NULL as double precision) as d1_mbp_noninvasive_max
+  , v_d1.MBPNI_Min as d1_mbp_noninvasive_min
+  , v_d1.MBPNI_Max as d1_mbp_noninvasive_max
   , v_d1.SysBP_Min as d1_sysbp_min
   , v_d1.SysBP_Max as d1_sysbp_max
   , v_d1.DiasBP_Min as d1_diasbp_min
   , v_d1.DiasBP_Max as d1_diasbp_max
-  , v_d1.MBP_Min as d1_mbp_min
-  , v_d1.MBP_Max as d1_mbp_max
-
-  --, case when v_d1.sysbp_invasive_min  <= v_d1.sysbp_noninvasive_min   then v_d1.sysbp_invasive_min
-  --        else coalesce(v_d1.sysbp_noninvasive_min , v_d1.sysbp_invasive_min)  end as d1_sysbp_min
-  --, case when v_d1.sysbp_invasive_max  >= v_d1.sysbp_noninvasive_max   then v_d1.sysbp_invasive_max
-  --        else coalesce(v_d1.sysbp_noninvasive_max , v_d1.sysbp_invasive_max)  end as d1_sysbp_max
-  --, case when v_d1.diasbp_invasive_min <= v_d1.diasbp_noninvasive_min  then v_d1.diasbp_invasive_min
-  --        else coalesce(v_d1.diasbp_noninvasive_min, v_d1.diasbp_invasive_min) end as d1_diasbp_min
-  --, case when v_d1.diasbp_invasive_max >= v_d1.diasbp_noninvasive_max  then v_d1.diasbp_invasive_max
-  --        else coalesce(v_d1.diasbp_noninvasive_max, v_d1.diasbp_invasive_max) end as d1_diasbp_max
-  --, case when v_d1.mbp_invasive_min    <= v_d1.mbp_noninvasive_min     then v_d1.mbp_invasive_min
-  --        else coalesce(v_d1.mbp_noninvasive_min   , v_d1.mbp_invasive_min)    end as d1_mbp_min
-  --, case when v_d1.mbp_invasive_max    >= v_d1.mbp_noninvasive_max     then v_d1.mbp_invasive_max
-  --        else coalesce(v_d1.mbp_noninvasive_max   , v_d1.mbp_invasive_max)    end as d1_mbp_max
+  , v_d1.MeanBP_Min as d1_mbp_min
+  , v_d1.MeanBP_Max as d1_mbp_max
 
   -- Physiology - FIRST HOUR
   , v_h1.HeartRate_Min as h1_heartrate_min
@@ -119,33 +106,21 @@ select
   , v_h1.SysBPInv_Max as h1_sysbp_invasive_max
   , v_h1.DiasBPInv_Min as h1_diasbp_invasive_min
   , v_h1.DiasBPInv_Max as h1_diasbp_invasive_max
-  , cast(NULL as double precision) as h1_mbp_invasive_min
-  , cast(NULL as double precision) as h1_mbp_invasive_max
+  , v_h1.MBPInv_Min as h1_mbp_invasive_min
+  , v_h1.MBPInv_Max as h1_mbp_invasive_max
   , v_h1.SysBPNI_Min as h1_sysbp_noninvasive_min
   , v_h1.SysBPNI_Max as h1_sysbp_noninvasive_max
   , v_h1.DiasBPNI_Min as h1_diasbp_noninvasive_min
   , v_h1.DiasBPNI_Max as h1_diasbp_noninvasive_max
-  , cast(NULL as double precision) as h1_mbp_noninvasive_min
-  , cast(NULL as double precision) as h1_mbp_noninvasive_max
+  , v_h1.MBPNI_Min as h1_mbp_noninvasive_min
+  , v_h1.MBPNI_Max as h1_mbp_noninvasive_max
   , v_h1.SysBP_Min as h1_sysbp_min
   , v_h1.SysBP_Max as h1_sysbp_max
   , v_h1.DiasBP_Min as h1_diasbp_min
   , v_h1.DiasBP_Max as h1_diasbp_max
-  , v_h1.MBP_Min as h1_mbp_min
-  , v_h1.MBP_Max as h1_mbp_max
+  , v_h1.MeanBP_Min as h1_mbp_min
+  , v_h1.MeanBP_Max as h1_mbp_max
 
---  , case when v_h1.sysbp_invasive_min  <= v_h1.sysbp_noninvasive_min   then v_h1.sysbp_invasive_min
---          else coalesce(v_h1.sysbp_noninvasive_min , v_h1.sysbp_invasive_min)  end as h1_sysbp_min
---  , case when v_h1.sysbp_invasive_max  >= v_h1.sysbp_noninvasive_max   then v_h1.sysbp_invasive_max
---          else coalesce(v_h1.sysbp_noninvasive_max , v_h1.sysbp_invasive_max)  end as h1_sysbp_max
---  , case when v_h1.diasbp_invasive_min <= v_h1.diasbp_noninvasive_min  then v_h1.diasbp_invasive_min
---          else coalesce(v_h1.diasbp_noninvasive_min, v_h1.diasbp_invasive_min) end as h1_diasbp_min
---  , case when v_h1.diasbp_invasive_max >= v_h1.diasbp_noninvasive_max  then v_h1.diasbp_invasive_max
---          else coalesce(v_h1.diasbp_noninvasive_max, v_h1.diasbp_invasive_max) end as h1_diasbp_max
---  , case when v_h1.mbp_invasive_min    <= v_h1.mbp_noninvasive_min     then v_h1.mbp_invasive_min
---          else coalesce(v_h1.mbp_noninvasive_min   , v_h1.mbp_invasive_min)    end as h1_mbp_min
---  , case when v_h1.mbp_invasive_max    >= v_h1.mbp_noninvasive_max     then v_h1.mbp_invasive_max
---          else coalesce(v_h1.mbp_noninvasive_max   , v_h1.mbp_invasive_max)    end as h1_mbp_max
 
   -- Labs - FIRST DAY
   , lab_d1.ALBUMIN_min as d1_albumin_min
@@ -154,14 +129,14 @@ select
   , lab_d1.BILIRUBIN_max as d1_bilirubin_max
   , lab_d1.BUN_min as d1_bun_min
   , lab_d1.BUN_max as d1_bun_max
---, lab_d1.CALCIUM_min as d1_calcium_min
---, lab_d1.CALCIUM_max as d1_calcium_max
+  , lab_d1.CALCIUM_min as d1_calcium_min
+  , lab_d1.CALCIUM_max as d1_calcium_max
   , lab_d1.CREATININE_min as d1_creatinine_min
   , lab_d1.CREATININE_max as d1_creatinine_max
   , lab_d1.GLUCOSE_min as d1_glucose_min
   , lab_d1.GLUCOSE_max as d1_glucose_max
- -- ,lab_d1.INR_min as d1_inr_min
- -- ,lab_d1.INR_max as d1_inr_max
+  , lab_d1.INR_min as d1_inr_min
+  , lab_d1.INR_max as d1_inr_max
   , lab_d1.HCO3_min as d1_hco3_min
   , lab_d1.HCO3_max as d1_hco3_max
   , lab_d1.HEMATOCRIT_min as d1_hematocrit_min
@@ -181,11 +156,11 @@ select
 
   -- blood gases, first day
   , bg_d1.PH_min as d1_arterial_ph_min
-  , bg_d1.PH as d1_arterial_ph_max
+  , bg_d1.PH_max as d1_arterial_ph_max
   , bg_d1.PO2_min as d1_arterial_po2_min
-  , bg_d1.PO2 as d1_arterial_po2_max
+  , bg_d1.PO2_max as d1_arterial_po2_max
   , bg_d1.PCO2_min as d1_arterial_pco2_min
-  , bg_d1.PCO2 as d1_arterial_pco2_max
+  , bg_d1.PCO2_max as d1_arterial_pco2_max
   , bg_d1.PaO2FiO2 as d1_PaO2FiO2Ratio_min
 
   -- Labs - FIRST HOUR
@@ -195,14 +170,14 @@ select
   , lab_h1.BILIRUBIN_max as h1_bilirubin_max
   , lab_h1.BUN_min as h1_bun_min
   , lab_h1.BUN_max as h1_bun_max
---, lab_h1.CALCIUM_min as h1_calcium_min
---, lab_h1.CALCIUM_max as h1_calcium_max
+  , lab_h1.CALCIUM_min as h1_calcium_min
+  , lab_h1.CALCIUM_max as h1_calcium_max
   , lab_h1.CREATININE_min as h1_creatinine_min
   , lab_h1.CREATININE_max as h1_creatinine_max
   , lab_h1.GLUCOSE_min as h1_glucose_min
   , lab_h1.GLUCOSE_max as h1_glucose_max
- -- ,lab_h1.INR_min as h1_inr_min
- -- ,lab_h1.INR_max as h1_inr_max
+  , lab_h1.INR_min as h1_inr_min
+  , lab_h1.INR_max as h1_inr_max
   , lab_h1.HCO3_min as h1_hco3_min
   , lab_h1.HCO3_max as h1_hco3_max
   , lab_h1.HEMATOCRIT_min as h1_hematocrit_min

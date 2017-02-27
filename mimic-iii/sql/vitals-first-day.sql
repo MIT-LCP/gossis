@@ -42,9 +42,12 @@ SELECT pvt.subject_id, pvt.hadm_id, pvt.icustay_id
 , min(case when VitalID = 12 then valuenum else null end) as DiasBPNI_Min
 , max(case when VitalID = 12 then valuenum else null end) as DiasBPNI_Max
 , avg(case when VitalID = 12 then valuenum else null end) as DiasBPNI_Mean
-, min(case when VitalID = 13 then valuenum else null end) as MBP_Min
-, max(case when VitalID = 13 then valuenum else null end) as MBP_Max
-, avg(case when VitalID = 13 then valuenum else null end) as MBP_Mean
+, min(case when VitalID = 13 then valuenum else null end) as MBPInv_Min
+, max(case when VitalID = 13 then valuenum else null end) as MBPInv_Max
+, avg(case when VitalID = 13 then valuenum else null end) as MBPInv_Mean
+, min(case when VitalID = 14 then valuenum else null end) as MBPNI_Min
+, max(case when VitalID = 14 then valuenum else null end) as MBPNI_Max
+, avg(case when VitalID = 14 then valuenum else null end) as MBPNI_Mean
 
 FROM  (
   select ie.subject_id, ie.hadm_id, ie.icustay_id
@@ -60,9 +63,10 @@ FROM  (
     when itemid in (807,811,1529,3745,3744,225664,220621,226537) and valuenum > 0 then 8 -- Glucose
     when itemid in (51,6701,220050) and valuenum > 0 and valuenum < 400 then 9 -- SysBPInv
     when itemid in (8368,8555,220051) and valuenum > 0 and valuenum < 300 then 10 -- DiasBPInv
-    when itemid in (455,220179) and valuenum > 0 and valuenum < 400 then 11 -- SysBPNI
-    when itemid in (8441,220180) and valuenum > 0 and valuenum < 300 then 12 -- DiasBPNI
-    when itemid in (442,8440,224167,227242,227243,224643) and valuenum > 0 and valuenum < 400 then 13 -- MBP
+    when itemid in (442,455,220179) and valuenum > 0 and valuenum < 400 then 11 -- SysBPNI
+    when itemid in (8440,8441,220180) and valuenum > 0 and valuenum < 300 then 12 -- DiasBPNI
+    when itemid in (52,6702,220052,225312) and valuenum > 0 and valuenum < 400 then 13 -- MBPInv
+    when itemid in (456,443,220181) and valuenum > 0 and valuenum < 400 then 14 -- MBPNI
 
     else null end as VitalID
       -- convert F to C
@@ -81,35 +85,28 @@ FROM  (
   220045, --"Heart Rate"
 
   -- Systolic/diastolic
+  51, --	Arterial BP [Systolic] i
+  442, --	Manual BP [Systolic] ni
+  455, --	NBP [Systolic] ni
+  6701, --	Arterial BP #2 [Systolic] i
+  220179, --	Non Invasive Blood Pressure systolic ni
+  220050, --	Arterial Blood Pressure systolic i
 
-  51, --	Arterial BP [Systolic]
-  442, --	Manual BP [Systolic]
-  455, --	NBP [Systolic]
-  6701, --	Arterial BP #2 [Systolic]
-  220179, --	Non Invasive Blood Pressure systolic
-  220050, --	Arterial Blood Pressure systolic
-
-  8368, --	Arterial BP [Diastolic]
-  8440, --	Manual BP [Diastolic]
-  8441, --	NBP [Diastolic]
-  8555, --	Arterial BP #2 [Diastolic]
-  220180, --	Non Invasive Blood Pressure diastolic
-  220051, --	Arterial Blood Pressure diastolic
-
-  224167, --    Manual Blood Pressure Systolic Left
-  227242, --    Manual Blood Pressure Diastolic Right
-  227243, --    Manual Blood Pressure Systolic Right
-  224643, --    Manual Blood Pressure Diastolic Left
-
+  8368, --	Arterial BP [Diastolic] i 
+  8440, --	Manual BP [Diastolic] ni
+  8441, --	NBP [Diastolic] ni
+  8555, --	Arterial BP #2 [Diastolic] i
+  220180, --	Non Invasive Blood Pressure diastolic ni
+  220051, --	Arterial Blood Pressure diastolic i
 
   -- MEAN ARTERIAL PRESSURE
-  456, --"NBP Mean"
-  52, --"Arterial BP Mean"
-  6702, --	Arterial BP Mean #2
-  443, --	Manual BP Mean(calc)
-  220052, --"Arterial Blood Pressure mean"
-  220181, --"Non Invasive Blood Pressure mean"
-  225312, --"ART BP mean"
+  456, --"NBP Mean" ni
+  52, --"Arterial BP Mean" i
+  6702, --	Arterial BP Mean #2 i
+  443, --	Manual BP Mean(calc) ni
+  220052, --"Arterial Blood Pressure mean" i
+  220181, --"Non Invasive Blood Pressure mean" ni
+  225312, --"ART BP mean" i
 
   -- RESPIRATORY RATE
   618,--	Respiratory Rate

@@ -23,21 +23,23 @@ FROM
         WHEN itemid = 1394 THEN 'HEIGHT'
 	WHEN itemid = 226707 THEN 'HEIGHT'
         WHEN itemid = 225082 THEN 'PREGNANT'
-        WHEN itemid = 227687 THEN 'SMOKING'
+        WHEN itemid = 227687 THEN 'SMOKING' 
         WHEN itemid = 225108 THEN 'SMOKING'
       ELSE null
     END AS label
-  , -- the values with sanity checks
+  , -- the values with sanity checks for non-flags to not be 0 nor negative, and flags to not be negative
     CASE
-      WHEN itemid = 3580 and valuenum <    0 THEN null -- kg 'WEIGHT'
-      WHEN itemid = 763 and valuenum < 0 THEN null -- kg 'WEIGHT'
-      WHEN itemid = 3693 and valuenum < 0 THEN null -- kg 'WEIGHT'
-      WHEN itemid = 224639 and valuenum < 0 THEN null -- kg 'WEIGHT'
-      WHEN itemid = 1394 and valuenum < 0 THEN null -- in 'HEIGHT'
-      WHEN itemid = 226707 and valuenum < 0 THEN null -- in 'HEIGHT'
+      WHEN itemid = 3580 and valuenum <=    0 THEN null -- kg 'WEIGHT'
+      WHEN itemid = 763 and valuenum <= 0 THEN null -- kg 'WEIGHT'
+      WHEN itemid = 3693 and valuenum <= 0 THEN null -- kg 'WEIGHT'
+      WHEN itemid = 224639 and valuenum <= 0 THEN null -- kg 'WEIGHT'
+      WHEN itemid = 1394 and valuenum <= 0 THEN null -- in 'HEIGHT'
+      WHEN itemid = 226707 and valuenum <= 0 THEN null -- in 'HEIGHT'
       WHEN itemid = 225082 and valuenum < 0 THEN null -- flag 'PREGNANT'
       WHEN itemid = 227687 and valuenum < 0 THEN null -- flag 'SMOKING'
       WHEN itemid = 225108 and valuenum < 0 THEN null -- flag 'SMOKING'
+      WHEN itemid = 225108 and valuenum = 1 THEN 2    -- flag 'SMOKING' if use = 1 then 2,  
+						      -- if history = 1 and use = 0 then 1, if either = 0 then 0
     ELSE ce.valuenum
     END AS valuenum
 
@@ -58,7 +60,7 @@ FROM
       227687, -- TOBACCO USE HISTORY | FLAG | METAVISION
       225108 -- TOBACCO USE | FLAG | METAVISION
     )
-    AND valuenum IS NOT null AND valuenum > 0 -- lab values cannot be 0 and cannot be negative
+    AND valuenum IS NOT null
 ) demo
 GROUP BY demo.subject_id, demo.hadm_id, demo.icustay_id
 ORDER BY demo.subject_id, demo.hadm_id, demo.icustay_id;
