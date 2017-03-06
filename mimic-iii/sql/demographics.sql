@@ -23,7 +23,7 @@ FROM
         WHEN itemid = 1394 THEN 'HEIGHT'
 	WHEN itemid = 226707 THEN 'HEIGHT'
         WHEN itemid = 225082 THEN 'PREGNANT'
-        WHEN itemid = 227687 THEN 'SMOKING' 
+        WHEN itemid = 227687 THEN 'SMOKING'
         WHEN itemid = 225108 THEN 'SMOKING'
       ELSE null
     END AS label
@@ -33,12 +33,12 @@ FROM
       WHEN itemid = 763 and valuenum <= 0 THEN null -- kg 'WEIGHT'
       WHEN itemid = 3693 and valuenum <= 0 THEN null -- kg 'WEIGHT'
       WHEN itemid = 224639 and valuenum <= 0 THEN null -- kg 'WEIGHT'
-      WHEN itemid = 1394 and valuenum <= 0 THEN null -- in 'HEIGHT'
-      WHEN itemid = 226707 and valuenum <= 0 THEN null -- in 'HEIGHT'
+      WHEN itemid = 1394 and valuenum <= 40 THEN null -- in 'HEIGHT'
+      WHEN itemid = 226707 and valuenum <= 40 THEN null -- in 'HEIGHT'
       WHEN itemid = 225082 and valuenum < 0 THEN null -- flag 'PREGNANT'
       WHEN itemid = 227687 and valuenum < 0 THEN null -- flag 'SMOKING'
       WHEN itemid = 225108 and valuenum < 0 THEN null -- flag 'SMOKING'
-      WHEN itemid = 225108 and valuenum = 1 THEN 2    -- flag 'SMOKING' if use = 1 then 2,  
+      WHEN itemid = 225108 and valuenum = 1 THEN 2    -- flag 'SMOKING' if use = 1 then 2,
 						      -- if history = 1 and use = 0 then 1, if either = 0 then 0
     ELSE ce.valuenum
     END AS valuenum
@@ -49,7 +49,7 @@ FROM
     ON ce.subject_id = ie.subject_id AND ce.hadm_id = ie.hadm_id
     AND ce.ITEMID in
     (
-      -- comment is: LABEL | UNITS | DBSOURCE 
+      -- comment is: LABEL | UNITS | DBSOURCE
       3580, -- PRESENT WEIGHT (KG) | KG | CAREVUE
       763, -- DAILY WEIGHT | KG | CAREVUE
       3693, -- WEIGHT KG | KG | CAREVUE
