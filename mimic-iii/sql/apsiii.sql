@@ -61,11 +61,14 @@ with bg as
       else ROW_NUMBER() over (partition by bg.ICUSTAY_ID ORDER BY PO2 DESC)
     end as pao2_rn
 
-  from bloodgasfirstdayarterial bg
+  from gossis_bg bg
+  inner join icustays ie
+    on bg.icustay_id = ie.icustay_id
   left join ventdurations vd
     on bg.icustay_id = vd.icustay_id
     and bg.charttime >= vd.starttime
     and bg.charttime <= vd.endtime
+  where bg.charttime <= ie.intime + interval '1' day
 )
 -- because ph/pco2 rules are an interaction *within* a blood gas, we calculate them here
 -- the worse score is then taken for the final calculation
@@ -118,7 +121,10 @@ with bg as
           else 12
         end
     end as acidbase_score
-  from bloodgasfirstdayarterial bg
+  from gossis_bg bg
+  inner join icustays ie
+    on bg.icustay_id = ie.icustay_id
+    and bg.charttime <= ie.intime + interval '1' day
   where ph is not null and pco2 is not null
 )
 , acidbase_max as
