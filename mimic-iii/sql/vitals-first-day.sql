@@ -1,8 +1,8 @@
 -- This query pivots the vital signs for the first 24 hours of a patient's stay
 -- Vital signs include heart rate, blood pressure, respiration rate, and temperature
 
-DROP MATERIALIZED VIEW IF EXISTS vitalsfirstday CASCADE;
-create materialized view vitalsfirstday as
+DROP MATERIALIZED VIEW IF EXISTS gossis_vitalsfirstday CASCADE;
+create materialized view gossis_vitalsfirstday as
 SELECT pvt.subject_id, pvt.hadm_id, pvt.icustay_id
 
 -- Easier names
@@ -74,8 +74,8 @@ FROM  (
 
   from icustays ie
   left join chartevents ce
-  on ie.subject_id = ce.subject_id and ie.hadm_id = ce.hadm_id and ie.icustay_id = ce.icustay_id
-  and ce.charttime between ie.intime and ie.intime + interval '1' day
+  on ie.icustay_id = ce.icustay_id
+  and ce.charttime between ie.intime - interval '2' hour and ie.intime + interval '1' day
   -- exclude rows marked as error
   and ce.error IS DISTINCT FROM 1
   where ce.itemid in
@@ -92,7 +92,7 @@ FROM  (
   220179, --	Non Invasive Blood Pressure systolic ni
   220050, --	Arterial Blood Pressure systolic i
 
-  8368, --	Arterial BP [Diastolic] i 
+  8368, --	Arterial BP [Diastolic] i
   8440, --	Manual BP [Diastolic] ni
   8441, --	NBP [Diastolic] ni
   8555, --	Arterial BP #2 [Diastolic] i
@@ -138,5 +138,3 @@ FROM  (
 ) pvt
 group by pvt.subject_id, pvt.hadm_id, pvt.icustay_id
 order by pvt.subject_id, pvt.hadm_id, pvt.icustay_id;
-
-commit;

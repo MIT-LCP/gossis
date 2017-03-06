@@ -1,8 +1,8 @@
 -- This query pivots the vital signs for the first hour of a patient's stay
 -- Vital signs include heart rate, blood pressure, respiration rate, and temperature
 
-DROP MATERIALIZED VIEW IF EXISTS vitalsfirsthour CASCADE;
-create materialized view vitalsfirsthour as
+DROP MATERIALIZED VIEW IF EXISTS gossis_vitalsfirsthour CASCADE;
+create materialized view gossis_vitalsfirsthour as
 SELECT pvt.subject_id, pvt.hadm_id, pvt.icustay_id
 
 -- Easier names
@@ -74,8 +74,8 @@ FROM  (
 
   from icustays ie
   left join chartevents ce
-  on ie.subject_id = ce.subject_id and ie.hadm_id = ce.hadm_id and ie.icustay_id = ce.icustay_id
-  and ce.charttime between ie.intime and ie.intime + interval '1' hour
+  on ie.icustay_id = ce.icustay_id
+  and ce.charttime between ie.intime - interval '2' hour and ie.intime + interval '1' hour
   -- exclude rows marked as error
   and ce.error IS DISTINCT FROM 1
   where ce.itemid in
