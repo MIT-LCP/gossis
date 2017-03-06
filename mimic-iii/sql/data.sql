@@ -24,7 +24,7 @@ select
   , demo.height*2.54 as height  --converted from inches to cm (for compatibility with other db's)
   , case when coalesce(demo.weight,demo.height) is not null
       and demo.height > 0
-        then demo.weight / (demo.height * 0.01 * demo.height * 0.01)
+        then demo.weight / (demo.height*2.54*0.01 * demo.height*2.54*0.01)
       end as bmi
   , adm.ethnicity
   , cast(demo.PREGNANT as smallint) as pregnant
@@ -161,7 +161,7 @@ select
   , bg_d1.PO2_max as d1_arterial_po2_max
   , bg_d1.PCO2_min as d1_arterial_pco2_min
   , bg_d1.PCO2_max as d1_arterial_pco2_max
-  , bg_d1.PaO2FiO2 as d1_PaO2FiO2Ratio_min
+  , bg_d1.PaO2FiO2_min as d1_PaO2FiO2Ratio_min
 
   -- Labs - FIRST HOUR
   , lab_h1.ALBUMIN_min as h1_albumin_min
@@ -197,12 +197,12 @@ select
 
   -- blood gases, first hour
   , bg_h1.PH_min as h1_arterial_ph_min
-  , bg_h1.PH as h1_arterial_ph_max
+  , bg_h1.PH_max as h1_arterial_ph_max
   , bg_h1.PO2_min as h1_arterial_po2_min
-  , bg_h1.PO2 as h1_arterial_po2_max
+  , bg_h1.PO2_max as h1_arterial_po2_max
   , bg_h1.PCO2_min as h1_arterial_pco2_min
-  , bg_h1.PCO2 as h1_arterial_pco2_max
-  , bg_h1.PaO2FiO2 as h1_PaO2FiO2Ratio_min
+  , bg_h1.PCO2_max as h1_arterial_pco2_max
+  , bg_h1.PaO2FiO2_min as h1_PaO2FiO2Ratio_min
 
   -- APS III components
   , apsiii.albumin_score as albumin_apache
@@ -251,17 +251,17 @@ inner join patients pt
   on ie.subject_id = pt.subject_id
 left join demographics demo
   on ie.icustay_id = demo.icustay_id
-left join labsfirstday lab_d1
+left join gossis_labsfirstday lab_d1
   on ie.icustay_id = lab_d1.icustay_id
-left join labsfirsthour lab_h1
+left join gossis_labsfirsthour lab_h1
   on ie.icustay_id = lab_h1.icustay_id
-left join bloodgasfirstdayarterial bg_d1
+left join gossis_bg_firstday bg_d1
   on ie.icustay_id = bg_d1.icustay_id
-left join bloodgasfirsthourarterial bg_h1
+left join gossis_bg_firsthour bg_h1
   on ie.icustay_id = bg_h1.icustay_id
-left join vitalsfirstday v_d1
+left join gossis_vitalsfirstday v_d1
   on ie.icustay_id = v_d1.icustay_id
-left join vitalsfirsthour v_h1
+left join gossis_vitalsfirsthour v_h1
   on ie.icustay_id = v_h1.icustay_id
-left join gosiss_apsiii apsiii
+left join apsiii
   on ie.icustay_id = apsiii.icustay_id;
