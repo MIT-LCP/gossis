@@ -2,8 +2,8 @@
 
 -- Have already confirmed that the unit of measurement is always the same: null or the correct unit
 
-DROP MATERIALIZED VIEW IF EXISTS labsfirstday CASCADE;
-CREATE materialized VIEW labsfirstday AS
+DROP MATERIALIZED VIEW IF EXISTS gossis_labsfirstday CASCADE;
+CREATE materialized VIEW gossis_labsfirstday AS
 SELECT
   pvt.subject_id, pvt.hadm_id, pvt.icustay_id
 
