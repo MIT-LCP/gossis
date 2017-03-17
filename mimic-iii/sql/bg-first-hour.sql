@@ -122,6 +122,16 @@ select ie.subject_id, ie.hadm_id, ie.icustay_id
 , min(ab_score.paco2) as aps3_acidbase_paco2
 , min(ab_score.acidbase_score) as acidbase_score
 
+-- oxygenation parameters
+, min(bg.po2) as pao2_min
+, max(bg.po2) as pao2_max
+, min(bg.pco2) as paco2_min
+, max(bg.pco2) as paco2_max
+, min(bg.pao2fio2) as pao2fio2_min
+, max(bg.pao2fio2) as pao2fio2_max
+, min(coalesce(bg.aado2, bg.aado2_calc)) as aado2_min
+, max(coalesce(bg.aado2, bg.aado2_calc)) as aado2_max
+
 -- acid-base parameters
 , min(bg.PH) as PH_min
 , max(bg.PH) as PH_max
