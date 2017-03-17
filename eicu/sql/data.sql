@@ -1,7 +1,9 @@
+DROP TABLE IF EXISTS gosiss CASCADE;
 CREATE TABLE gosiss as
 select
   -- patient identifiers
-    'eicu_' || cast(pt.patientunitstayid as varchar(40)) as encounter_id
+  pt.patientunitstayid
+  , 'eicu_' || cast(pt.patientunitstayid as varchar(40)) as encounter_id
   , 'eicu_' || pt.uniquepid as patient_id
 
   -- hierarchical factors - hospital
