@@ -271,4 +271,11 @@ left join gosiss_bg_h1 bg_h1
 left join gosiss_vital_d1 v_d1
   on pt.patientunitstayid = v_d1.patientunitstayid
 left join gosiss_vital_h1 v_h1
-  on pt.patientunitstayid = v_h1.patientunitstayid;
+  on pt.patientunitstayid = v_h1.patientunitstayid
+where pt.patientunitstayid in
+(
+select patientunitstayid
+from gosiss_cohort co
+where co.excluded = 0
+)
+order by pt.patientunitstayid;
