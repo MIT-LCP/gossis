@@ -1,8 +1,8 @@
 CREATE TABLE gosiss as
 select
   -- patient identifiers
-    'eicu_' || cast(pt.patientunitstayid as varchar(40)) as encounterId
-  , 'eicu_' || pt.uniquepid as patientId
+    'eicu_' || cast(pt.patientunitstayid as varchar(40)) as encounter_id
+  , 'eicu_' || pt.uniquepid as patient_id
 
   -- hierarchical factors - hospital
   , cast('USA' as varchar(10)) as country
@@ -12,7 +12,7 @@ select
   , cast(null as varchar(10)) as hospital_type
 
   -- hierarchical factors - ICU
-  , pt.wardid as icuId
+  , pt.wardid as icu_id
   , pt.unittype as icu_type
   , pt.unitstaytype as icu_stay_type
 
@@ -49,20 +49,6 @@ select
   , apv.electivesurgery as elective_surgery
   -- TODO: double check below is a valid field and READMIT == READMITTED (anzics)
   , apv.readmit as readmission_status
-
-
-  -- TODO: define events
-  , cast(null as smallint) as GIBleed_1h
-  , cast(null as smallint) as SNCMass_1h
-  , cast(null as smallint) as Aminas_1h
-  , cast(null as smallint) as Arrhythmia_1h
-  , cast(null as smallint) as AKI_1h
-  , cast(null as smallint) as Arritmia_D1
-  , cast(null as smallint) as CPA_D1
-  , cast(null as smallint) as AKI_D1
-  , cast(null as smallint) as GIBleed_D1
-  , cast(null as smallint) as SNCMass_D1
-  , cast(null as smallint) as Neutrpenia_D1
 
   -- TODO: Define treatments
 
@@ -173,7 +159,8 @@ select
   , bg_d1.pao2_max as d1_arterial_po2_max
   , bg_d1.paco2_min as d1_arterial_pco2_min
   , bg_d1.paco2_max as d1_arterial_pco2_max
-  , bg_d1.PaO2FiO2Ratio_min as d1_PaO2FiO2Ratio_min
+  , bg_d1.pao2fio2ratio_min as d1_pao2fio2ratio_min
+  , cast(null as numeric(5,2)) as d1_pao2fio2ratio_max
 
   -- Labs - FIRST HOUR
   , lab_h1.albumin_min as h1_albumin_min
@@ -210,23 +197,24 @@ select
   , bg_h1.pao2_max as h1_arterial_po2_max
   , bg_h1.paco2_min as h1_arterial_pco2_min
   , bg_h1.paco2_max as h1_arterial_pco2_max
-  , bg_h1.PaO2FiO2Ratio_min as h1_PaO2FiO2Ratio_min
+  , bg_h1.pao2fio2ratio_min as h1_pao2fio2ratio_min
+  , cast(null as numeric(5,2)) as h1_pao2fio2ratio_max
 
   -- APS III components
   , aav.albumin as albumin_apache
   , aav.bilirubin as bilirubin_apache
   , aav.creatinine as creatinine_apache
-  , aav.fio2 as fio2_apache
   , aav.glucose as glucose_apache
-  -- , aav. as bicarbonate_apache
   , aav.hematocrit as hematocrit_apache
   , aav.heartrate as heart_rate_apache
-  -- , aav. as potassium_apache
   , aav.meanbp as map_apache
   , aav.sodium as sodium_apache
+  , aav.fio2 as fio2_apache
   , aav.pco2 as paco2_apache
   , aav.pao2 as pao2_apache
   , aav.ph as ph_apache
+  -- TODO: does eICU have a separate paco2 for acid-base scoring?
+  , aav.pco2 as paco2_for_ph_apache
   , aav.respiratoryrate as resprate_apache
   , aav.temperature as temp_apache
   , aav.bun as bun_apache
@@ -236,9 +224,10 @@ select
   , aav.motor as gcs_motor_apache
   , aav.verbal as gcs_verbal_apache
   , aav.meds as gcs_unable_apache
-  -- , aav.dialysis as dialysis_apache
-  -- , aav.intubated as intubated_apache
-  -- , aav.vent as vent_apache
+
+  , aav.dialysis as arf_apache
+  , aav.intubated as intubated_apache
+  , aav.vent as vent_apache
 
   -- Other measurements - FIRST DAY
   -- , urine_output
