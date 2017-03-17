@@ -56,7 +56,7 @@ with pvt as
     from icustays ie
     left join labevents le
       on le.subject_id = ie.subject_id
-      and le.charttime between (ie.intime - interval '24' hour) and (ie.outtime + interval '1' day)
+      and le.charttime between (ie.intime - interval '1' hour) and (ie.outtime + interval '1' day)
       and le.ITEMID in
       -- blood gases
       (
