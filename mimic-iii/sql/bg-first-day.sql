@@ -4,16 +4,7 @@
 -- now generate arterial only blood gas samples
 DROP MATERIALIZED VIEW IF EXISTS gossis_bg_firstday CASCADE;
 CREATE MATERIALIZED VIEW gossis_bg_firstday AS
-with bg as
-(
- -- subselect to first day values only
- select bg.*
- from bloodgas bg
- inner join icustays ie
-  on bg.icustay_id = ie.icustay_id
-  and bg.charttime between ie.intime - interval '1' day and ie.intime + interval '1' day
-)
-, stg_spo2 as
+with stg_spo2 as
 (
   select SUBJECT_ID, HADM_ID, ICUSTAY_ID, CHARTTIME
     -- max here is just used to group SpO2 by charttime
@@ -68,7 +59,7 @@ with bg as
 select bg.*
   , ROW_NUMBER() OVER (partition by bg.icustay_id, bg.charttime order by s1.charttime DESC) as lastRowSpO2
   , s1.spo2
-from bg
+from bloodgas bg
 left join stg_spo2 s1
   -- same patient
   on  bg.icustay_id = s1.icustay_id
