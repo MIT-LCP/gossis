@@ -7,10 +7,10 @@ with bg as
 (
  -- subselect to first day values only
  select bg.*
- from bloodgas bg
+ from gosiss_bg bg
  inner join icustays ie
   on bg.icustay_id = ie.icustay_id
-  and bg.charttime between ie.intime - interval '1' day and ie.intime + interval '1' day
+  and bg.charttime <= ie.intime + interval '1' hour
 )
 , stg_spo2 as
 (
