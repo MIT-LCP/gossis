@@ -35,8 +35,8 @@ select pt.PATIENTUNITSTAYID
       when cast(age as numeric) < 16 then 1
     else 0 end as exclusion_Over16
 -- only include first icustay
-, case when fs.type in ('1','2','3','4','5','6') then 1
-    else 0 end as exclusion_readmission
+, case when fs.type in ('1','2','3','4','5','6') then 0
+    else 1 end as exclusion_readmission
 , case when aiva.apachescore > 1 then 0 else 1 end as exclusion_NoAPACHEIV
 , case when has_vit.numobs > 0 then 0 else 1 end as exclusion_VitalObservations
 , case when has_lab.numobs > 0 then 0 else 1 end as exclusion_LabObservations
