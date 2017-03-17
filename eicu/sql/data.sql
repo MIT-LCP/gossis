@@ -229,7 +229,7 @@ select
 
   , aav.dialysis as arf_apache
   , aav.intubated as intubated_apache
-  , aav.vent as vent_apache
+  , aav.vent as ventilated_apache
 
   -- Other measurements - FIRST DAY
   -- , urine_output
