@@ -53,5 +53,5 @@ where labname in
   , 'sodium'
   , 'WBC x 1000'
 )
-and labresultoffset >= (-24*60) and labresultoffset <= (24*60)
+and labresultoffset >= (-1*60) and labresultoffset <= (24*60)
 group by patientunitstayid;
