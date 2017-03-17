@@ -125,8 +125,8 @@ FROM
   FROM icustays ie
 
   LEFT JOIN labevents le
-    ON le.subject_id = ie.subject_id AND le.hadm_id = ie.hadm_id
-    AND le.charttime BETWEEN (ie.intime - interval '6' hour) AND (ie.intime + interval '1' hour)
+    ON le.subject_id = ie.subject_id
+    AND le.charttime BETWEEN (ie.intime - interval '1' hour) AND (ie.intime + interval '1' hour)
     AND le.ITEMID in
     (
       -- comment is: LABEL | CATEGORY | FLUID | NUMBER OF ROWS IN LABEVENTS
