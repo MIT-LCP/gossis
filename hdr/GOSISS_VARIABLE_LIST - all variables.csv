@@ -319,23 +319,6 @@ blood gases - first hour,,,,,,,,,,,,,,,,,,,,,,,,
 ,h1_arterial_pco2_max,,,,,,,,,,,,,,,,,,,,,PCO2,,bloodgasfirsthourarterial 
 ,h1_pao2fio2ratio_min,,lowpao2fio2,,Text box,,,,,,,,,,,,,,,,,,,
 ,h1_pao2fio2ratio_max,,highpao2fio2,,Text box,,,,,,,,,,,,,,,,,PaO2FiO2,,bloodgasfirsthourarterial 
-other data - first day,,,,,,,,,,,,,,,,,,,,,,,,
-,d1_gcs_verbal,,,,,,,gcsverb,Verbal score,,Integer,5,,,,,,,,,,gcsverbal,,gcs-first-day
-,d1_gcs_motor,,,,,,,gcsmotor,Motor score,,Integer,6,,,,,,,,,,gcsmotor,,gcs-first-day
-,d1_gcs_eyes,,,,,,,gcseye,Eyes score,,Integer,4,,,,,,,,,,gcseyes,,gcs-first-day
-,d1_gcs_total_min,,,,,,,gcs,Total Glasgow Coma Scale,,Integer,,,15,,,,,,,,,,
-,,,,,,,,TREAT_LMT,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,
-other data - first hour,,,,,,,,,,,,,,,,,,,,,,,,
-,h1_gcs_verbal,,,,,,,,,,,,,,,,,,,,,,,
-,h1_gcs_motor,,,,,,,,,,,,,,,,,,,,,,,
-,h1_gcs_eyes,,,,,,,,,,,,,,,,,,,,,,,
-,h1_gcs_total_min,,Glasgow,,Text box,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,
 Comorbidities,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,chr_resp,"Chronic restrictive, obstructive disease resulting in severe exercise restriction (unable to climb stairs or perform household duties); or documented chronic hypoxia, hypercapnia, secondary polycythaemia, severe pulmonary hypertension (mean > 40 mmHg); or ventilator dependency",,Coded integer,2,,,,,,,,,,,,

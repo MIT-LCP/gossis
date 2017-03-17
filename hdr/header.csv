@@ -168,14 +168,6 @@ h1_arterial_pco2_min
 h1_arterial_pco2_max
 h1_pao2fio2ratio_min
 h1_pao2fio2ratio_max
-d1_gcs_verbal
-d1_gcs_motor
-d1_gcs_eyes
-d1_gcs_total_min
-h1_gcs_verbal
-h1_gcs_motor
-h1_gcs_eyes
-h1_gcs_total_min
 albumin_apache
 bilirubin_apache
 creatinine_apache
