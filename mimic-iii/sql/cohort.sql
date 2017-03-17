@@ -109,17 +109,22 @@ select
   , case when icustay_num > 1 then 1 else 0 end as exclusion_readmission
   -- remove non-adults
   , case when age < 16 then 1 else 0 end as exclusion_age
-  -- not in cardiac/vascular surgery
-  , case when first_service in ('CSURG','VSURG') then 1 else 0 end
-      as exclusion_surgical
-  -- not DNR in the first 24 hours
-  , case
-      when dnrtime_days < 1.0 then 1
-    else 0 end
-    as exclusion_dnr
+  -- -- not DNR in the first 4 hours
+  -- , case
+  --     when dnrtime_days < (4/24) then 1
+  --   else 0 end
+  --   as exclusion_dnr
   -- short stays <= 4 hours removed as done with APACHE
   , case
       when (outtime_hr - intime_hr) <= interval '4' hour then 1
     else 0 end
     as exclusion_shortstay
+  , case
+        when intime_hr is not null
+        and icustay_num = 1
+        and age >= 16
+        and (outtime_hr - intime_hr) >= interval '4' hour
+      then 0
+      else 1
+    end as excluded
 from tt;
