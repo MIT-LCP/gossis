@@ -235,9 +235,9 @@ select
   -- , urine_output
 
   -- Scoring systems
-  , apr.apachescore as apache_iva_score
-  , cast(apr.predictedicumortality as double precision) as apache_iva_icu_death_prob
-  , cast(apr.predictedhospitalmortality as double precision) as apache_iva_hospital_death_prob
+  , apr.apachescore as apache_3j_score
+  , cast(apr.predictedicumortality as double precision) as apache_4a_icu_death_prob
+  , cast(apr.predictedhospitalmortality as double precision) as apache_4a_hospital_death_prob
 
 from patient pt
 -- get prior admissions - QUESTION: is ANZICS prev admission only in hospital??
