@@ -2,8 +2,8 @@
 -- chemistry values which were found in LABEVENTS
 
 -- now generate arterial only blood gas samples
-DROP MATERIALIZED VIEW IF EXISTS gossis_bg_firstday CASCADE;
-CREATE MATERIALIZED VIEW gossis_bg_firstday AS
+DROP TABLE IF EXISTS gosiss_bg_d1 CASCADE;
+CREATE TABLE gosiss_bg_d1 AS
 with stg_spo2 as
 (
   select SUBJECT_ID, HADM_ID, ICUSTAY_ID, CHARTTIME

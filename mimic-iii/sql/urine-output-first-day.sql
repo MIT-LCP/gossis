@@ -2,8 +2,8 @@
 -- Purpose: Create a view of the urine output for each ICUSTAY_ID over the first 24 hours.
 -- ------------------------------------------------------------------
 
-DROP MATERIALIZED VIEW IF EXISTS uofirstday CASCADE;
-create materialized view uofirstday as
+DROP TABLE IF EXISTS gosiss_uo_d1 CASCADE;
+create TABLE gosiss_uo_d1 as
 select
   -- patient identifiers
   ie.subject_id, ie.hadm_id, ie.icustay_id

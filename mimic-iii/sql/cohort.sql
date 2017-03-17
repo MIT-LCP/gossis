@@ -1,10 +1,10 @@
--- Create a materialized view for the intubation cohort
+-- Create a table for the intubation cohort
 -- This view only contains icustay_id which are included in the dataset
 -- We require:
 --    ventdurations
 
-DROP MATERIALIZED VIEW IF EXISTS gosiss_cohort CASCADE;
-CREATE MATERIALIZED VIEW gosiss_cohort as
+DROP TABLE IF EXISTS gosiss_cohort CASCADE;
+CREATE TABLE gosiss_cohort as
 -- get services associated with each hospital admission
 with serv as
 (

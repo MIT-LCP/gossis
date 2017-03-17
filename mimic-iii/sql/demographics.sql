@@ -1,7 +1,7 @@
 -- This query gets the demographics of the patients per stay
 
-DROP MATERIALIZED VIEW IF EXISTS demographics CASCADE;
-CREATE materialized VIEW demographics AS
+DROP TABLE IF EXISTS gosiss_demographics CASCADE;
+CREATE TABLE gosiss_demographics AS
 SELECT
   demo.subject_id, demo.hadm_id, demo.icustay_id
 

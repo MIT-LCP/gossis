@@ -1,8 +1,8 @@
 -- This query pivots the vital signs for the first hour of a patient's stay
 -- Vital signs include heart rate, blood pressure, respiration rate, and temperature
 
-DROP MATERIALIZED VIEW IF EXISTS gossis_vitalsfirsthour CASCADE;
-create materialized view gossis_vitalsfirsthour as
+DROP TABLE IF EXISTS gossis_vitals_h1 CASCADE;
+CREATE TABLE gossis_vitals_h1 as
 SELECT pvt.subject_id, pvt.hadm_id, pvt.icustay_id
 
 -- Easier names

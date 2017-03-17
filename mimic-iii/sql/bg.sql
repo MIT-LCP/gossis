@@ -1,8 +1,8 @@
 -- The aim of this query is to pivot entries related to blood gases and
 -- chemistry values which were found in LABEVENTS
 
-DROP MATERIALIZED VIEW IF EXISTS bloodgas CASCADE;
-create materialized view bloodgas as
+DROP TABLE IF EXISTS gosiss_bloodgas CASCADE;
+CREATE TABLE gosiss_bloodgas as
 with pvt as
 ( -- begin query that extracts the data
   select ie.subject_id, ie.hadm_id, ie.icustay_id

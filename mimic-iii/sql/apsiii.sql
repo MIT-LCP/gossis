@@ -36,8 +36,8 @@
 --  674 | Temp. Site
 --  224642 | Temperature Site
 
-DROP MATERIALIZED VIEW IF EXISTS gosiss_apsiii CASCADE;
-CREATE MATERIALIZED VIEW gosiss_apsiii as
+DROP TABLE IF EXISTS gosiss_apsiii CASCADE;
+CREATE TABLE gosiss_apsiii as
 with bg as
 (
   -- join blood gas to ventilation durations to determine if patient was vent

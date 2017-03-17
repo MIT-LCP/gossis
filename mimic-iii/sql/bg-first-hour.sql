@@ -1,8 +1,8 @@
 -- The aim of this query is to pivot entries related to blood gases and
 -- chemistry values which were found in LABEVENTS
 
-DROP MATERIALIZED VIEW IF EXISTS gossis_bg_firsthour CASCADE;
-CREATE MATERIALIZED VIEW gossis_bg_firsthour AS
+DROP TABLE IF EXISTS gosiss_bg_h1 CASCADE;
+CREATE TABLE gosiss_bg_h1 AS
 with bg as
 (
  -- subselect to first day values only

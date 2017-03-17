@@ -156,10 +156,8 @@ where itemid in
 , 225477 -- "Unplanned Extubation (non-patient initiated)"
 );
 
-
---DROP MATERIALIZED VIEW IF EXISTS VENTDURATIONS CASCADE;
-DROP TABLE IF EXISTS VENTDURATIONS CASCADE;
-create table ventdurations as
+DROP TABLE IF EXISTS gosiss_ventdurations CASCADE;
+CREATE TABLE gosiss_ventdurations as
 with vd0 as
 (
   select
