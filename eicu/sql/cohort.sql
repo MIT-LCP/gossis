@@ -41,6 +41,15 @@ select pt.PATIENTUNITSTAYID
 , case when has_vit.numobs > 0 then 0 else 1 end as exclusion_VitalObservations
 , case when has_lab.numobs > 0 then 0 else 1 end as exclusion_LabObservations
 , case when has_med.numobs > 0 then 0 else 1 end as exclusion_MedObservations
+-- excluded column aggregates all the above
+, case
+    when fs.type in ('1','2','3','4','5','6')
+      and aiva.apachescore > 1
+      and has_vit.numobs > 0
+      and has_lab.numobs > 0
+      and has_med.numobs > 0
+    then 0
+  else 1 end as excluded
 from patient pt
 -- check for apache values
 left join (select patientunitstayid, max(apachescore) as apachescore from APACHEPATIENTRESULT where apacheversion = 'IVa' group by patientunitstayid) aiva
