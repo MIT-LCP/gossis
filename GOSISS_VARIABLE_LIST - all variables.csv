@@ -1,0 +1,488 @@
+,Final field name,quick explanation,EPIMED,Description,Field type,,,ANZICS Field name,Description,Input type,Data type,Example,Conversion Formula,,eICU field name,eICU table,Data type,Nullable,Description,field name if not preex,,mimic field name,mimic table,mimic materialized view
+,,,,,,,,,,,,,,,,,,,,,,,,
+Identifiers,,,,,,,,,,,,,,,,,,,,,,,,
+Unique encounter ID,encounter_id,,Record,Identifier for the patient (integer),,,,"siteid, patientid, admepisode",,,,,,,patientUnitStayID,,int,NOT NULL,a globally unique identifier (GUID) used as a foreign key link to the patient table,,,icustay_id,icustays,
+Unique patient ID,patient_id,,,,,,,patientid,,,,3305706G540,,,uniquepid,,,,,,,subject_id,icustays,
+,,,initials,Patient initials,,,,,,,,,,,,,,,,,,,,
+,,,Birthdate,Patient birth date,,,,,,,,,,,,,,,,,,,,
+Hierarchical factors,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,countrycode,,,String,AU,,,,,,,,,,,,
+,country,,,,,,,country,,,String,Australia,,,always 'USA',,,,,,,always 'USA',,
+,hospital_id,,HospCode,Identifier for the hospital (integer),,,,site_id,,,,,,,hospitalid,patient,,,,,,always 'BIDMC' (must be smallint),,
+Teaching hospital? Yes/No,teaching_hospital,,,,,,,cicmlevel == 3,,,,,,,teachingstatus,,,,,,,always 1,,
+Bed size (grouped),hospital_bed_size,,,,,,,,,,,,,,numbedscategory,,,,,,,null,,
+,hospital_type,,,,,,,hospitalclassificationid,,,Coded integer,108,,,,,,,,,,null,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,publicprivate,,,,,,,,,,,,,,,,
+,,,,,,,,publicprivate,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,locationcode,"A unique identifier for a hospital, as represented by a combination of numeric and/or alphabetic characters.",,Coded integer,3,,,,,,,,,,,,
+,,,,,,,,jurisdictionid,,,Alphanumeric code,AU-3181,,,,,,,,,,,,
+,,,,,,,,jurisdictionname,,,Coded integer,1,,,,,,,,,,,,
+,,,,,,,,publicprivateid,,,String code,VIC,,,,,,,,,,,,
+,,,,,,,,publicprivate,,,Coded integer,4,,,,,,,,,,,,
+,,,,,,,,cicmlevel,,,,Public,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,cicmlevelid,,,,3/PICU,,,,,,,,,,,,
+,,,,,,,,,,,Coded integer,3,,,,,,,,,,,,
+,icu_id,,ICUCode,Identifier for the ICU (integer),,,,site_id,,,,,,,wardid,patient,,,,,,first_wardid,icustays,
+,icu_type,,,,,,,,,,Coded integer,3,,,unittype,patient,,,,,,first_careunit,icustays,
+,icu_stay_type,,,,,,,caretype,,,,NULL,,,unitstaytype,patient,,,,,,null,,
+,,,,,,,,staffing_nursing_fte,,,,,,,,,,,,,,,,
+,,,,,,,,staffing_trainee_fte,,,,,,,,,,,,,,,,
+,,,,,,,,staffing_senior_fte,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+Demographics,,,,,,,,,,,,,,,,,,,,,,,,
+,age,,Age,Age in years,,,,age,Age measured in years,,Integer,74,,,age,apachepredvar,,,,,,"DATE_PART('year', i.intime::date)-DATE_PART('year', p.dob::date) AS age","patients, icustays","SELECT (EXTRACT(EPOCH FROM i.intime::date)-EXTRACT(EPOCH FROM p.dob::date))/60/60/24/365 AS age, i.subject_id, i.intime, p.dob FROM icustays AS i INNER JOIN patients AS p ON i.subject_id=p.subject_id"
+,gender,,malegender,Binary flag indicating if patient is male,,,,sex,Gender,,String,M,,,gender,patient,,,,,,gender,patients,
+,weight,,Weight,Weight (kg),,,,weight,,,,NULL,,,admissionweight,patient,,,,,,valuenum (with itemid=3580),chartevents,
+,height,,Height,Height (cm),,,,height,,,,NULL,,,admissionheight,patient,,,,,,valuenum (with itemid=1394),chartevents,
+,bmi,,BMI,Body mass index,,,,,,,,,,,(calculated from above),,,,,,,,,
+,ethnicity,,,,,,,indigenous,,,Coded integer,NULL,,,,,,,,,,ethnicity,admissions,
+,,,,,,,,postcode,,,Coded integer,3029,,,,,,,,,,,,
+,pregnant,,,,,,,preg_stat,,,,NULL,,C,flowsheet with some effort,,,,,,,value (with itemid=225082),chartevents,
+,smoking_status,,,,,,,smokingstatus,,,Coded integer,2,,C,flowsheet with some effort,,,,,,,"value (with itemid=227687 (tobacco use history), 225108 (tobacco use) )",chartevents,
+,,,,,,,,smokingintensity,?,,,50,,,,,,,,,,null,,
+,,,,,,,,icuadmissioncount,,,Integer,1,,,,,,,,,,number of different icustay_id for 1 subject_id,icustays,
+,,,,,,,,hospitaladmissioncount,,,Integer,1,,,,,,,,,,,,
+,,,,,,,,readmissioncount,,,Integer,NULL,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+Misc,,,,,,,,,,,,,,,,,,,,,,,,
+,,,HealthInsurCode,,,,,,,,,,,,,,,,,,,insurance,admissions,
+,,,,,,,,prior_icu_ad_dtm,,,Numeric,NULL,,,,,,,,,,,,
+,,,,,,,,prior_icu_ds_dtm,,,Numeric,NULL,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+Hospital course,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,hosp_ad_dtm,Hospital admission date/time,,Numeric,40916.62847,,,,,,,,,,admittime,admissions,
+,,,,,,,,hosp_ds_dtm,Hospital discharge date/time,,Numeric,40924,,,,,,,,,,dischtime,admissions,
+,hospital_admit_source,,,,,,,hosp_srce,,,Coded integer,2,,,hospitaladmitsource,patient,,,,,,admission_location,admissions,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,hospital_disch_location,,Hosp_Destination,Name of the destination,,,,hosp_outcm,,,,,,,hospitaldischargelocation,patient,,,,,,discharge_location,admissions,
+,,,HospDestName,,,,,,,,,,,,,,,,,,,,,
+,hospital_los_days,hospital length of stay in days,Hosp_LOS,,,,,hosp_hrs,,,Numeric,176.916666,x/24.0,,hospitaldischargeoffset,,,,,,,"SELECT (EXTRACT(EPOCH FROM a.dischtime::date)-EXTRACT(EPOCH FROM a.admittime::date))/60/60/24 AS los, i.subject_id, i.intime, a.admittime FROM icustays AS i INNER JOIN admissions AS a ON i.hadm_id=a.hadm_id;","admissions, icustays",
+,hospital_death,"1=yes, 0=no",Hosp_Death,Integers coding hospital destination,,,,died_hosp,,,Coded integer,2,dictionary,,hospitaldischargestatus,patient,,,,,,hospital_expired_flag,admissions,
+,,,,,,,,,,,Coded integer,3,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,AdmSourcecode,,,,,,,,,,,,,,,,,,,,,
+,icu_admit_source,,Admsource,,,,,icu_srce,,,Coded integer,3,dictionary,,unitadmitsource,patient,,,,,,null,,
+,icu_admit_type,,AdmTypeName,,,,,,,,,,,,unittype,patient,,,,,,admission_type,admissions,
+,,,Admtype,,,,,,,,,,,,,,,,,,,,,
+,icu_disch_location,,ICU_Destination,Integers coding ICU destination,,,,icu_outcm,,,,,dictionary,,unitdischargelocation,patient,,,,,collapse to anzics,last_careunit,icustays,
+,,,UnitDestinationName,Name of the destination,,,,,,,,,,,,patient,,,,,,,,
+,pre_icu_los_days,"length of stay in hospital before ICU stay, in days",HospDayPriorICU,,,,,pre_icu_hrs,,,Numeric,21.3,x/24.0,,hospitaladmitoffset,patient,,,,,,"SELECT (EXTRACT(EPOCH FROM i.intime::date)-EXTRACT(EPOCH FROM a.admittime::date))/60/60/24 AS los, i.subject_id, i.intime, a.admittime FROM icustays AS i INNER JOIN admissions AS a ON i.hadm_id=a.hadm_id;","admissions, icustays",
+,icu_los_days,,ICU_LOS,ICU length of stay in days,,,,icu_hrs,,,Numeric,49.25,x/24.0,,unitdischargeoffset,patient,,,,,,los,icustays,
+,icu_death,,ICU_Death,"1=yes (died in ICU), 0=no",,,,died_icu,,,Coded integer,2,dictionary,,unitdischargestatus,patient,,,,,,if deathtime on admissions <= outtime  ????,"admissions, icustays",
+,,,,,,,,admepisode,,,,0,,,,,,,,,,,,
+,,,,,,,,icuadmitfinyr,,,Date,2011-12,,,,,,,,,,,,
+,,,,,,,,icuadmityyyymm,,,Integer,201201,,,,,,,,,,,,
+,,,,,,,,icuadmityyyy,,,Integer,2012,,,,,,,,,,,,
+,,,,,,,,icu_ad_dtm,ICU admission date/time,?Days since 01-01-1900?,Numeric,40917.51597,,,,,,,,,,intime,icustays,
+,,,,,,,,icu_ds_dtm,ICU discharge date/time,,Numeric,40919.56806,,,,,,,,,,outtime,icustays,
+,elective_surgery,,,,,,,elect,"elective admisison codes: 1 = yes, 2 = no",,,,dictionary,,electivesurgery,apachepredvar,,,,,,admission_type='ELECTIVE',admissions,
+,readmission_status,"this patient stay is an in-hospital readmission, 1=yes, 0=no",,,,,,readmitted,"whether this admission is a readmission or not (1=yes, 2=no)",,Coded integer,2,dictionary,c,readmit,patient,,,,***,,multiple icustay_id for 1 hadm_id,,
+,,,,,,,,icu_ds_dec_dtm,,,Numeric,40918.66528,,,,,,,,,,,,
+,,,,,,,,discharge_delay_hrs,,,Numeric,21.666666,,,,,,,,,,,,
+,,,,,,,,readmission_lag_hrs,,,Numeric,NULL,,,,,,,,,,,,
+,,,,,,,,,,,Coded integer,3,,,,,,,,,,,,
+,,,,,,,,emg_rsp_adm,,,Coded integer,1,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,intralocprev_emerg,,admission_location LIKE 'EMERGENCY ROOM%' or EDREGTIME if exists then that meand that they were registered,admissions,
+,,,,,,,,,,,,,,,,,,,,intralocprev_otherICU,,first row for icustay_id order by intime prev_careunit LIKE '%ICU%',transfers,
+,,,,,,,,,,,,,,,,,,,,intralocprev_other,,all others not in previous two variables,-,
+,,,,,,,,,,,,,,,,,,,,unplanned_adm,,admission_type LIKE 'EMERGENCY' OR 'URGENT',admissions,
+,,,,,,,,,,,,,,,,,,,,non_operative,,"last_careunit NOT LIKE 'SICU', 'CSIU', 'CVICU' and on services if curr_service LIKE 'ORTHO' or 'SURG'","icustays, services",
+,,,,,,,,,,,,,,,,,,,,emerg_surg,,"last_careunit LIKE 'SICU', 'CSIU', 'CVICU'",icustays,
+,,,,,,,,,,,,,,,,,,,,,,,,
+Events,,,,,,,,,,,,,,,,,,,,,,,,
+,,,GIBleed_1h,,,,,,,,,,,,,,,,,,,,,
+,,,SNCMass_1h,,,,,,,,,,,,,,,,,,,,,
+,,,Aminas_1h,,,,,,,,,,,,,,,,,,,,,
+,,,Arritmias_1h,Arrhythmias,,,,,,,,,,,,,,,,,,,,
+,,,AKI_1h,,,,,,,,,,,,,,,,,,,,,
+,,,Arritmia_D1,,,,,,,,,,,,,,,,,,,,,
+,,,CPA_D1,,,,,,,,,,,,,,,,,,,,,
+,,,AKI_D1,,,,,,,,,,,,,,,,,,,,,
+,,,GIBleed_D1,,,,,,,,,,,,,,,,,,,,,
+,,,SNCMass_D1,,,,,,,,,,,,,,,,,,,,,
+,,,Neutrpenia_D1,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,cardarrest,"The presence of a cardiac arrest in the 24 hours prior to ICU admission, as represented by a code.",,Coded integer,2,,,,,,,,,,,,
+,,,,,,,,resparrest,"The presence of a respiratory arrest in the 24 hours prior to ICU admission, as represented by a code.",,Coded integer,2,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,CPR,,icd9_code = 9960,procedures_icd,
+,,,,,,,,,,,,,,,,,,,,,,,,
+Treatment,,,,,,,,,,,,,,,,,,,,,,,,
+,,,EOL_Decision,,,,,,,,,,,,,,,,,,,,,
+,,,EOL_Days,,,,,,,,,,,,,,,,,,,,,
+,,,MechVent_1h,Mechanical ventilation,,,,,,,,,,,,,,,,,,,,
+,,,NIV_1h,Non-invasive ventilation,,,,,,,,,,,,,,,,,,,,
+,,,PCR_1h,,,,,,,,,,,,,,,,,,,,,
+,,,RRT_1h,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,vent,,cohort
+,,,NIV_D1,,,,,,,,,,,,,,,,,,,,,
+,,,Pressors_D1,,,,,,,,,,,,,,,,,,,,,
+,,,RRT_D1,,,,,,,,,,,,,,,,,,,,,
+,,,NIV_UTI,,,,,,,,,,,,,,,,,,,,,
+,,,NIV_Failure,,,,,,,,,,,,,,,,,,,,,
+,,,MechVent_UTI,,,,,,,,,,,,,,,,,,,,,
+,,,MV_Duration,,,,,,,,,,,,,,,,,,,ventduration,,ventilation-duration
+,,,TQT,,,,,,,,,,,,,,,,,,,,,
+,,,Pressors_UTI,,,,,,,,,,,,,,,,,,,,,
+,,,RRT_UTI,,,,,,,,,,,,,,,,,,,itemid = 648 and value = 'Intubated/trach',chartevents,
+,,,,,,,,,Intubation status of a patient.,,Coded integer,2,,,,,,,,,,vent,,cohort
+,,,MechVent_D1,,,,,,Invasive ventilation status of a patient.,,Coded integer,2,,,,,,,,,,,,
+,,,,,,,,cabg_graft,,,Coded integer,NULL,,,,,,,,,,,,
+,,,,,,,,cabg_redo,,,Coded integer,3,,,,,,,,,,,,
+,,,,,,,,thromb_therapy,,,Coded integer,NULL,,,,,,,,,,icd9_code LIKE '9910',diagnoses_icd,
+,,,,,,,,,,,,,,,,,,,,vasoactive_drugs_b4,,if startime <= 2hrs from admittime,,mimic-code/blob/master/concepts/vasopressor-durations/vasopressor-durations.sql
+,,,,,,,,,,,,,,,,,,,,,,,,
+Diagnosis,,,,,,,,,,,,,,,,,,,,,,,,
+,,,DiagCateg,,,,,,,,,,,,,,,,,,,,,
+,,,DiagCatName,,,,,,,,,,,,,,,,,,,,,
+,,,DiagCode,code is a custom ontology,,,,,,,,,,,,,,,,,,,,
+,,,DiagName,can only pick one from a list,,,,,,,,,,,,,,,,,,,,
+,,,MothYr,Located on diagnosis page,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,ap2diag,Apache II diagnosis,,Coded integer,118,,,,,,,,,,,,
+,,,,,,,,ap3diag,Apache III diagnosis,,Coded integer,602,,,,,,,,,,,,
+,,,,,,,,ap3_subcode,Apache III subcode,,Coded numeric,602.02,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,reason_cardiovasc,,"seq_num=1, will be the reason for icu admission icd9_code LIKE 27652, 78559, 78550",diagnoses_icd,
+,,,,,,,,,,,,,,,,,,,,reason_septic_shock,,"seq_num=1, will be the reason for icu admission icd9_code LIKE 99802, 78552, 6395, 99989, 99685",diagnoses_icd,
+,,,,,,,,iddm,,,,,,,diabetes,,,,,reason_card_undef,,"seq_num=1, will be the reason for icu admission icd9_code LIKE 9950, 99560, 99561, 99562, 99563, 99564, 99565, 99566, 99567, 99568, 99569, 99941, 99942, 99949, 9779, 9895, 2870",diagnoses_icd,
+,,,,,,,,,,,,,,,,,,,,reason_rhythm_dist,,"seq_num=1, will be the reason for icu admission icd9_code LIKE 4279, 9971, 3062, 42789, 4269, 42760, 7802",diagnoses_icd,
+,,,,,,,,,,,,,,,,,,,,reason_pancreatitis,,"seq_num=1, will be the reason for icu admission icd9_code LIKE c('5770', '5771', '0723')",diagnoses_icd,
+,,,,,,,,,,,,,,,,,,,,reason_acute_abd,,"seq_num=1, will be the reason for icu admission icd9_code LIKE 7890",diagnoses_icd,
+,,,,,,,,,,,,,,,,,,,,reason_hepatic,,"seq_num=1, will be the reason for icu admission icd9_code LIKE 571,5710, 5711, 5712, 5713, 5714, 57140, 57141, 57142, 57149, 5715, 5716, 5718, 5719",diagnoses_icd,
+,,,,,,,,,,,,,,,,,,,,reason_neuro,,"seq_num=1, will be the reason for icu admission icd9_code LIKE 78001, 436, 2503, 2493, 2502, 2492, 78039, 3453, 5722, 2502, 2510, 7792",diagnoses_icd,
+,,,,,,,,,,,,,,,,,,,,reason_seizures,,"seq_num=1, will be the reason for icu admission icd9_code LIKE 345, 3450, 34500, 34501, 3451, 34510, 34511, 3452, 3453, 3454, 34540, 34541, 3455, 34550, 34551, 3456, 34560, 34561, 3457, 34570, 34571, 3458, 34580, 34581, 3459, 34590,34591",diagnoses_icd,
+,,,,,,,,,,,,,,,,,,,,reason_focal_neur,,"seq_num=1, will be the reason for icu admission icd9_code LIKE 4359, 3429, 436, 34489, 43821, 43822, 43820, 4370, 4378, 3431, 30011,4341, 3420, 3434, 1390, 7670, 3421, 3428, 4340, 3441, 3430, 3341, 3432, 0150, 73088, 3060, 09489, 34400, 34401, 34402, 34403, 34404, 34409",diagnoses_icd,
+,,,,,,,,,,,,,,,,,,,,reason_intracranial_mass,,"seq_num=1, will be the reason for icu admission icd9_code LIKE 2396",diagnoses_icd,
+,,,,,,,,,,,,,,,,,,,,,,,,
+Physiology - First DAY,,,,,,,,,,,,,,,,,,,,,,,,
+,d1_heartrate_min,,,,,,,hrlo,,,Integer,85,,,heartrate,vitalPeriodic,bigint,,,,,HeartRate_Min,,vitalsfirstday
+,d1_heartrate_max,,,,,,,hrhi,,,Integer,115,,,heartrate,vitalPeriodic,bigint,,,,,HeartRate_Max,,vitalsfirstday
+,d1_resprate_min,,,,,,,rrlo,,,Integer,18,,,respiration,vitalPeriodic,bigint,,,,,RespRate_Min,,vitalsfirstday
+,d1_resprate_max,,,,,,,rrhi,,,Integer,28,,,respiration,vitalPeriodic,bigint,,,,,RespRate_Max,,vitalsfirstday
+,d1_spo2_min,,,,,,,,,,,,,,sao2,vitalPeriodic,bigint,,,,,SpO2_Min,,vitalsfirstday
+,d1_spo2_max,,,,,,,,,,,,,,sao2,vitalPeriodic,bigint,,,,,SpO2_Max,,vitalsfirstday
+,d1_temp_min,,,,,,,templo,,,Numeric,36.2,,,temperature,vitalPeriodic,"numeric(11,4)",,,,,TempC_Min,,vitalsfirstday
+,d1_temp_max,,,,,,,temphi,,,Numeric,37.6,,,temperature,vitalPeriodic,"numeric(11,4)",,,,,TempC_Max,,vitalsfirstday
+,d1_sysbp_invasive_min,,,,,,,,,,,,,,systemicsystolic,vitalPeriodic,bigint,,,,,SysBPInv_Min,,vitalsfirstday
+,d1_sysbp_invasive_max,,,,,,,,,,,,,,systemicsystolic,vitalPeriodic,bigint,,,,,SysBPInv_Max,,vitalsfirstday
+,d1_diasbp_invasive_min,,,,,,,,,,,,,,systemicdiastolic,vitalPeriodic,bigint,,,,,DiasBPInv_Min,,vitalsfirstday
+,d1_diasbp_invasive_max,,,,,,,,,,,,,,systemicdiastolic,vitalPeriodic,bigint,,,,,DiasBPInv_Max,,vitalsfirstday
+,d1_mbp_invasive_min,,,,,,,,,,,,,,systemicmean,vitalPeriodic,bigint,,,,,null,,
+,d1_mbp_invasive_max,,,,,,,,,,,,,,systemicmean,vitalPeriodic,bigint,,,,,null,,
+,d1_sysbp_noninvasive_min,,,,,,,,,,,,,,noninvasivesystolic,vitalAperiodic,double precision,,,,,SysBPNI_Min,,vitalsfirstday
+,d1_sysbp_noninvasive_max,,,,,,,,,,,,,,noninvasivesystolic,vitalAperiodic,double precision,,,,,SysBPNI_Max,,vitalsfirstday
+,d1_diasbp_noninvasive_min,,,,,,,,,,,,,,noninvasivediastolic,vitalAperiodic,double precision,,,,,DiasBPNI_Min,,vitalsfirstday
+,d1_diasbp_noninvasive_max,,,,,,,,,,,,,,noninvasivediastolic,vitalAperiodic,double precision,,,,,DiasBPNI_Max,,vitalsfirstday
+,d1_mbp_noninvasive_min,,,,,,,,,,,,,,noninvasivemean,vitalAperiodic,double precision,,,,,null,,
+,d1_mbp_noninvasive_max,,,,,,,,,,,,,,noninvasivemean,vitalAperiodic,double precision,,,,,null,,
+,d1_sysbp_min,,,,,,,systoliclo,,,Integer,130,,,,,,,,,,SysBP_Min,,vitalsfirstday
+,d1_sysbp_max,,,,,,,systolichi,,,Integer,160,,,,,,,,,,SysBP_Max,,vitalsfirstday
+,d1_diasbp_min,,,,,,,diastoliclo,,,Integer,65,,,,,,,,,,DiasBP_Min,,vitalsfirstday
+,d1_diasbp_max,,,,,,,diastolichi,,,Integer,80,,,,,,,,,,DiasBP_Max,,vitalsfirstday
+,d1_mbp_min,,,,,,,maplo,,,Integer,87,,,,,,,,,,MBP_Min,,vitalsfirstday
+,d1_mbp_max,,,,,,,maphi,,,Integer,107,,,,,,,,,,MBP_Max,,vitalsfirstday
+,d1_pasys_invasive_min,,,,,,,,,,,,,,,,,,,,,,,
+,d1_pasys_invasive_max,,,,,,,,,,,,,,,,,,,,,,,
+,d1_padias_invasive_min,,,,,,,,,,,,,,,,,,,,,,,
+,d1_padias_invasive_max,,,,,,,,,,,,,,,,,,,,,,,
+,d1_pamean_invasive_min,,,,,,,,,,,,,,,,,,,,,,,
+,d1_pamean_invasive_max,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+Physiology - First HOUR,,,,,,,,,,,,,,,,,,,,,,,,
+,h1_heartrate_min,,,,,,,,,,,,,,heartrate,vitalPeriodic,bigint,,,,,HeartRate_Min,,vitalsfirsthour
+,h1_heartrate_max,,high_hr,,Text box,,,,,,,,,,heartrate,vitalPeriodic,bigint,,,,,HeartRate_Max,,vitalsfirsthour
+,h1_resprate_min,,,,,,,,,,,,,,respiration,vitalPeriodic,bigint,,,,,RespRate_Min,,vitalsfirsthour
+,h1_resprate_max,,High_rr,,Text box,,,,,,,,,,respiration,vitalPeriodic,bigint,,,,,RespRate_Max,,vitalsfirsthour
+,h1_spo2_min,,,,,,,,,,,,,,sao2,vitalPeriodic,bigint,,,,,SpO2_Min,,vitalsfirsthour
+,h1_spo2_max,,,,,,,,,,,,,,sao2,vitalPeriodic,bigint,,,,,SpO2_Max,,vitalsfirsthour
+,h1_temp_min,,,,,,,,,,,,,,temperature,vitalPeriodic,"numeric(11,4)",,,,,TempC_Min,,vitalsfirsthour
+,h1_temp_max,,High_temp,,Text box,,,,,,,,,,temperature,vitalPeriodic,"numeric(11,4)",,,,,TempC_Max,,vitalsfirsthour
+,h1_sysbp_invasive_min,,,,,,,,,,,,,,systemicsystolic,vitalPeriodic,bigint,,,,,SysBPInv_Min,,vitalsfirsthour
+,h1_sysbp_invasive_max,,,,,,,,,,,,,,systemicsystolic,vitalPeriodic,bigint,,,,,SysBPInv_Max,,vitalsfirsthour
+,h1_diasbp_invasive_min,,,,,,,,,,,,,,systemicdiastolic,vitalPeriodic,bigint,,,,,DiasBPInv_Min,,vitalsfirsthour
+,h1_diasbp_invasive_max,,,,,,,,,,,,,,systemicdiastolic,vitalPeriodic,bigint,,,,,DiasBPInv_Max,,vitalsfirsthour
+,h1_mbp_invasive_min,,,,,,,,,,,,,,systemicmean,vitalPeriodic,bigint,,,,,null,,vitalsfirsthour
+,h1_mbp_invasive_max,,,,,,,,,,,,,,systemicmean,vitalPeriodic,bigint,,,,,null,,vitalsfirsthour
+,h1_sysbp_noninvasive_min,,,,,,,,,,,,,,,,,,,,,SysBPNI_Min,,vitalsfirsthour
+,h1_sysbp_noninvasive_max,,,,,,,,,,,,,,,,,,,,,SysBPNI_Max,,vitalsfirsthour
+,h1_diasbp_noninvasive_min,,,,,,,,,,,,,,,,,,,,,DiasBPNI_Min,,vitalsfirsthour
+,h1_diasbp_noninvasive_max,,,,,,,,,,,,,,,,,,,,,DiasBPNI_Max,,vitalsfirsthour
+,h1_mbp_noninvasive_min,,,,,,,,,,,,,,,,,,,,,null,,vitalsfirsthour
+,h1_mbp_noninvasive_max,,,,,,,,,,,,,,,,,,,,,null,,vitalsfirsthour
+,h1_sysbp_min,,,,,,,,,,,,,,,,,,,,,SysBP_Min,,vitalsfirsthour
+,h1_sysbp_max,,,,,,,,,,,,,,,,,,,,,SysBP_Max,,vitalsfirsthour
+,h1_diasbp_min,,,,,,,,,,,,,,,,,,,,,DiasBP_Min,,vitalsfirsthour
+,h1_diasbp_max,,,,,,,,,,,,,,,,,,,,,DiasBP_Max,,vitalsfirsthour
+,h1_mbp_min,,low_map,,Text box,,,,,,,,,,,,,,,,,MBP_Min,,vitalsfirsthour
+,h1_mbp_max,,,,,,,,,,,,,,,,,,,,,MBP_Max,,vitalsfirsthour
+,h1_pasys_invasive_min,,lowpasist,,Text box,,,,,,,,,,,,,,,,,,,
+,h1_pasys_invasive_max,,,,,,,,,,,,,,,,,,,,,,,
+,h1_padias_invasive_min,,lowpadiast,,Text box,,,,,,,,,,,,,,,,,,,
+,h1_padias_invasive_max,,,,,,,,,,,,,,,,,,,,,,,
+,h1_pamean_invasive_min,,,,,,,,,,,,,,,,,,,,,,,
+,h1_pamean_invasive_max,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+"timing: 1 hour before, 24 hours after ICU admit",,,,,,,,,,,,,,,,,,,,,,,,
+Labs - First DAY,d1_albumin_min,,,,,,,,,,,,,,,,,,albumin',,,ALBUMIN_min,,labsfirstday
+,d1_albumin_max,,,,,,,,,,,,,,,,,,,,,ALBUMIN_max,,labsfirstday
+,d1_bilirubin_min,,,,,,,,,,,,,,,,,,", 'total bilirubin'",,,BILIRUBIN_min,,labsfirstday
+,d1_bilirubin_max,,,,,,,,,,,,,,,,,,,,,BILIRUBIN_max,,labsfirstday
+,d1_bun_min,,,,,,,,,,,,,,,,,,", 'BUN'",,,BUN_min,,labsfirstday
+,d1_bun_max,,,,,,,,,,,,,,,,,,,,,BUN_max,,labsfirstday
+,d1_calcium_min,,,,,,,,,,,,,,,,,,", 'calcium'",,,CALCIUM_min,,labsfirstday
+,d1_calcium_max,,,,,,,,,,,,,,,,,,,,,CALCIUM_max,,labsfirstday
+,d1_creatinine_min,,,,,,,creatlo,,,Integer,301,,,,,,,", 'creatinine'",,,CREATINE_min,,labsfirstday
+,d1_creatinine_max,,,,,,,creathi,,,Integer,311,,,,,,,,,,CREATINE_max,,labsfirstday
+,d1_glucose_min,,,,,,,gluclo,,,Numeric,10.5,,,,,,,", 'bedside glucose', 'glucose'",,,GLUCOSE_min,,labsfirstday
+,d1_glucose_max,,,,,,,gluchi,,,Numeric,11,,,,,,,,,,GLUCOSE_max,,labsfirstday
+,d1_inr_min,,,,,,,,,,,,,,,,,,", 'PT - INR'",,,INR_min,,labsfirstday
+,d1_inr_max,,,,,,,,,,,,,,,,,,,,,INR_max,,labsfirstday
+,d1_hco3_min,,,,,,,hco3lo,,,Integer,22,,,,,,,", 'bicarbonate' -- HCO3",,,HCO3_min,,labsfirstday
+,d1_hco3_max,,,,,,,hco3hi,,,Integer,23,,,,,,,,,,HCO3_max,,labsfirstday
+,d1_hematocrit_min,,,,,,,hctlo,,,Numeric,0.35,,,,,,,", 'Hct'",,,HEMATOCRIT_min,,labsfirstday
+,d1_hematocrit_max,,,,,,,hcthi,,,Numeric,0.35,,,,,,,,,,HEMATOCRIT_max,,labsfirstday
+,d1_hemaglobin_min,,,,,,,hmgnlo,,,Numeric,NULL,,,,,,,", 'Hgb'",,,HEMOGLOBIN_min,,labsfirstday
+,d1_hemaglobin_max,,,,,,,hmgnhi,,,Numeric,NULL,,,,,,,,,,HEMOGLOBIN_max,,labsfirstday
+,d1_lactate_min,,,,,,,,,,,,,,,,,,", 'lactate'",,,LACTATE_min,,labsfirstday
+,d1_lactate_max,,,,,,,,,,,,,,,,,,,,,LACTATE_max,,labsfirstday
+,d1_platelets_min,,,,,,,platlo,,,Numeric,NULL,,,,,,,", 'platelets x 1000'",,,PLATELET_min,,labsfirstday
+,d1_platelets_max,,,,,,,plathi,,,Numeric,NULL,,,,,,,,,,PLATELET_max,,labsfirstday
+,d1_potassium_min,,,,,,,klo,,,Numeric,4.8,,,,,,,", 'potassium'",,,POTASSIUM_min,,labsfirstday
+,d1_potassium_max,,,,,,,khi,,,Numeric,4.9,,,,,,,,,,POTASSIUM_max,,labsfirstday
+,d1_sodium_min,,,,,,,nalo,,,Integer,133,,,,,,,", 'sodium'",,,SODIUM_min,,labsfirstday
+,d1_sodium_max,,,,,,,nahi,,,Integer,134,,,,,,,,,,SODIUM_max,,labsfirstday
+,d1_wbc_min,,,,,,,wcclo,,,Numeric,18.1,,,,,,,", 'WBC x 1000'",,,WBC_min,,labsfirstday
+,d1_wbc_max,,,,,,,wcchi,,,Numeric,18.1,,,,,,,,,,WBC_max,,labsfirstday
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+blood gases - first day,,,,,,,,,,,,,,,,,,,,,,,,
+,d1_arterial_ph_min,,,,,,,,,,,,,,,,,,,,,PH (get min),,bloodgasfirstdayarterial
+,d1_arterial_ph_max,,,,,,,,,,,,,,,,,,,,,PH,,bloodgasfirstdayarterial
+,d1_arterial_po2_min,,,,,,,,,,,,,,,,,,,,,PO2 (get min),,bloodgasfirstdayarterial
+,d1_arterial_po2_max,,,,,,,,,,,,,,,,,,,,,PO2,,bloodgasfirstdayarterial
+,d1_arterial_pco2_min,,,,,,,,,,,,,,,,,,,,,PCO2 (get min),,bloodgasfirstdayarterial
+,d1_arterial_pco2_max,,,,,,,,,,,,,,,,,,,,,PCO2,,bloodgasfirstdayarterial
+,d1_pao2fio2ratio_min,,,,,,,,,,,,,,,,,,,,,PaO2FiO2,,bloodgasfirstdayarterial
+,d1_pao2fio2ratio_max,,,,,,,,,,,,,,,,,,,d1_PEEP,,"valuenum with itemid = 60,437,505,506,686,220339,224700",chartevents,
+,,,,,,,,,,,,,,,,,,,,d1_tidal_volume,,"valuenum with itemid = 639, 654, 681, 682, 683, 684,224685,224684,224686",chartevents,
+,,,,,,,,,,,,,,,,,,,,d1_base_excess_max,,BASEEXCESS,,bloodgasfirstdayarterial
+,,,,,,,,,,,,,,,,,,,,d1_base_excess_min,,BASEEXCESS (get min),,bloodgasfirstdayarterial
+,,,,,,,,,,,,,,,,,,,,,,,,
+Labs - First HOUR,h1_albumin_min,,,,,,,,,,,,,,,,,,,,,ALBUMIN_min,,labsfirsthour
+,h1_albumin_max,,,,,,,,,,,,,,,,,,,,,ALBUMIN_max,,labsfirsthour
+,h1_bilirubin_min,,,,,,,,,,,,,,,,,,,,,BILIRUBIN_min,,labsfirsthour
+,h1_bilirubin_max,,Bilirubin,,Text box,,,,,,,,,,,,,,,,,BILIRUBIN_max,,labsfirsthour
+,h1_bun_min,,,,,,,,,,,,,,,,,,,,,BUN_min,,labsfirsthour
+,h1_bun_max,,BUN,,Text box,,,,,,,,,,,,,,,,,BUN_max,,labsfirsthour
+,,,Urea,,Text box,,,,,,,,,,,,,,,,,,,
+,h1_calcium_min,,,,,,,,,,,,,,,,,,,,,CALCIUM_min,,labsfirsthour
+,h1_calcium_max,,,,,,,,,,,,,,,,,,,,,CALCIUM_max,,labsfirsthour
+,h1_creatinine_min,,,,,,,,,,,,,,,,,,,,,CREATINE_min,,labsfirsthour
+,h1_creatinine_max,,Creatinine,,Text box,,,,,,,,,,,,,,,,,CREATINE_max,,labsfirsthour
+,h1_glucose_min,,,,,,,,,,,,,,,,,,,,,GLUCOSE_min,,labsfirsthour
+,h1_glucose_max,,,,,,,,,,,,,,,,,,,,,GLUCOSE_max,,labsfirsthour
+,h1_inr_min,,,,,,,,,,,,,,,,,,,,,INR_min,,labsfirsthour
+,h1_inr_max,,,,,,,,,,,,,,,,,,,,,INR_max,,labsfirsthour
+,h1_hco3_min,,,,,,,,,,,,,,,,,,,,,HCO3_min,,labsfirsthour
+,h1_hco3_max,,,,,,,,,,,,,,,,,,,,,HCO3_max,,labsfirsthour
+,h1_hematocrit_min,,,,,,,,,,,,,,,,,,,,,HEMATOCRIT_min,,labsfirsthour
+,h1_hematocrit_max,,,,,,,,,,,,,,,,,,,,,HEMATOCRIT_max,,labsfirsthour
+,h1_hemaglobin_min,,,,,,,,,,,,,,,,,,,,,HEMOGLOBIN_min,,labsfirsthour
+,h1_hemaglobin_max,,,,,,,,,,,,,,,,,,,,,HEMOGLOBIN_max,,labsfirsthour
+,h1_lactate_min,,,,,,,,,,,,,,,,,,,,,LACTATE_min,,labsfirsthour
+,h1_lactate_max,,lactate,,Text box,,,,,,,,,,,,,,,,,LACTATE_max,,labsfirsthour
+,h1_platelets_min,,Low_Plat,,Text box,,,,,,,,,,,,,,,,,PLATELET_min,,labsfirsthour
+,h1_platelets_max,,,,,,,,,,,,,,,,,,,,,PLATELET_max,,labsfirsthour
+,h1_potassium_min,,,,,,,,,,,,,,,,,,,,,POTASSIUM_min,,labsfirsthour
+,h1_potassium_max,,,,,,,,,,,,,,,,,,,,,POTASSIUM_max,,labsfirsthour
+,h1_sodium_min,,,,,,,,,,,,,,,,,,,,,SODIUM_min,,labsfirsthour
+,h1_sodium_max,,,,,,,,,,,,,,,,,,,,,SODIUM_max,,labsfirsthour
+,h1_wbc_min,,,,,,,,,,,,,,,,,,,,,WBC_min,,labsfirsthour
+,h1_wbc_max,,High_Leuc,,Text box,,,,,,,,,,,,,,,,,WBC_max,,labsfirsthour
+blood gases - first hour,,,,,,,,,,,,,,,,,,,,,,,,
+,h1_arterial_ph_min,,lowph,,Text box,,,,,,,,,,,,,,,,,PH (get min),,bloodgasfirsthourarterial 
+,h1_arterial_ph_max,,highph,,Text box,,,,,,,,,,,,,,,,,PH,,bloodgasfirsthourarterial 
+,h1_arterial_po2_min,,lowpao2,,Text box,,,,,,,,,,,,,,,,,PO2 (get min),,bloodgasfirsthourarterial 
+,h1_arterial_po2_max,,highpao2,,Text box,,,,,,,,,,,,,,,,,PO2,,bloodgasfirsthourarterial 
+,h1_arterial_pco2_min,,,,,,,,,,,,,,,,,,,,,PCO2 (get min),,bloodgasfirsthourarterial 
+,h1_arterial_pco2_max,,,,,,,,,,,,,,,,,,,,,PCO2,,bloodgasfirsthourarterial 
+,h1_pao2fio2ratio_min,,lowpao2fio2,,Text box,,,,,,,,,,,,,,,,,,,
+,h1_pao2fio2ratio_max,,highpao2fio2,,Text box,,,,,,,,,,,,,,,,,PaO2FiO2,,bloodgasfirsthourarterial 
+other data - first day,,,,,,,,,,,,,,,,,,,,,,,,
+,d1_gcs_verbal,,,,,,,gcsverb,Verbal score,,Integer,5,,,,,,,,,,gcsverbal,,gcs-first-day
+,d1_gcs_motor,,,,,,,gcsmotor,Motor score,,Integer,6,,,,,,,,,,gcsmotor,,gcs-first-day
+,d1_gcs_eyes,,,,,,,gcseye,Eyes score,,Integer,4,,,,,,,,,,gcseyes,,gcs-first-day
+,d1_gcs_total_min,,,,,,,gcs,Total Glasgow Coma Scale,,Integer,,,15,,,,,,,,,,
+,,,,,,,,TREAT_LMT,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+other data - first hour,,,,,,,,,,,,,,,,,,,,,,,,
+,h1_gcs_verbal,,,,,,,,,,,,,,,,,,,,,,,
+,h1_gcs_motor,,,,,,,,,,,,,,,,,,,,,,,
+,h1_gcs_eyes,,,,,,,,,,,,,,,,,,,,,,,
+,h1_gcs_total_min,,Glasgow,,Text box,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+Comorbidities,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,chr_resp,"Chronic restrictive, obstructive disease resulting in severe exercise restriction (unable to climb stairs or perform household duties); or documented chronic hypoxia, hypercapnia, secondary polycythaemia, severe pulmonary hypertension (mean > 40 mmHg); or ventilator dependency",,Coded integer,2,,,,,,,,,,,,
+,,,,,,,,chr_liv,"cirrhosis and documented portal hypertension; or episodes of past upper GI bleed attributed to portal hypertension. If the patient has a functioning liver transplant, this chronic health item does not apply.",,Coded integer,2,,,,,,,,,,icd9_code LIKE '5712' OR icd9_code LIKE '5715',diagnoses_icd,
+,,,,,,,,arf,,,Coded integer,2,,,,,,,,,,,,
+,,,,,,,,thrombpro,,,Coded integer,1,,,,,,,,,,,,
+,,,,,,,,iddm,?,,,NULL,,,,,,,,,,,,
+,,,,,,,,immundis,"The patient has a disease that is sufficiently advanced to suppress resistance to infection: leukaemia, AIDS, lymphoma, severe autoimmune disease or documented diffuse metastatic carcinoma.",,Coded integer,2,,,,,,,,,,separated into specific disease below,,
+,,,,,,,,immunrx,"The patient has received therapy that has suppressed resistance to infection: e.g. immunosuppression, chemotherapy within 4 weeks of admission, radiation, high-dose steroid treatment (e.g. >1.5mg/kg methyl prednisolone or equivalent for ≥5 days), long term treatment with >20 mg/day steroid.",,Coded integer,2,,,,,,,,,,probably equivalent to cancer therapy below,,
+,,,CHF_23,Severe - new york heart association class II/III,,,,,,,,,,,,,,,,,,,,
+,,,CHF-4,Severe - new york heart association class IV,,,,chr_cvs,New York Heart Association Class IV: angina or symptoms at rest or on minimal exertion (whilst getting dressed or during self-care).,,Coded integer,2,,,,,,,,,,sebastian's algorithms,,
+,,,CRF_NoDialysis,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,CRF-Dialysis,,Yes/No,,,chr_ren,Must be receiving chronic haemodialysis or peritoneal dialysis,,Coded integer,2,,,,,,,,,,,,
+,,,CirrohsisAB,Child A-B,Yes/No,,,cirrhos,APACHE data element,,Coded integer,2,,,,,,,,,,cirrohsis on chr_liv column,,
+,,,CirrohsisC,Child C,,,,,,,,,,,,,,,,,,,,
+,,,Hepat_Fail,,,,,hepfail,APACHE data element,,Coded integer,2,,,,,,,,,,,,
+,,,SolidtuimorLR,Locoregional,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,SolidTumorMTX,Metastatic,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,primary anatomic site of tumor,,,,,,,,,,,,,,,,,,,,,
+,,,Hemat_Tumor,,,,,,,,,,,,,,,,,,,"icd9_code LIKE 20000-20238, 20240-20248, 20250-20382, 20400-20522, 20580-20702, 20720-20892, 2386, or 2733",diagnoses_icd,
+,,,HMType_Code,Code distinguishing four types of haematologic malignancy,Multiple choice,,,,,,,,,,,,,,,,,combined above,,
+,,,HMType_name,"Name for the above code, Four options: lymphoma, leukemia, multiple myeloma, other",,,,lymphoma,APACHE data element,,Coded integer,2,,,,,,,,,,combined above,,
+,,,,,,,,leukaem,APACHE data element,,Coded integer,2,,,,,,,,,,,,
+,,,,,,,,metast,APACHE data element,,Coded integer,2,,,,,,,,,,,,
+,,,Immunossuppres,,Yes/No,,,immunsup,APACHE data element,,Coded integer,2,,,,,,,,,,,,
+,,,COPD,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,Steroids,Steroid use,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,AIDS,,Yes/No,,,aids,APACHE data element,,Coded integer,2,,,,,,,,,,icd9_code BETWEEN '042' AND '0449',diagnoses_icd,
+,,,Hypertension,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,Asthma,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,DM_noCompliction,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,DM_Complication,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,Angina,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,Prev-AMI,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,Card_Arrithm,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,Prev_DVT,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,PerArtDis,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,Chron_AtriaFib,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,Rheumat_Dis,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,Stroke_Sequel,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,Stroke_NoSequel,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,Dementia,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,Psychiatric,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,Morbid_Obese,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,Malnourishment,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,Peptic_Dis,,Yes/No,,,,,,,,,,,,,,,,,,,
+,,,Chron_Health_Status,Three options: one is CH status before hospital admission,Multiple choice,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,diabetes,,icd9_code LIKE 250,diagnoses_icd,
+,,,,,,,,,,,,,,,,,,,,Cancer,,"icd9_code LIKE 1960-1991, 20970-20975, 20979, or 78951",diagnoses_icd,
+,,,,,,,,,,,,,,,,,,,,pneumonia,,"icd9_code LIKE c('4800','4801','4802','4803','4803','4808','4809','481','48249','48281','48282','48283','4820','4821','4822','48230','48231','48232','48239','48240','48241','48242','48284','48289','4829','4830','4831','4838','4841','4843','4845','4846','4847','4848','485','486','5183','5070','77018','5070','5071','5072','5073','5074','5075','5076','5077','5078','7700','514','390','99731')",diagnoses_icd,
+,,,,,,,,,,,,,,,,,,,,infection acquired in hospital,,icd9_code LIKE 1369,diagnoses_icd,
+,,,,,,,,,,,,,,,,,,,,,,,,
+APACHE III components,,,,,,,,,,,,,,,,,,,,,,,,
+,albumin_apache,,,,,,,albumin,,,Integer,34,,,albumin,apacheApsVar,double precision,,,,,,,
+,bilirubin_apache,,,,,,,bili,,,Integer,19,,,bilirubin,apacheApsVar,double precision,,,,,,,
+,creatinine_apache,,,,,,,creat,,,Integer,311,,,creatinine,apacheApsVar,double precision,,,,,,,
+,glucose_apache,,,,,,,glucose,,,Numeric,10.5,,,glucose,apacheApsVar,double precision,,,,,,,
+bicarbonate_apache,,,,,,,,,,,,,,,,,,,,,,,,
+,hematocrit_apache,,,,,,,,,,,,,,hematocrit,apacheApsVar,double precision,,,,,,,
+,heart_rate_apache,,,,,,,,,,,,,,heartrate,apacheApsVar,double precision,,,,,,,
+potassium_apache,,,,,,,,,,,,,,,,,,,,,,,,
+,map_apache,,,,,,,,,,,,,,meanbp,apacheApsVar,double precision,,,,,,,
+,sodium_apache,,,,,,,,,,,,,,sodium,apacheApsVar,double precision,,,,,,,
+,fio2_apache,,,,,,,ap3fio,Apache3FractionInspiredOxygen,,Integer,NULL,,,fio2,apacheApsVar,double precision,,,,,FIO2,,bloodgasfirstdayarterial
+,paco2_apache,,,,,,,ap3co2o,Apache3PartialCarbonDioxidePressure,,Integer,NULL,,,pco2,apacheApsVar,double precision,,,,,,,
+,pao2_apache,,,,,,,ap3po2,Apache3PartialOxygenPressure,,Integer,NULL,,,pao2,apacheApsVar,double precision,,,,,,,
+,ph_apache,,,,,,,ap3ph,Apache3WorstAcidPHLevel,,Numeric,NULL,,,ph,apacheApsVar,double precision,,,,,,,
+,paco2_for_ph_apache,,,,,,,ap3co2p,Apache3WorstAcidPartialCarbonDioxidePressure,,Integer,NULL,,,,,,,,,,,,
+,resprate_apache,,,,,,,,,,,,,,respiratoryrate,apacheApsVar,double precision,,,,,,,
+,temp_apache,,,,,,,,,,,,,,temperature,apacheApsVar,double precision,,,,,,,
+,bun_apache,,,,,,,urea,,,Numeric,18.8,,,bun,apacheApsVar,double precision,,,,,,,
+,urineoutput_apache,,,,,,,urineop,,,Integer,1299,,,urine,apacheApsVar,double precision,,,,,,,
+,wbc_apache,,,,,,,,,,,,,,wbc,apacheApsVar,double precision,,,,,,,
+,gcs_eyes_apache,,,,,,,gcseye,,,,,,,eyes,apacheApsVar,bigint,,,,,,,
+,gcs_motor_apache,,,,,,,gcsmotor,,,,,,,motor,apacheApsVar,bigint,,,,,,,
+,gcs_verbal_apache,,,,,,,gcsverb,,,,,,,verbal,apacheApsVar,bigint,,,,,,,
+,gcs_unable_apache,,,,,,,,,,,,,,meds,apacheApsVar,bigint,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,arf_apache,,,,,,,,,,,,,,,,,,,,,,,
+,intubated_apache,,,,,,,intubated,,,,,,,intubated,apacheApsVar,bigint,,,,,,,
+,ventilated_apache,,,,,,,ventilated,,,,,,,vent,apacheApsVar,bigint,,,,,,,
+,,,,,,,,,,,,,,,dialysis,apacheApsVar,bigint,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+APACHE II components,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,temp,,,Numeric,37.6,,,,,,,,,,,,
+,,,,,,,,map,,,Integer,107,,,,,,,,,,,,
+,,,,,,,,hr,,,Integer,115,,,,,,,,,,,,
+,,,,,,,,rr,,,Integer,28,,,,,,,,,,,,
+,,,,,,,,paco2,,,Integer,NULL,,,,,,,,,,,,
+,,,,,,,,pao2,,,Integer,NULL,,,,,,,,,,,,
+,,,,,,,,fio2,,,Integer,NULL,,,,,,,,,,,,
+,,,,,,,,na,,,Integer,134,,,,,,,,,,,,
+,,,,,,,,k,,,Numeric,4.9,,,,,,,,,,,,
+,,,,,,,,ph,,,Numeric,NULL,,,,,,,,,,,,
+,,,,,,,,hco3,,,Integer,22,,,,,,,,,,,,
+,,,,,,,,wcc,,,Numeric,18.1,,,,,,,,,,,,
+,,,,,,,,hct,,,Numeric,0.35,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+Scores,,,,,,,,,,,,,,,,,,,,,,,,
+,apache_3j_score,,,,,,,apache3score,,,Integer,59,,,,,,,,,,,,
+,apache_3j_hospital_death_prob,,,,,,,apache3riskofdeath,,,Numeric,0.076683,,,,,,,,,,,,
+,,,,,,,,apache3isincluded,,,Integer,1,,,,,,,,,,,,
+,,,,,,,,apache3issmr,,,Numeric,1,,,,,,,,,,,,
+,apache_4a_score,,,,,,,,,,,,,,apachescore,apachePatientResult,bigint,,,,,,,
+,apache_4a_icu_death_prob,,,,,,,,,,,,,,predictedicumortality,apachePatientResult,character varying(50),,,,,,,
+,apache_4a_hospital_death_prob,,,,,,,,,,,,,,predictedhospitalmortality,apachePatientResult,character varying(50),,,,,,,
+,,,,,,,,anzrodriskofdeath,,,Numeric,0.066706,,,,,,,,,,,,
+,,,,,,,,anzrodisincluded,,,Integer,1,,,,,,,,,,,,
+,,,,,,,,anzrodissmr,,,Integer,1,,,,,,,,,,,,
+,,,,,,,,agescore,,,Integer,16,,,,,,,,,,,,
+,,,,,,,,albuminscore,,,Integer,0,,,,,,,,,,,,
+,,,,,,,,bilirubinscore,,,Integer,0,,,,,,,,,,,,
+,,,,,,,,creatininescore,,,Integer,7,,,,,,,,,,,,
+,,,,,,,,glucosescore,,,Integer,0,,,,,,,,,,,,
+,,,,,,,,haematocritscore,,,Integer,3,,,,,,,,,,,,
+,,,,,,,,heartratescore,,,Integer,5,,,,,,,,,,,,
+,,,,,,,,meanarterialpressurescore,,,Integer,4,,,,,,,,,,,,
+,,,,,,,,sodiumscore,,,Integer,2,,,,,,,,,,,,
+,,,,,,,,neurologicalscore,,,Integer,0,,,,,,,,,,,,
+,,,,,,,,oxygenationscore,,,Integer,0,,,,,,,,,,,,
+,,,,,,,,phscore,,,Integer,0,,,,,,,,,,,,
+,,,,,,,,respiratoryratescore,,,Integer,6,,,,,,,,,,,,
+,,,,,,,,temperaturescore,,,Integer,0,,,,,,,,,,,,
+,,,,,,,,ureascore,,,Integer,11,,,,,,,,,,,,
+,,,,,,,,urineoutputscore,,,Integer,5,,,,,,,,,,,,
+,,,,,,,,whitecellcountscore,,,Integer,0,,,,,,,,,,,,
+,,,,,,,,riskmodelversionid,,,Integer,7,,,,,,,,,,,,
+,,,Charlson,,,,,,,,,,,,,,,,,,,,,
+,,,SAPS3PT,,,,,,,,,,,,,,,,,,,,,
+,,,SAPS3Pro,,,,,,,,,,,,,,,,,,,,,
+,,,SAPS3ProCSA,,,,,,,,,,,,,,,,,,,,,
+,,,SOFAPT,not shown though because not all hospitals collect information necessary,,,,,,,,,,,,,,,,,,,,
+,,,MPMIII,collected but not displayed because it's not useful,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+Other,,,,,,,,,,,,,,,,,,,,,,,,
+"duration of devices e.g. catheters, mechanical ventilation, so on. have date of insertion and date of removal.",,,,,,,,,,,,,,,,,,,,,,,,
+can input information about infections with a start date and the system will map this start date to admission date - if it's on admission then this is flagged in their database as on admission.,,,,,,,,,,,,,,,,,,,,,,,,
