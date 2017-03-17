@@ -8,7 +8,7 @@ select
 
   -- hierarchical factors - hospital
   , cast('USA' as varchar(10)) as country
-  , pt.hospitalid
+  , pt.hospitalid as hospital_id
   , hp.teachingstatus as teaching_hospital
   , hp.numbedscategory as hospital_bed_size
   , cast(null as varchar(10)) as hospital_type
