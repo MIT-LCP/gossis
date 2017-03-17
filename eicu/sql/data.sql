@@ -133,6 +133,8 @@ select
   , lab_d1.bilirubin_max as d1_bilirubin_max
   , lab_d1.bun_min as d1_bun_min
   , lab_d1.bun_max as d1_bun_max
+  , lab_d1.calcium_min as d1_calcium_min
+  , lab_d1.calcium_max as d1_calcium_max
   , lab_d1.creatinine_min as d1_creatinine_min
   , lab_d1.creatinine_max as d1_creatinine_max
   , lab_d1.glucose_min as d1_glucose_min
@@ -143,6 +145,8 @@ select
   , lab_d1.hematocrit_max as d1_hematocrit_max
   , lab_d1.hemaglobin_min as d1_hemaglobin_min
   , lab_d1.hemaglobin_max as d1_hemaglobin_max
+  , lab_d1.inr_min as d1_inr_min
+  , lab_d1.inr_max as d1_inr_max
   , lab_d1.lactate_min as d1_lactate_min
   , lab_d1.lactate_max as d1_lactate_max
   , lab_d1.platelets_min as d1_platelets_min
@@ -171,6 +175,8 @@ select
   , lab_h1.bilirubin_max as h1_bilirubin_max
   , lab_h1.bun_min as h1_bun_min
   , lab_h1.bun_max as h1_bun_max
+  , lab_h1.calcium_min as h1_calcium_min
+  , lab_h1.calcium_max as h1_calcium_max
   , lab_h1.creatinine_min as h1_creatinine_min
   , lab_h1.creatinine_max as h1_creatinine_max
   , lab_h1.glucose_min as h1_glucose_min
@@ -181,6 +187,8 @@ select
   , lab_h1.hematocrit_max as h1_hematocrit_max
   , lab_h1.hemaglobin_min as h1_hemaglobin_min
   , lab_h1.hemaglobin_max as h1_hemaglobin_max
+  , lab_d1.inr_min as h1_inr_min
+  , lab_d1.inr_max as h1_inr_max
   , lab_h1.lactate_min as h1_lactate_min
   , lab_h1.lactate_max as h1_lactate_max
   , lab_h1.platelets_min as h1_platelets_min

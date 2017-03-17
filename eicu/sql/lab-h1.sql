@@ -9,6 +9,8 @@ select patientunitstayid
 , max(case when labname = 'total bilirubin' then labresult else null end) as bilirubin_max
 , min(case when labname = 'BUN' then labresult else null end) as bun_min
 , max(case when labname = 'BUN' then labresult else null end) as bun_max
+, min(case when labname = 'calcium' then labresult else null end) as calcium_min
+, max(case when labname = 'calcium' then labresult else null end) as calcium_max
 , min(case when labname = 'creatinine' then labresult else null end) as creatinine_min
 , max(case when labname = 'creatinine' then labresult else null end) as creatinine_max
 , min(case when labname in ('bedside glucose', 'glucose') then labresult else null end) as glucose_min
@@ -19,6 +21,7 @@ select patientunitstayid
 , max(case when labname = 'Hct' then labresult else null end) as hematocrit_max
 , min(case when labname = 'Hgb' then labresult else null end) as hemaglobin_min
 , max(case when labname = 'Hgb' then labresult else null end) as hemaglobin_max
+, min(case when labname = 'PT - INR' then labresult else null end) as INR_min
 , max(case when labname = 'PT - INR' then labresult else null end) as INR_max
 , min(case when labname = 'lactate' then labresult else null end) as lactate_min
 , max(case when labname = 'lactate' then labresult else null end) as lactate_max
