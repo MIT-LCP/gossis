@@ -78,7 +78,7 @@ with arf as
   select ie.icustay_id
   , max(case when vd.icustay_id is not null then 1 else 0 end) as mechvent
   from icustays ie
-  left join ventdurations vd
+  left join gosiss_ventdurations vd
     on ie.icustay_id = vd.icustay_id
     and ie.intime >= vd.starttime - interval '1' day
     and ie.intime <= vd.endtime
