@@ -38,111 +38,11 @@
 
 DROP TABLE IF EXISTS gosiss_apsiii CASCADE;
 CREATE TABLE gosiss_apsiii as
-with bg as
-(
-  -- join blood gas to ventilation durations to determine if patient was vent
-  -- also join to cpap table for the same purpose
-  select bg.icustay_id, bg.charttime
-  , PO2 as PaO2
-  , AADO2
-  -- row number indicating the highest AaDO2
-  , case
-      when  coalesce(FIO2, fio2_chartevents) is not null
-        and vd.icustay_id is not null -- patient is ventilated
-        and coalesce(FIO2, fio2_chartevents) >= 0.5
-        then ROW_NUMBER() over (partition by bg.ICUSTAY_ID ORDER BY AADO2 DESC)
-      else null end
-      as aado2_rn
-  , case
-      when  coalesce(FIO2, fio2_chartevents) >= 0.5
-          then null
-      when vd.icustay_id is not null
-          then null
-      else ROW_NUMBER() over (partition by bg.ICUSTAY_ID ORDER BY PO2 DESC)
-    end as pao2_rn
-
-  from gossis_bg bg
-  inner join icustays ie
-    on bg.icustay_id = ie.icustay_id
-  left join ventdurations vd
-    on bg.icustay_id = vd.icustay_id
-    and bg.charttime >= vd.starttime
-    and bg.charttime <= vd.endtime
-  where bg.charttime <= ie.intime + interval '1' day
-)
--- because ph/pco2 rules are an interaction *within* a blood gas, we calculate them here
--- the worse score is then taken for the final calculation
-, acidbase as
-(
-  select bg.icustay_id
-  , ph, pco2 as PACO2
-  , case
-      when ph is null or pco2 is null then null
-      when ph < 7.20 then
-        case
-          when pco2 < 50 then 12
-          else 4
-        end
-      when ph < 7.30 then
-        case
-          when pco2 < 30 then 9
-          when pco2 < 40 then 6
-          when pco2 < 50 then 3
-          else 2
-        end
-      when ph < 7.35 then
-        case
-          when pco2 < 30 then 9
-          when pco2 < 45 then 0
-          else 1
-        end
-      when ph < 7.45 then
-        case
-          when pco2 < 30 then 5
-          when pco2 < 45 then 0
-          else 1
-        end
-      when ph < 7.50 then
-        case
-          when pco2 < 30 then 5
-          when pco2 < 35 then 0
-          when pco2 < 45 then 2
-          else 12
-        end
-      when ph < 7.60 then
-        case
-          when pco2 < 40 then 3
-          else 12
-        end
-      else -- ph >= 7.60
-        case
-          when pco2 < 25 then 0
-          when pco2 < 40 then 3
-          else 12
-        end
-    end as acidbase_score
-  from gossis_bg bg
-  inner join icustays ie
-    on bg.icustay_id = ie.icustay_id
-    and bg.charttime <= ie.intime + interval '1' day
-  where ph is not null and pco2 is not null
-)
-, acidbase_max as
-(
-  select icustay_id, acidbase_score, ph, paco2
-    -- create integer which indexes maximum value of score with 1
-  , case
-      when ph is not null and paco2 is not null
-        then ROW_NUMBER() over (partition by ICUSTAY_ID ORDER BY ACIDBASE_SCORE DESC)
-      else null
-    end as acidbase_rn
-  from acidbase
-)
 -- define acute renal failure (ARF) as:
 --  creatinine >=1.5 mg/dl
 --  and urine output <410 cc/day
 --  and no chronic dialysis
-, arf as
+with arf as
 (
   select ie.icustay_id
     , case
@@ -199,12 +99,15 @@ select ie.subject_id, ie.hadm_id, ie.icustay_id
       , vital.resprate_min
       , vital.resprate_max
 
-      , pa.PaO2
-      , aa.AaDO2
+      , bg.aps3_oxy_pao2 as pao2
+      , bg.aps3_oxy_fio2 as fio2
+      , bg.aps3_oxy_paco2 as paco2_oxy
+      , bg.aps3_oxy_aado2 as aado2
+      , bg.oxygenation_score
 
-      , ab.ph
-      , ab.paco2
-      , ab.acidbase_score
+      , bg.aps3_acidbase_ph as ph
+      , bg.aps3_acidbase_paco2 as paco2
+      , bg.acidbase_score
 
       , labs.hematocrit_min
       , labs.hematocrit_max
@@ -241,8 +144,6 @@ select ie.subject_id, ie.hadm_id, ie.icustay_id
           else labs.glucose_min -- if equal, just pick labs
         end as glucose_min
 
-      -- , labs.bicarbonate_min
-      -- , labs.bicarbonate_max
       , vent.mechvent as vent
       , uo.urineoutput
       -- gcs and its components
@@ -256,21 +157,11 @@ inner join admissions adm
   on ie.hadm_id = adm.hadm_id
 inner join patients pat
   on ie.subject_id = pat.subject_id
-
--- join to above views - the row number filters to 1 row per ICUSTAY_ID
-left join bg pa
-  on  ie.icustay_id = pa.icustay_id
-  and pa.pao2_rn = 1
-left join bg aa
-  on  ie.icustay_id = aa.icustay_id
-  and aa.aado2_rn = 1
-left join acidbase_max ab
-  on  ie.icustay_id = ab.icustay_id
-  and ab.acidbase_rn = 1
+-- join to custom tables to get more data....
 left join arf
   on ie.icustay_id = arf.icustay_id
-
--- join to custom tables to get more data....
+left join gosiss_bg_d1 bg
+  on  ie.icustay_id = bg.icustay_id
 left join vent
   on ie.icustay_id = vent.icustay_id
 left join gcsfirstday gcs
@@ -533,185 +424,163 @@ from cohort
 
 from cohort
 )
--- Combine together the scores for min/max, using the following rules:
---  1) select the value furthest from a predefined normal value
---  2) if both equidistant, choose the one which gives a worse score
---  3) calculate score for acid-base abnormalities as it requires interactions
--- sometimes the code is a bit redundant, i.e. we know the max would always be furthest from 0
+-- Combine together the scores for min/max, choosing the one that gives the higher score
 , scorecomp as
 (
-  select co.*
-  -- The rules for APS III require the definition of a "worst" value
-  -- This value is defined as whatever value is furthest from a predefined normal
-  -- e.g., for heart rate, worst is defined as furthest from 75
+  select co.icustay_id
   , case
       when heartrate_max is null then null
-      when abs(heartrate_max-75) > abs(heartrate_min-75)
+      when smax.hr_score >= smin.hr_score
         then smax.hr_score
-      when abs(heartrate_max-75) < abs(heartrate_min-75)
-        then smin.hr_score
-      when abs(heartrate_max-75) = abs(heartrate_min-75)
-      and  smax.hr_score >= smin.hr_score
-        then smax.hr_score
-      when abs(heartrate_max-75) = abs(heartrate_min-75)
-      and  smax.hr_score < smin.hr_score
-        then smin.hr_score
-    end as hr_score
+      else smin.hr_score
+    end as heart_rate_score
+  , case
+      when heartrate_max is null then null
+      when smax.hr_score >= smin.hr_score
+        then heartrate_max
+      else heartrate_min
+    end as heart_rate
 
   , case
       when meanbp_max is null then null
-      when abs(meanbp_max-90) > abs(meanbp_min-90)
+      when smax.meanbp_score >= smin.meanbp_score
         then smax.meanbp_score
-      when abs(meanbp_max-90) < abs(meanbp_min-90)
-        then smin.meanbp_score
-      -- values are equidistant - pick the larger score
-      when abs(meanbp_max-90) = abs(meanbp_min-90)
-      and  smax.meanbp_score >= smin.meanbp_score
-        then smax.meanbp_score
-      when abs(meanbp_max-90) = abs(meanbp_min-90)
-      and  smax.meanbp_score < smin.meanbp_score
-        then smin.meanbp_score
+      else smin.meanbp_score
     end as meanbp_score
+  , case
+      when meanbp_max is null then null
+      when smax.meanbp_score >= smin.meanbp_score
+        then meanbp_max
+      else meanbp_min
+    end as meanbp
 
   , case
       when tempc_max is null then null
-      when abs(tempc_max-38) > abs(tempc_min-38)
+      when smax.temp_score >= smin.temp_score
         then smax.temp_score
-      when abs(tempc_max-38) < abs(tempc_min-38)
-        then smin.temp_score
-      -- values are equidistant - pick the larger score
-      when abs(tempc_max-38) = abs(tempc_min-38)
-      and  smax.temp_score >= smin.temp_score
-        then smax.temp_score
-      when abs(tempc_max-38) = abs(tempc_min-38)
-      and  smax.temp_score < smin.temp_score
-        then smin.temp_score
+      else smin.temp_score
     end as temp_score
+  -- same logic, but outputs the actual value, not the score
+  , case
+      when tempc_max is null then null
+      when smax.temp_score >= smin.temp_score
+        then tempc_max
+      else tempc_min
+    end as temp
 
   , case
       when resprate_max is null then null
-      when abs(resprate_max-19) > abs(resprate_min-19)
+      when smax.resprate_score >= smin.resprate_score
         then smax.resprate_score
-      when abs(resprate_max-19) < abs(resprate_min-19)
-        then smin.resprate_score
-      -- values are equidistant - pick the larger score
-      when abs(resprate_max-19) = abs(resprate_max-19)
-      and  smax.resprate_score >= smin.resprate_score
-        then smax.resprate_score
-      when abs(resprate_max-19) = abs(resprate_max-19)
-      and  smax.resprate_score < smin.resprate_score
-        then smin.resprate_score
+      else smin.resprate_score
     end as resprate_score
+  -- same logic, but outputs the actual value, not the score
+  , case
+      when resprate_max is null then null
+      when smax.resprate_score >= smin.resprate_score
+        then resprate_max
+      else resprate_min
+    end as resprate
 
   , case
       when hematocrit_max is null then null
-      when abs(hematocrit_max-45.5) > abs(hematocrit_min-45.5)
+      when smax.hematocrit_score >= smin.hematocrit_score
         then smax.hematocrit_score
-      when abs(hematocrit_max-45.5) < abs(hematocrit_min-45.5)
-        then smin.hematocrit_score
-      -- values are equidistant - pick the larger score
-      when abs(hematocrit_max-45.5) = abs(hematocrit_max-45.5)
-      and  smax.hematocrit_score >= smin.hematocrit_score
-        then smax.hematocrit_score
-      when abs(hematocrit_max-45.5) = abs(hematocrit_max-45.5)
-      and  smax.hematocrit_score < smin.hematocrit_score
-        then smin.hematocrit_score
+      else smin.hematocrit_score
     end as hematocrit_score
+  -- same logic, but outputs the actual value, not the score
+  , case
+      when hematocrit_max is null then null
+      when smax.hematocrit_score >= smin.hematocrit_score
+        then hematocrit_max
+      else hematocrit_min
+    end as hematocrit
 
   , case
       when wbc_max is null then null
-      when abs(wbc_max-11.5) > abs(wbc_min-11.5)
+      when smax.wbc_score >= smin.wbc_score
         then smax.wbc_score
-      when abs(wbc_max-11.5) < abs(wbc_min-11.5)
-        then smin.wbc_score
-      -- values are equidistant - pick the larger score
-      when abs(wbc_max-11.5) = abs(wbc_max-11.5)
-      and  smax.wbc_score >= smin.wbc_score
-        then smax.wbc_score
-      when abs(wbc_max-11.5) = abs(wbc_max-11.5)
-      and  smax.wbc_score < smin.wbc_score
-        then smin.wbc_score
+      else smin.wbc_score
     end as wbc_score
-
-
-  -- For some labs, "furthest from normal" doesn't make sense
-  -- e.g. creatinine w/ ARF, the minimum could be 0.3, and the max 1.6
-  -- while the minimum of 0.3 is "further from 1", seems like the max should be scored
+  -- same logic, but outputs the actual value, not the score
+  , case
+      when wbc_max is null then null
+      when smax.wbc_score >= smin.wbc_score
+        then wbc_max
+      else wbc_min
+    end as wbc
 
   , case
+    when creatinine_max is null then null
+    when smax.creatinine_score >= smin.creatinine_score
+      then smax.creatinine_score
+    else smin.creatinine_score
+  end as creatinine_score
+  -- same logic, but outputs the actual value, not the score
+  , case
       when creatinine_max is null then null
-      -- if they have arf then use the max to score
-      when arf = 1 then smax.creatinine_score
-      -- otherwise furthest from 1
-      when abs(creatinine_max-1) > abs(creatinine_min-1)
-        then smax.creatinine_score
-      when abs(creatinine_max-1) < abs(creatinine_min-1)
-        then smin.creatinine_score
-      -- values are equidistant
       when smax.creatinine_score >= smin.creatinine_score
-        then smax.creatinine_score
-      when smax.creatinine_score < smin.creatinine_score
-        then smin.creatinine_score
-    end as creatinine_score
+        then creatinine_max
+      else creatinine_min
+    end as creatinine
 
   -- the rule for BUN is the furthest from 0.. equivalent to the max value
   , case
       when bun_max is null then null
       else smax.bun_score
     end as bun_score
+  , bun_max as bun
 
   , case
       when sodium_max is null then null
-      when abs(sodium_max-145.5) > abs(sodium_min-145.5)
+      when smax.sodium_score >= smin.sodium_score
         then smax.sodium_score
-      when abs(sodium_max-145.5) < abs(sodium_min-145.5)
-        then smin.sodium_score
-      -- values are equidistant - pick the larger score
-      when abs(sodium_max-145.5) = abs(sodium_max-145.5)
-      and  smax.sodium_score >= smin.sodium_score
-        then smax.sodium_score
-      when abs(sodium_max-145.5) = abs(sodium_max-145.5)
-      and  smax.sodium_score < smin.sodium_score
-        then smin.sodium_score
+      else smin.sodium_score
     end as sodium_score
+  -- same logic, but outputs the actual value, not the score
+  , case
+      when sodium_max is null then null
+      when smax.sodium_score >= smin.sodium_score
+        then sodium_max
+      else sodium_min
+    end as sodium
 
   , case
       when albumin_max is null then null
-      when abs(albumin_max-3.5) > abs(albumin_min-3.5)
+      when smax.albumin_score >= smin.albumin_score
         then smax.albumin_score
-      when abs(albumin_max-3.5) < abs(albumin_min-3.5)
-        then smin.albumin_score
-      -- values are equidistant - pick the larger score
-      when abs(albumin_max-3.5) = abs(albumin_max-3.5)
-      and  smax.albumin_score >= smin.albumin_score
-        then smax.albumin_score
-      when abs(albumin_max-3.5) = abs(albumin_max-3.5)
-      and  smax.albumin_score < smin.albumin_score
-        then smin.albumin_score
+      else smin.albumin_score
     end as albumin_score
+  -- same logic, but outputs the actual value, not the score
+  , case
+      when albumin_max is null then null
+      when smax.albumin_score >= smin.albumin_score
+        then albumin_max
+      else albumin_min
+    end as albumin
 
   , case
       when bilirubin_max is null then null
       else smax.bilirubin_score
     end as bilirubin_score
+  , bilirubin_max as bilirubin
 
   , case
       when glucose_max is null then null
-      when abs(glucose_max-130) > abs(glucose_min-130)
+      when smax.glucose_score >= smin.glucose_score
         then smax.glucose_score
-      when abs(glucose_max-130) < abs(glucose_min-130)
-        then smin.glucose_score
-      -- values are equidistant - pick the larger score
-      when abs(glucose_max-130) = abs(glucose_max-130)
-      and  smax.glucose_score >= smin.glucose_score
-        then smax.glucose_score
-      when abs(glucose_max-130) = abs(glucose_max-130)
-      and  smax.glucose_score < smin.glucose_score
-        then smin.glucose_score
+      else smin.glucose_score
     end as glucose_score
-
+  -- same logic, but outputs the actual value, not the score
+  , case
+      when glucose_max is null then null
+      when smax.glucose_score >= smin.glucose_score
+        then glucose_max
+      else glucose_min
+    end as glucose
 
   -- Below are interactions/special cases where only 1 value is important
+  -- this data is sourced from the cohort table - not min/max tables
   , case
       when urineoutput is null then null
       when urineoutput <   400 then 15
@@ -721,7 +590,8 @@ from cohort
       when urineoutput <  2000 then 4
       when urineoutput <  4000 then 0
       when urineoutput >= 4000 then 1
-  end as uo_score
+    end as urineoutput_score
+  , urineoutput
 
   , case
       when endotrachflag = 1
@@ -777,24 +647,21 @@ from cohort
       else null
     end as gcs_score
 
-  , case
-      when PaO2 is null and AaDO2 is null
-        then null
-      when PaO2 is not null then
-        case
-          when PaO2 < 50 then 15
-          when PaO2 < 70 then 5
-          when PaO2 < 80 then 2
-        else 0 end
-      when AaDO2 is not null then
-        case
-          when AaDO2 <  100 then 0
-          when AaDO2 <  250 then 7
-          when AaDO2 <  350 then 9
-          when AaDO2 <  500 then 11
-          when AaDO2 >= 500 then 14
-        else 0 end
-      end as pao2_aado2_score
+  -- the following are available extracted from cohort table
+  , gcsmotor, gcseyes, gcsverbal
+  , endotrachflag as gcsunable
+  , pao2
+  , fio2
+  , paco2_oxy
+  , aado2
+  , oxygenation_score
+
+  , ph
+  , paco2
+  , acidbase_score
+
+  , vent
+  , arf
 
 from cohort co
 left join score_min smin
@@ -807,21 +674,21 @@ left join score_max smax
 (
   select s.*
   -- coalesce statements impute normal score of zero if data element is missing
-  , coalesce(hr_score,0)
+  , coalesce(heart_rate_score,0)
   + coalesce(meanbp_score,0)
   + coalesce(temp_score,0)
   + coalesce(resprate_score,0)
-  + coalesce(pao2_aado2_score,0)
   + coalesce(hematocrit_score,0)
   + coalesce(wbc_score,0)
   + coalesce(creatinine_score,0)
-  + coalesce(uo_score,0)
+  + coalesce(urineoutput_score,0)
   + coalesce(bun_score,0)
   + coalesce(sodium_score,0)
   + coalesce(albumin_score,0)
   + coalesce(bilirubin_score,0)
   + coalesce(glucose_score,0)
   + coalesce(acidbase_score,0)
+  + coalesce(oxygenation_score,0)
   + coalesce(gcs_score,0)
     as APSIII
   from scorecomp s
@@ -830,15 +697,15 @@ select ie.subject_id, ie.hadm_id, ie.icustay_id
 , APSIII
 -- Calculate probability of hospital mortality using equation from Johnson 2014.
 , 1 / (1 + exp(- (-4.4360 + 0.04726*(APSIII) ))) as APSIII_PROB
-, hr_score
+, heart_rate_score
 , meanbp_score
 , temp_score
 , resprate_score
-, pao2_aado2_score
+, oxygenation_score
 , hematocrit_score
 , wbc_score
 , creatinine_score
-, uo_score
+, urineoutput_score
 , bun_score
 , sodium_score
 , albumin_score
@@ -846,6 +713,32 @@ select ie.subject_id, ie.hadm_id, ie.icustay_id
 , glucose_score
 , acidbase_score
 , gcs_score
+-- components
+, heart_rate
+, meanbp
+, temp
+, resprate
+-- oxygenation components
+, pao2
+, fio2
+, paco2_oxy
+, aado2
+, hematocrit
+, wbc
+, creatinine
+, urineoutput
+, bun
+, sodium
+, albumin
+, bilirubin
+, glucose
+-- acidbase components
+, ph, paco2
+-- gcs components
+, gcsverbal, gcsmotor, gcseyes, gcsunable
+-- misc necessary components
+, vent
+, arf
 from icustays ie
 left join score s
   on ie.icustay_id = s.icustay_id
