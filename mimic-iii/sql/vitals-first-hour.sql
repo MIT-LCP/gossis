@@ -139,5 +139,3 @@ FROM  (
 ) pvt
 group by pvt.subject_id, pvt.hadm_id, pvt.icustay_id
 order by pvt.subject_id, pvt.hadm_id, pvt.icustay_id;
-
-commit;
