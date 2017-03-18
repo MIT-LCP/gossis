@@ -2,18 +2,18 @@ DROP TABLE IF EXISTS gosiss CASCADE;
 CREATE TABLE gosiss as
 select
   -- patient identifiers
-    'mimic_' || cast(ie.icustay_id as varchar(40)) as encounterId
-  , 'mimic_' || cast(ie.subject_id as varchar(40)) as patientId
+    'mimic_' || cast(ie.icustay_id as varchar(40)) as encounter_id
+  , 'mimic_' || cast(ie.subject_id as varchar(40)) as patient_id
 
   -- hierarchical factors - hospital
   , cast('USA' as varchar(10)) as country
-  , cast(-1 as smallint) as hospitalid
+  , cast(-1 as smallint) as hospital_id
   , cast(1 as smallint) as teaching_hospital
   , cast(NULL as smallint) as hospital_bed_size
   , cast(null as varchar(10)) as hospital_type
 
   -- hierarchical factors - ICU
-  , ie.first_wardid as icuId
+  , ie.first_wardid as icu_id
   , ie.first_careunit as icu_type
   , cast(NULL as varchar(10)) as icu_stay_type
 
@@ -46,20 +46,6 @@ select
 
   , case when adm.admission_type = 'ELECTIVE' then 1 else 0 end as elective_surgery
   , cast(NULL as smallint) as readmission_status
-
-
-  -- TODO: define events
-  , cast(null as smallint) as GIBleed_1h
-  , cast(null as smallint) as SNCMass_1h
-  , cast(null as smallint) as Aminas_1h
-  , cast(null as smallint) as Arrhythmia_1h
-  , cast(null as smallint) as AKI_1h
-  , cast(null as smallint) as Arritmia_D1
-  , cast(null as smallint) as CPA_D1
-  , cast(null as smallint) as AKI_D1
-  , cast(null as smallint) as GIBleed_D1
-  , cast(null as smallint) as SNCMass_D1
-  , cast(null as smallint) as Neutrpenia_D1
 
   -- TODO: Define treatments
 
@@ -157,11 +143,12 @@ select
   -- blood gases, first day
   , bg_d1.PH_min as d1_arterial_ph_min
   , bg_d1.PH_max as d1_arterial_ph_max
-  , bg_d1.PO2_min as d1_arterial_po2_min
-  , bg_d1.PO2_max as d1_arterial_po2_max
-  , bg_d1.PCO2_min as d1_arterial_pco2_min
-  , bg_d1.PCO2_max as d1_arterial_pco2_max
+  , bg_d1.PAO2_min as d1_arterial_pao2_min
+  , bg_d1.PAO2_max as d1_arterial_pao2_max
+  , bg_d1.PACO2_min as d1_arterial_paco2_min
+  , bg_d1.PACO2_max as d1_arterial_paco2_max
   , bg_d1.PaO2FiO2_min as d1_PaO2FiO2Ratio_min
+  , bg_d1.PaO2FiO2_max as d1_PaO2FiO2Ratio_max
 
   -- Labs - FIRST HOUR
   , lab_h1.ALBUMIN_min as h1_albumin_min
@@ -198,48 +185,51 @@ select
   -- blood gases, first hour
   , bg_h1.PH_min as h1_arterial_ph_min
   , bg_h1.PH_max as h1_arterial_ph_max
-  , bg_h1.PO2_min as h1_arterial_po2_min
-  , bg_h1.PO2_max as h1_arterial_po2_max
-  , bg_h1.PCO2_min as h1_arterial_pco2_min
-  , bg_h1.PCO2_max as h1_arterial_pco2_max
+  , bg_h1.PAO2_min as h1_arterial_pao2_min
+  , bg_h1.PAO2_max as h1_arterial_pao2_max
+  , bg_h1.PACO2_min as h1_arterial_paco2_min
+  , bg_h1.PACO2_max as h1_arterial_paco2_max
   , bg_h1.PaO2FiO2_min as h1_PaO2FiO2Ratio_min
+  , bg_h1.PaO2FiO2_max as h1_PaO2FiO2Ratio_max
 
   -- APS III components
-  , apsiii.albumin_score as albumin_apache
-  , apsiii.bilirubin_score as bilirubin_apache
-  , apsiii.creatinine_score as creatinine_apache
-  --, apsiii.fio2 as fio2_apache
-  , cast(NULL as double precision) as fio2_apache
-  , apsiii.glucose_score as glucose_apache
-  -- , apsiii.hco3_score as bicarbonate_apache
-  , apsiii.hematocrit_score as hematocrit_apache
-  , apsiii.hr_score as heart_rate_apache
-  -- , apsiii. as potassium_apache
-  , apsiii.meanbp_score as map_apache
-  , apsiii.sodium_score as sodium_apache
---  , apsiii.pco2 as paco2_apache
---  , apsiii.pao2 as pao2_apache
- -- , apsiii.ph as ph_apache
-  , apsiii.resprate_score as resprate_apache
-  , apsiii.temp_score as temp_apache
-  , apsiii.bun_score as bun_apache
-  , apsiii.uo_score as urineoutput_apache
-  , apsiii.wbc_score as wbc_apache
-  --, apsiii.eyes as gcs_eyes_apache
-  --, apsiii.motor as gcs_motor_apache
-  --, apsiii.verbal as gcs_verbal_apache
-  --, apsiii.meds as gcs_unable_apache
-  -- , apsiii.dialysis as dialysis_apache
-  -- , apsiii.intubated as intubated_apache
-  -- , apsiii.vent as vent_apache
+  , apsiii.albumin as albumin_apache
+  , apsiii.bilirubin as bilirubin_apache
+  , apsiii.creatinine as creatinine_apache
+  , apsiii.glucose as glucose_apache
+  , apsiii.hematocrit as hematocrit_apache
+  , apsiii.heart_rate as heart_rate_apache
+  , apsiii.meanbp as map_apache
+  , apsiii.sodium as sodium_apache
+  , bg_d1.aps3_oxy_fio2 as fio2_apache
+  , bg_d1.aps3_oxy_paco2 as paco2_apache
+  , bg_d1.aps3_oxy_pao2 as pao2_apache
+  -- , bg_d1.aps3_oxy_aado2
+  -- , bg_d1.oxygenation_score
 
-  -- Other measurements - FIRST DAY
-  -- , urine_output
+  , bg_d1.aps3_acidbase_ph as ph_apache
+  , bg_d1.aps3_acidbase_paco2 as paco2_for_ph_apache
+  -- , bg_d1.acidbase_score
+  , apsiii.resprate as resprate_apache
+  , apsiii.temp as temp_apache
+  , apsiii.bun as bun_apache
+  , apsiii.urineoutput as urineoutput_apache
+  , apsiii.wbc as wbc_apache
+
+  , apsiii.gcseyes as gcs_eyes_apache
+  , apsiii.gcsmotor as gcs_motor_apache
+  , apsiii.gcsverbal as gcs_verbal_apache
+  , apsiii.gcsunable as gcs_unable_apache
+
+  , apsiii.vent as ventilated_apache
+  , apsiii.arf as dialysis_apache
+  -- , ??? as intubated_apache
 
   -- Scoring systems
-  , cast(NULL as smallint) as apache_iva_score
-  , cast(NULL as double precision) as apache_iva_icu_death_prob
-  , cast(NULL as double precision) as apache_iva_hospital_death_prob
+  , apsiii.apsiii
+  , cast(NULL as smallint) as apache_3j_score
+  , cast(NULL as double precision) as apache_4a_icu_death_prob
+  , cast(NULL as double precision) as apache_4a_hospital_death_prob
 
 from icustays ie
 -- get prior admissions - QUESTION: is ANZICS prev admission only in hospital??
@@ -249,19 +239,19 @@ inner join admissions adm
   on ie.hadm_id = adm.hadm_id
 inner join patients pt
   on ie.subject_id = pt.subject_id
-left join demographics demo
+left join gosiss_demographics demo
   on ie.icustay_id = demo.icustay_id
-left join gossis_labsfirstday lab_d1
+left join gosiss_labs_d1 lab_d1
   on ie.icustay_id = lab_d1.icustay_id
-left join gossis_labsfirsthour lab_h1
+left join gosiss_labs_h1 lab_h1
   on ie.icustay_id = lab_h1.icustay_id
-left join gossis_bg_firstday bg_d1
+left join gosiss_bg_d1 bg_d1
   on ie.icustay_id = bg_d1.icustay_id
-left join gossis_bg_firsthour bg_h1
+left join gosiss_bg_h1 bg_h1
   on ie.icustay_id = bg_h1.icustay_id
-left join gossis_vitalsfirstday v_d1
+left join gossis_vitals_d1 v_d1
   on ie.icustay_id = v_d1.icustay_id
-left join gossis_vitalsfirsthour v_h1
+left join gossis_vitals_h1 v_h1
   on ie.icustay_id = v_h1.icustay_id
-left join apsiii
+left join gosiss_apsiii apsiii
   on ie.icustay_id = apsiii.icustay_id;
