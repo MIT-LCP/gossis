@@ -47,16 +47,6 @@ SELECT pvt.subject_id, pvt.hadm_id, pvt.icustay_id
 , min(case when VitalID = 14 then valuenum else null end) as MBPNI_Min
 , max(case when VitalID = 14 then valuenum else null end) as MBPNI_Max
 , avg(case when VitalID = 14 then valuenum else null end) as MBPNI_Mean
--- either invasive or non-invasive blood pressure
-, min(case when VitalID in (9,11) then valuenum else null end) as SysBP_Min
-, max(case when VitalID in (9,11) then valuenum else null end) as SysBP_Max
-, avg(case when VitalID in (9,11) then valuenum else null end) as SysBP_Mean
-, min(case when VitalID in (10,12) then valuenum else null end) as DiasBP_Min
-, max(case when VitalID in (10,12) then valuenum else null end) as DiasBP_Max
-, avg(case when VitalID in (10,12) then valuenum else null end) as DiasBP_Mean
-, min(case when VitalID in (13,14) then valuenum else null end) as MBP_Min
-, max(case when VitalID in (13,14) then valuenum else null end) as MBP_Max
-, avg(case when VitalID in (13,14) then valuenum else null end) as MBP_Mean
 
 FROM  (
   select ie.subject_id, ie.hadm_id, ie.icustay_id
