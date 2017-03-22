@@ -1,3 +1,8 @@
+# ignore csv, xlsx, and pdf files by default
+*.csv
+*.pdf
+*.xlsx
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
