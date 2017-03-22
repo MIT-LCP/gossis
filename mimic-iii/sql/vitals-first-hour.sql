@@ -9,15 +9,15 @@ SELECT pvt.subject_id, pvt.hadm_id, pvt.icustay_id
 , min(case when VitalID = 1 then valuenum else null end) as HeartRate_Min
 , max(case when VitalID = 1 then valuenum else null end) as HeartRate_Max
 , avg(case when VitalID = 1 then valuenum else null end) as HeartRate_Mean
-, min(case when VitalID = 2 then valuenum else null end) as SysBP_Min
-, max(case when VitalID = 2 then valuenum else null end) as SysBP_Max
-, avg(case when VitalID = 2 then valuenum else null end) as SysBP_Mean
-, min(case when VitalID = 3 then valuenum else null end) as DiasBP_Min
-, max(case when VitalID = 3 then valuenum else null end) as DiasBP_Max
-, avg(case when VitalID = 3 then valuenum else null end) as DiasBP_Mean
-, min(case when VitalID = 4 then valuenum else null end) as MeanBP_Min
-, max(case when VitalID = 4 then valuenum else null end) as MeanBP_Max
-, avg(case when VitalID = 4 then valuenum else null end) as MeanBP_Mean
+, min(case when VitalID in (9,11) then valuenum else null end) as SysBP_Min
+, max(case when VitalID in (9,11) then valuenum else null end) as SysBP_Max
+, avg(case when VitalID in (9,11) then valuenum else null end) as SysBP_Mean
+, min(case when VitalID in (10,12) then valuenum else null end) as DiasBP_Min
+, max(case when VitalID in (10,12) then valuenum else null end) as DiasBP_Max
+, avg(case when VitalID in (10,12) then valuenum else null end) as DiasBP_Mean
+, min(case when VitalID in (13,14) then valuenum else null end) as MeanBP_Min
+, max(case when VitalID in (13,14) then valuenum else null end) as MeanBP_Max
+, avg(case when VitalID in (13,14) then valuenum else null end) as MeanBP_Mean
 , min(case when VitalID = 5 then valuenum else null end) as RespRate_Min
 , max(case when VitalID = 5 then valuenum else null end) as RespRate_Max
 , avg(case when VitalID = 5 then valuenum else null end) as RespRate_Mean
@@ -53,9 +53,11 @@ FROM  (
   select ie.subject_id, ie.hadm_id, ie.icustay_id
   , case
     when itemid in (211,220045) and valuenum > 0 and valuenum < 300 then 1 -- HeartRate
-    when itemid in (51,442,455,6701,220179,220050) and valuenum > 0 and valuenum < 400 then 2 -- SysBP
-    when itemid in (8368,8440,8441,8555,220180,220051) and valuenum > 0 and valuenum < 300 then 3 -- DiasBP
-    when itemid in (456,52,6702,443,220052,220181,225312) and valuenum > 0 and valuenum < 300 then 4 -- MeanBP
+    -- below case statements just shown for illustration of getting any BP meas
+    -- including them would supercede the non-invasive/invasive case statements
+    -- when itemid in (51,442,455,6701,220179,220050) and valuenum > 0 and valuenum < 400 then 2 -- SysBP
+    -- when itemid in (8368,8440,8441,8555,220180,220051) and valuenum > 0 and valuenum < 300 then 3 -- DiasBP
+    -- when itemid in (456,52,6702,443,220052,220181,225312) and valuenum > 0 and valuenum < 300 then 4 -- MeanBP
     when itemid in (615,618,220210,224690) and valuenum > 0 and valuenum < 70 then 5 -- RespRate
     when itemid in (223761,678) and valuenum > 70 and valuenum < 120  then 6 -- TempF, converted to degC in valuenum call
     when itemid in (223762,676) and valuenum > 10 and valuenum < 50  then 6 -- TempC
