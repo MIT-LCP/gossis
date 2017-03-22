@@ -46,7 +46,7 @@ select
   , case when adm.deathtime <= ie.outtime then 1 else 0 end as ICU_death
 
   , case when adm.admission_type = 'ELECTIVE' then 1 else 0 end as elective_surgery
-  , cast(NULL as smallint) as readmission_status
+  , demo.readmission as readmission_status
 
   -- TODO: Define treatments
 

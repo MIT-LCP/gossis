@@ -97,6 +97,9 @@ SELECT
   , demo.PREGNANT
   , demo.SMOKING
   , serv.first_service
+  , case when ROW_NUMBER() over (PARTITION BY ie.hadm_id ORDER BY ie.intime) > 1
+      then 1
+    else 0 end as readmission
 FROM icustays ie
 LEFT JOIN demo
   on ie.icustay_id = demo.icustay_id
