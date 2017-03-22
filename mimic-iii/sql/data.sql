@@ -16,7 +16,7 @@ select
   -- hierarchical factors - ICU
   , ie.first_wardid as icu_id
   , ie.first_careunit as icu_type
-  , cast(NULL as varchar(10)) as icu_stay_type
+  , demo.first_service as icu_stay_type
 
   -- demographics
   , ROUND( (CAST(ie.intime AS DATE) - CAST(pt.dob AS DATE))  / 365.242, 4) AS age
