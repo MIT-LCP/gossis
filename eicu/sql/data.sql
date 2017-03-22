@@ -223,7 +223,7 @@ select
   , aav.pco2 as paco2_apache
   , aav.pao2 as pao2_apache
   , aav.ph as ph_apache
-  -- TODO: does eICU have a separate paco2 for acid-base scoring?
+  -- note that eICU uses the same PaCO2 for oxygenation and pH scoring
   , aav.pco2 as paco2_for_ph_apache
   , aav.respiratoryrate as resprate_apache
   , aav.temperature as temp_apache
