@@ -1487,7 +1487,8 @@ d1_wbc_min:
     note: None
   snomed: None
 d1_wbc_max:
-  category: The highest white blood cell count for the patient during the first 24 hours of their unit stay
+  category: labs
+  description: The highest white blood cell count for the patient during the first 24 hours of their unit stay
   dataType: numeric
   example: 10.0
   unitofmeasure: 10^9/L
@@ -1942,7 +1943,8 @@ h1_wbc_min:
     note: None
   snomed: None
 h1_wbc_max:
-  category: The highest white blood cell count for the patient during the first hour of their unit stay
+  category: labs
+  description: The highest white blood cell count for the patient during the first hour of their unit stay
   dataType: numeric
   example: 10.0
   unitofmeasure: 10^9/L
