@@ -13,8 +13,6 @@ SELECT
   , max(CASE WHEN label = 'ALBUMIN' THEN valuenum ELSE null END) as ALBUMIN_max
   , min(CASE WHEN label = 'BANDS' THEN valuenum ELSE null END) as BANDS_min
   , max(CASE WHEN label = 'BANDS' THEN valuenum ELSE null END) as BANDS_max
-  , min(CASE WHEN label = 'BICARBONATE' THEN valuenum ELSE null END) as BICARBONATE_min
-  , max(CASE WHEN label = 'BICARBONATE' THEN valuenum ELSE null END) as BICARBONATE_max
   , min(CASE WHEN label = 'BILIRUBIN' THEN valuenum ELSE null END) as BILIRUBIN_min
   , max(CASE WHEN label = 'BILIRUBIN' THEN valuenum ELSE null END) as BILIRUBIN_max
   , min(CASE WHEN label = 'CREATININE' THEN valuenum ELSE null END) as CREATININE_min
@@ -23,6 +21,8 @@ SELECT
   , max(CASE WHEN label = 'CHLORIDE' THEN valuenum ELSE null END) as CHLORIDE_max
   , min(CASE WHEN label = 'GLUCOSE' THEN valuenum ELSE null END) as GLUCOSE_min
   , max(CASE WHEN label = 'GLUCOSE' THEN valuenum ELSE null END) as GLUCOSE_max
+  , min(CASE WHEN label = 'HCO3' THEN valuenum ELSE null end) as HCO3_min
+  , max(CASE WHEN label = 'HCO3' THEN valuenum ELSE null end) as HCO3_max
   , min(CASE WHEN label = 'HEMATOCRIT' THEN valuenum ELSE null END) as HEMATOCRIT_min
   , max(CASE WHEN label = 'HEMATOCRIT' THEN valuenum ELSE null END) as HEMATOCRIT_max
   , min(CASE WHEN label = 'HEMOGLOBIN' THEN valuenum ELSE null END) as HEMOGLOBIN_min
@@ -45,8 +45,6 @@ SELECT
   , max(CASE WHEN label = 'BUN' THEN valuenum ELSE null end) as BUN_max
   , min(CASE WHEN label = 'WBC' THEN valuenum ELSE null end) as WBC_min
   , max(CASE WHEN label = 'WBC' THEN valuenum ELSE null end) as WBC_max
-  , min(CASE WHEN label = 'HCO3' THEN valuenum ELSE null end) as HCO3_min
-  , max(CASE WHEN label = 'HCO3' THEN valuenum ELSE null end) as HCO3_max
   , min(CASE WHEN label = 'CALCIUM' THEN valuenum ELSE null end) as CALCIUM_min
   , max(CASE WHEN label = 'CALCIUM' THEN valuenum ELSE null end) as CALCIUM_max
 
@@ -60,7 +58,8 @@ FROM
         WHEN itemid = 50868 THEN 'ANION GAP'
         WHEN itemid = 50862 THEN 'ALBUMIN'
         WHEN itemid = 51144 THEN 'BANDS'
-        WHEN itemid = 50882 THEN 'BICARBONATE'
+	      WHEN itemid = 50893 THEN 'CALCIUM'
+        WHEN itemid = 50882 THEN 'HCO3' -- bicarbonate
         WHEN itemid = 50885 THEN 'BILIRUBIN'
         WHEN itemid = 50912 THEN 'CREATININE'
         WHEN itemid = 50806 THEN 'CHLORIDE'
@@ -83,8 +82,6 @@ FROM
         WHEN itemid = 51006 THEN 'BUN'
         WHEN itemid = 51300 THEN 'WBC'
         WHEN itemid = 51301 THEN 'WBC'
-	WHEN itemid = 50882 THEN 'HCO3'
-	WHEN itemid = 50893 THEN 'CALCIUM'
       ELSE null
     END AS label
   , -- add in some sanity checks on the values
