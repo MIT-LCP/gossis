@@ -2,16 +2,8 @@
 
 DROP TABLE IF EXISTS gosiss_demographics CASCADE;
 CREATE TABLE gosiss_demographics AS
-SELECT
-  demo.subject_id, demo.hadm_id, demo.icustay_id
-
-  , max(CASE WHEN label = 'WEIGHT' THEN valuenum ELSE null END) as WEIGHT
-  , max(CASE WHEN label = 'HEIGHT' THEN valuenum ELSE null END) as HEIGHT
-  , max(CASE WHEN label = 'PREGNANT' THEN valuenum ELSE null END) as PREGNANT
-  , max(CASE WHEN label = 'SMOKING' THEN valuenum ELSE null END) as SMOKING
-
-FROM
-( -- begin query that extracts the data
+with demo as
+(
   SELECT ie.subject_id, ie.hadm_id, ie.icustay_id
   -- here we assign labels to ITEMIDs
   -- this also fuses together multiple ITEMIDs containing the same data
@@ -61,7 +53,17 @@ FROM
       225108 -- TOBACCO USE | FLAG | METAVISION
     )
     AND valuenum IS NOT null
-) demo
+)
+SELECT
+  demo.subject_id, demo.hadm_id, demo.icustay_id
+
+  , max(CASE WHEN label = 'WEIGHT' THEN valuenum ELSE null END) as WEIGHT
+  , max(CASE WHEN label = 'HEIGHT' THEN valuenum ELSE null END) as HEIGHT
+  , max(CASE WHEN label = 'PREGNANT' THEN valuenum ELSE null END) as PREGNANT
+  , max(CASE WHEN label = 'SMOKING' THEN valuenum ELSE null END) as SMOKING
+
+FROM
+
 GROUP BY demo.subject_id, demo.hadm_id, demo.icustay_id
 ORDER BY demo.subject_id, demo.hadm_id, demo.icustay_id;
 
