@@ -267,4 +267,11 @@ left join gossis_vitals_d1 v_d1
 left join gossis_vitals_h1 v_h1
   on ie.icustay_id = v_h1.icustay_id
 left join gosiss_apsiii apsiii
-  on ie.icustay_id = apsiii.icustay_id;
+  on ie.icustay_id = apsiii.icustay_id
+-- Apply exclusion criteria
+where ie.icustay_id in
+(
+select icustay_id
+from gosiss_cohort co
+where co.excluded = 0
+);
