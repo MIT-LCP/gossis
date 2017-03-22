@@ -62,7 +62,7 @@ SELECT
   , max(CASE WHEN label = 'PREGNANT' THEN valuenum ELSE null END) as PREGNANT
   , max(CASE WHEN label = 'SMOKING' THEN valuenum ELSE null END) as SMOKING
 
-FROM
+FROM demo
 
 GROUP BY demo.subject_id, demo.hadm_id, demo.icustay_id
 ORDER BY demo.subject_id, demo.hadm_id, demo.icustay_id;
