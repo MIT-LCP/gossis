@@ -1,4 +1,16 @@
 variables:
+  - data_source:
+  category: identifier
+  description: Identifies the data source from which information was extracted
+  dataType: string
+  example: eicu
+  unitofmeasure: None
+  permissibleRange:
+    coded: ["eicu","mimic-iii","anzics"]
+    low: None
+    high: None
+    meaning: None
+  snomed: None
   - encounter_id:
     category: identifier
     description: Unique identifier associated with a patient unit stay
