@@ -79,6 +79,12 @@ select
   , v_d1.DiasBP_Max as d1_diasbp_max
   , v_d1.MeanBP_Min as d1_mbp_min
   , v_d1.MeanBP_Max as d1_mbp_max
+  , v_d1.PASys_Min as d1_pasys_invasive_min
+  , v_d1.PASys_Max as d1_pasys_invasive_max
+  , v_d1.PADias_Min as d1_padias_invasive_min
+  , v_d1.PADias_Max as d1_padias_invasive_max
+  , v_d1.PAMean_Min as d1_pamean_invasive_min
+  , v_d1.PAMean_Max as d1_pamean_invasive_max
 
   -- Physiology - FIRST HOUR
   , v_h1.HeartRate_Min as h1_heartrate_min
@@ -107,6 +113,12 @@ select
   , v_h1.DiasBP_Max as h1_diasbp_max
   , v_h1.MeanBP_Min as h1_mbp_min
   , v_h1.MeanBP_Max as h1_mbp_max
+  , v_h1.PASys_Min as h1_pasys_invasive_min
+  , v_h1.PASys_Max as h1_pasys_invasive_max
+  , v_h1.PADias_Min as h1_padias_invasive_min
+  , v_h1.PADias_Max as h1_padias_invasive_max
+  , v_h1.PAMean_Min as h1_pamean_invasive_min
+  , v_h1.PAMean_Max as h1_pamean_invasive_max
 
 
   -- Labs - FIRST DAY
