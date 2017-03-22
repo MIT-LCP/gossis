@@ -2,7 +2,8 @@ DROP TABLE IF EXISTS gosiss CASCADE;
 CREATE TABLE gosiss as
 select
   -- patient identifiers
-    'mimic_' || cast(ie.icustay_id as varchar(40)) as encounter_id
+    ie.dbsource as data_source
+  , 'mimic_' || cast(ie.icustay_id as varchar(40)) as encounter_id
   , 'mimic_' || cast(ie.subject_id as varchar(40)) as patient_id
 
   -- hierarchical factors - hospital
