@@ -4,7 +4,16 @@
 -- now generate arterial only blood gas samples
 DROP TABLE IF EXISTS gosiss_bg_d1 CASCADE;
 CREATE TABLE gosiss_bg_d1 AS
-with oxy_stg as
+-- filter down to first day
+with bg as
+(
+  select bg.*
+  from gosiss_bg bg
+  inner join icustays ie
+    on bg.icustay_id = ie.icustay_id
+  where bg.charttime <= ie.intime + interval '1' day
+)
+, oxy_stg as
 (
   select bg.icustay_id, bg.charttime
   -- calculate score for all blood gases
@@ -32,7 +41,7 @@ with oxy_stg as
         else 0 end
       else null
     end as oxygenation_score
-  from gosiss_bg bg
+  from bg
   where specimen_pred = 'ART'
   and (po2 is not null or aado2 is not null)
 )
@@ -42,8 +51,12 @@ with oxy_stg as
     icustay_id, charttime
     , pao2, paco2, fio2, aado2
     , oxygenation_score
-    , ROW_NUMBER() OVER (PARTITION BY icustay_id ORDER BY oxygenation_score desc)
-        as rn
+    , ROW_NUMBER() OVER
+    (
+      PARTITION BY icustay_id
+      ORDER BY oxygenation_score desc, pao2
+      , case when fio2 is not null then 0 else 1 end
+    ) as rn
   from oxy_stg
 )
 -- because ph/pco2 rules are an interaction *within* a blood gas, we calculate them here
@@ -98,7 +111,7 @@ with oxy_stg as
           else 12
         end
     end as acidbase_score
-  from gosiss_bg bg
+  from bg
   where ph is not null and pco2 is not null
   and specimen_pred = 'ART'
 )
@@ -106,7 +119,7 @@ with oxy_stg as
 (
   select icustay_id, acidbase_score, ph, paco2
     -- create integer which indexes maximum value of score with 1
-  , ROW_NUMBER() over (partition by ICUSTAY_ID ORDER BY ACIDBASE_SCORE DESC)
+  , ROW_NUMBER() over (partition by ICUSTAY_ID ORDER BY ACIDBASE_SCORE DESC, paco2 desc)
       as rn
   from acidbase
 )
@@ -180,7 +193,7 @@ select ie.subject_id, ie.hadm_id, ie.icustay_id
 -- , REQUIREDO2
 
 from icustays ie
-left join gosiss_bg bg
+left join bg
   on ie.icustay_id = bg.icustay_id
   -- restrict it to *only* arterial samples
   and bg.specimen_pred = 'ART'
