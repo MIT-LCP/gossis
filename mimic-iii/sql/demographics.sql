@@ -102,7 +102,4 @@ LEFT JOIN demo
   on ie.icustay_id = demo.icustay_id
 LEFT JOIN serv
   on demo.icustay_id = serv.icustay_id
-  and serv.rn = 1
-
-GROUP BY demo.subject_id, demo.hadm_id, demo.icustay_id
-ORDER BY demo.subject_id, demo.hadm_id, demo.icustay_id;
+  and serv.rn = 1;
