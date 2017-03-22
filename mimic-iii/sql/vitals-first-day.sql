@@ -47,6 +47,15 @@ SELECT pvt.subject_id, pvt.hadm_id, pvt.icustay_id
 , min(case when VitalID = 14 then valuenum else null end) as MBPNI_Min
 , max(case when VitalID = 14 then valuenum else null end) as MBPNI_Max
 , avg(case when VitalID = 14 then valuenum else null end) as MBPNI_Mean
+, min(case when VitalID = 15 then valuenum else null end) as PASys_Min
+, max(case when VitalID = 15 then valuenum else null end) as PASys_Max
+, avg(case when VitalID = 15 then valuenum else null end) as PASys_Mean
+, min(case when VitalID = 16 then valuenum else null end) as PADias_Min
+, max(case when VitalID = 16 then valuenum else null end) as PADias_Max
+, avg(case when VitalID = 16 then valuenum else null end) as PADias_Mean
+, min(case when VitalID = 17 then valuenum else null end) as PAMean_Min
+, max(case when VitalID = 17 then valuenum else null end) as PAMean_Max
+, avg(case when VitalID = 17 then valuenum else null end) as PAMean_Mean
 
 FROM  (
   select ie.subject_id, ie.hadm_id, ie.icustay_id
@@ -68,7 +77,9 @@ FROM  (
     when itemid in (8440,8441,220180) and valuenum > 0 and valuenum < 300 then 12 -- DiasBPNI
     when itemid in (52,6702,220052,225312) and valuenum > 0 and valuenum < 400 then 13 -- MBPInv
     when itemid in (456,443,220181) and valuenum > 0 and valuenum < 400 then 14 -- MBPNI
-
+    when itemid in (492,220059) and valuenum > 0 and valuenum < 80 then 15 -- PAPs
+    when itemid in (8448,220060) and valuenum > 0 and valuenum < 80 then 16 -- PAPd
+    when itemid in (491,220061) and valuenum > 0 and valuenum < 80 then 17 -- PAP mean
     else null end as VitalID
       -- convert F to C
   , case when itemid in (223761,678) then (valuenum-32)/1.8 else valuenum end as valuenum
@@ -115,6 +126,10 @@ FROM  (
   220210,--	Respiratory Rate
   224690, --	Respiratory Rate (Total)
 
+  -- PULMONARY ARTERY PRESSURE
+  492, 220059, -- Pulmonary Artery Pressure systolic, PAPs mmHg
+  8448, 220060, -- Pulmonary Artery Pressure diastolic, PAPd mmHg
+  491, 220061, -- Pulmonary Artery Pressure mean. PAPm mmHg
 
   -- SPO2, peripheral
   646, 220277,
