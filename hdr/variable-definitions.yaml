@@ -2316,7 +2316,7 @@ gcs_unable_apache:
   snomed: None
 arf_apache:
   category: APACHE covariate
-  description: Whether the patient had acute renal failure during the first 24 hours of their unit stay, defined as a 24 hour urine output <410ml, creatinine >=133 µmol/L and no chronic dialysis
+  description: Whether the patient had acute renal failure during the first 24 hours of their unit stay, defined as a 24 hour urine output <410ml, creatinine >=133 micromol/L and no chronic dialysis
   dataType: binary
   example: 0
   unitofmeasure: None
