@@ -1,5 +1,6 @@
 encounter_id
 patient_id
+data_source
 country
 hospital_id
 teaching_hospital

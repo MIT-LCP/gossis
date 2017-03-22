@@ -3,7 +3,7 @@
 Identifiers,,,,,,,,,,,,,,,,,,,,,,,,
 Unique encounter ID,encounter_id,,Record,Identifier for the patient (integer),,,,"siteid, patientid, admepisode",,,,,,,patientUnitStayID,,int,NOT NULL,a globally unique identifier (GUID) used as a foreign key link to the patient table,,,icustay_id,icustays,
 Unique patient ID,patient_id,,,,,,,patientid,,,,3305706G540,,,uniquepid,,,,,,,subject_id,icustays,
-,,,initials,Patient initials,,,,,,,,,,,,,,,,,,,,
+Data source for the record,data_source,"anzics, mimic-iii, eicu, epimed",initials,Patient initials,,,,always 'anzics',,,,,,,always 'eicu',,,,,,,always 'mimic-iii',,
 ,,,Birthdate,Patient birth date,,,,,,,,,,,,,,,,,,,,
 Hierarchical factors,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,countrycode,,,String,AU,,,,,,,,,,,,
@@ -233,35 +233,35 @@ Physiology - First HOUR,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,
 "timing: 1 hour before, 24 hours after ICU admit",,,,,,,,,,,,,,,,,,,,,,,,
-Labs - First DAY,d1_albumin_min,,,,,,,,,,,,,,,,,,albumin',,,ALBUMIN_min,,labsfirstday
+Labs - First DAY,d1_albumin_min,,,,,,,,,,,,,,,,,,,,,ALBUMIN_min,,labsfirstday
 ,d1_albumin_max,,,,,,,,,,,,,,,,,,,,,ALBUMIN_max,,labsfirstday
-,d1_bilirubin_min,,,,,,,,,,,,,,,,,,", 'total bilirubin'",,,BILIRUBIN_min,,labsfirstday
+,d1_bilirubin_min,,,,,,,,,,,,,,,,,,,,,BILIRUBIN_min,,labsfirstday
 ,d1_bilirubin_max,,,,,,,,,,,,,,,,,,,,,BILIRUBIN_max,,labsfirstday
-,d1_bun_min,,,,,,,,,,,,,,,,,,", 'BUN'",,,BUN_min,,labsfirstday
+,d1_bun_min,,,,,,,,,,,,,,,,,,,,,BUN_min,,labsfirstday
 ,d1_bun_max,,,,,,,,,,,,,,,,,,,,,BUN_max,,labsfirstday
-,d1_calcium_min,,,,,,,,,,,,,,,,,,", 'calcium'",,,CALCIUM_min,,labsfirstday
+,d1_calcium_min,,,,,,,,,,,,,,,,,,,,,CALCIUM_min,,labsfirstday
 ,d1_calcium_max,,,,,,,,,,,,,,,,,,,,,CALCIUM_max,,labsfirstday
-,d1_creatinine_min,,,,,,,creatlo,,,Integer,301,,,,,,,", 'creatinine'",,,CREATINE_min,,labsfirstday
+,d1_creatinine_min,,,,,,,creatlo,,,Integer,301,,,,,,,,,,CREATINE_min,,labsfirstday
 ,d1_creatinine_max,,,,,,,creathi,,,Integer,311,,,,,,,,,,CREATINE_max,,labsfirstday
-,d1_glucose_min,,,,,,,gluclo,,,Numeric,10.5,,,,,,,", 'bedside glucose', 'glucose'",,,GLUCOSE_min,,labsfirstday
+,d1_glucose_min,,,,,,,gluclo,,,Numeric,10.5,,,,,,,,,,GLUCOSE_min,,labsfirstday
 ,d1_glucose_max,,,,,,,gluchi,,,Numeric,11,,,,,,,,,,GLUCOSE_max,,labsfirstday
-,d1_inr_min,,,,,,,,,,,,,,,,,,", 'PT - INR'",,,INR_min,,labsfirstday
+,d1_inr_min,,,,,,,,,,,,,,,,,,,,,INR_min,,labsfirstday
 ,d1_inr_max,,,,,,,,,,,,,,,,,,,,,INR_max,,labsfirstday
-,d1_hco3_min,,,,,,,hco3lo,,,Integer,22,,,,,,,", 'bicarbonate' -- HCO3",,,HCO3_min,,labsfirstday
+,d1_hco3_min,,,,,,,hco3lo,,,Integer,22,,,,,,,,,,HCO3_min,,labsfirstday
 ,d1_hco3_max,,,,,,,hco3hi,,,Integer,23,,,,,,,,,,HCO3_max,,labsfirstday
-,d1_hematocrit_min,,,,,,,hctlo,,,Numeric,0.35,,,,,,,", 'Hct'",,,HEMATOCRIT_min,,labsfirstday
+,d1_hematocrit_min,,,,,,,hctlo,,,Numeric,0.35,,,,,,,,,,HEMATOCRIT_min,,labsfirstday
 ,d1_hematocrit_max,,,,,,,hcthi,,,Numeric,0.35,,,,,,,,,,HEMATOCRIT_max,,labsfirstday
-,d1_hemaglobin_min,,,,,,,hmgnlo,,,Numeric,NULL,,,,,,,", 'Hgb'",,,HEMOGLOBIN_min,,labsfirstday
+,d1_hemaglobin_min,,,,,,,hmgnlo,,,Numeric,NULL,,,,,,,,,,HEMOGLOBIN_min,,labsfirstday
 ,d1_hemaglobin_max,,,,,,,hmgnhi,,,Numeric,NULL,,,,,,,,,,HEMOGLOBIN_max,,labsfirstday
-,d1_lactate_min,,,,,,,,,,,,,,,,,,", 'lactate'",,,LACTATE_min,,labsfirstday
+,d1_lactate_min,,,,,,,,,,,,,,,,,,,,,LACTATE_min,,labsfirstday
 ,d1_lactate_max,,,,,,,,,,,,,,,,,,,,,LACTATE_max,,labsfirstday
-,d1_platelets_min,,,,,,,platlo,,,Numeric,NULL,,,,,,,", 'platelets x 1000'",,,PLATELET_min,,labsfirstday
+,d1_platelets_min,,,,,,,platlo,,,Numeric,NULL,,,,,,,,,,PLATELET_min,,labsfirstday
 ,d1_platelets_max,,,,,,,plathi,,,Numeric,NULL,,,,,,,,,,PLATELET_max,,labsfirstday
-,d1_potassium_min,,,,,,,klo,,,Numeric,4.8,,,,,,,", 'potassium'",,,POTASSIUM_min,,labsfirstday
+,d1_potassium_min,,,,,,,klo,,,Numeric,4.8,,,,,,,,,,POTASSIUM_min,,labsfirstday
 ,d1_potassium_max,,,,,,,khi,,,Numeric,4.9,,,,,,,,,,POTASSIUM_max,,labsfirstday
-,d1_sodium_min,,,,,,,nalo,,,Integer,133,,,,,,,", 'sodium'",,,SODIUM_min,,labsfirstday
+,d1_sodium_min,,,,,,,nalo,,,Integer,133,,,,,,,,,,SODIUM_min,,labsfirstday
 ,d1_sodium_max,,,,,,,nahi,,,Integer,134,,,,,,,,,,SODIUM_max,,labsfirstday
-,d1_wbc_min,,,,,,,wcclo,,,Numeric,18.1,,,,,,,", 'WBC x 1000'",,,WBC_min,,labsfirstday
+,d1_wbc_min,,,,,,,wcclo,,,Numeric,18.1,,,,,,,,,,WBC_min,,labsfirstday
 ,d1_wbc_max,,,,,,,wcchi,,,Numeric,18.1,,,,,,,,,,WBC_max,,labsfirstday
 ,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,
