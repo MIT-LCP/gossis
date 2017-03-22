@@ -144,10 +144,10 @@ select
   -- blood gases, first day
   , bg_d1.PH_min as d1_arterial_ph_min
   , bg_d1.PH_max as d1_arterial_ph_max
-  , bg_d1.PAO2_min as d1_arterial_pao2_min
-  , bg_d1.PAO2_max as d1_arterial_pao2_max
-  , bg_d1.PACO2_min as d1_arterial_paco2_min
-  , bg_d1.PACO2_max as d1_arterial_paco2_max
+  , bg_d1.PAO2_min as d1_arterial_po2_min
+  , bg_d1.PAO2_max as d1_arterial_po2_max
+  , bg_d1.PACO2_min as d1_arterial_pco2_min
+  , bg_d1.PACO2_max as d1_arterial_pco2_max
   , bg_d1.PaO2FiO2_min as d1_PaO2FiO2Ratio_min
   , bg_d1.PaO2FiO2_max as d1_PaO2FiO2Ratio_max
 
@@ -186,10 +186,10 @@ select
   -- blood gases, first hour
   , bg_h1.PH_min as h1_arterial_ph_min
   , bg_h1.PH_max as h1_arterial_ph_max
-  , bg_h1.PAO2_min as h1_arterial_pao2_min
-  , bg_h1.PAO2_max as h1_arterial_pao2_max
-  , bg_h1.PACO2_min as h1_arterial_paco2_min
-  , bg_h1.PACO2_max as h1_arterial_paco2_max
+  , bg_h1.PAO2_min as h1_arterial_po2_min
+  , bg_h1.PAO2_max as h1_arterial_po2_max
+  , bg_h1.PACO2_min as h1_arterial_pco2_min
+  , bg_h1.PACO2_max as h1_arterial_pco2_max
   , bg_h1.PaO2FiO2_min as h1_PaO2FiO2Ratio_min
   , bg_h1.PaO2FiO2_max as h1_PaO2FiO2Ratio_max
 
