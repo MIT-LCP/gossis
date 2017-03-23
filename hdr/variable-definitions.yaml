@@ -756,7 +756,7 @@ d1_pamean_invasive_max:
   snomed: None
 h1_heartrate_min:
   category: vitals
-  description: The patient's lowest heart rate during the first 24 hours of their unit stay
+  description: The patient's lowest heart rate during the first hour of their unit stay
   dataType: numeric
   example: 75
   unitofmeasure: Beats per minute
@@ -768,7 +768,7 @@ h1_heartrate_min:
   snomed: None
 h1_heartrate_max:
   category: vitals
-  description: The patient's highest heart rate during the first 24 hours of their unit stay
+  description: The patient's highest heart rate during the first hour of their unit stay
   dataType: numeric
   example: 75
   unitofmeasure: Beats per minute
@@ -780,7 +780,7 @@ h1_heartrate_max:
   snomed: None
 h1_resprate_min:
   category: vitals
-  description: The patient's lowest respiratory rate during the first 24 hours of their unit stay
+  description: The patient's lowest respiratory rate during the first hour of their unit stay
   dataType: numeric
   example: 14
   unitofmeasure: Breaths per minute
@@ -792,7 +792,7 @@ h1_resprate_min:
   snomed: None
 h1_resprate_max:
   category: vitals
-  description: The patient's highest respiratory rate during the first 24 hours of their unit stay
+  description: The patient's highest respiratory rate during the first hour of their unit stay
   dataType: numeric
   example: 14
   unitofmeasure: Breaths per minute
@@ -804,7 +804,7 @@ h1_resprate_max:
   snomed: None
 h1_spo2_min:
   category: vitals
-  description: The patient's lowest peripheral oxygen saturation during the first 24 hours of their unit stay
+  description: The patient's lowest peripheral oxygen saturation during the first hour of their unit stay
   dataType: numeric
   example: 100
   unitofmeasure: Percentage
@@ -816,7 +816,7 @@ h1_spo2_min:
   snomed: None
 h1_spo2_max:
   category: vitals
-  description: The patient's highest peripheral oxygen saturation during the first 24 hours of their unit stay
+  description: The patient's highest peripheral oxygen saturation during the first hour of their unit stay
   dataType: numeric
   example: None
   unitofmeasure: Percentage
@@ -828,7 +828,7 @@ h1_spo2_max:
   snomed: None
 h1_temp_min:
   category: vitals
-  description: The patient's lowest core temperature during the first 24 hours of their unit stay
+  description: The patient's lowest core temperature during the first hour of their unit stay
   dataType: numeric
   example: 33.0
   unitofmeasure: Degrees Celsius
@@ -840,7 +840,7 @@ h1_temp_min:
   snomed: None
 h1_temp_max:
   category: vitals
-  description: The patient's highest core temperature during the first 24 hours of their unit stay, invasively measured
+  description: The patient's highest core temperature during the first hour of their unit stay, invasively measured
   dataType: numeric
   example: 33.0
   unitofmeasure: Degrees Celsius
@@ -852,7 +852,7 @@ h1_temp_max:
   snomed: None
 h1_sysbp_invasive_min:
   category: vitals
-  description: The patient's lowest systolic blood pressure during the first 24 hours of their unit stay, invasively measured
+  description: The patient's lowest systolic blood pressure during the first hour of their unit stay, invasively measured
   dataType: numeric
   example: 120
   unitofmeasure: Millimetres of mercury
@@ -864,7 +864,7 @@ h1_sysbp_invasive_min:
   snomed: None
 h1_sysbp_invasive_max:
   category: vitals
-  description: The patient's highest systolic blood pressure during the first 24 hours of their unit stay, invasively measured
+  description: The patient's highest systolic blood pressure during the first hour of their unit stay, invasively measured
   dataType: numeric
   example: 120
   unitofmeasure: Millimetres of mercury
@@ -876,7 +876,7 @@ h1_sysbp_invasive_max:
   snomed: None
 h1_diasbp_invasive_min:
   category: vitals
-  description: The patient's lowest diastolic blood pressure during the first 24 hours of their unit stay, invasively measured
+  description: The patient's lowest diastolic blood pressure during the first hour of their unit stay, invasively measured
   dataType: numeric
   example: None
   unitofmeasure: Millimetres of mercury
@@ -888,7 +888,7 @@ h1_diasbp_invasive_min:
   snomed: None
 h1_diasbp_invasive_max:
   category: vitals
-  description: The patient's highest diastolic blood pressure during the first 24 hours of their unit stay, invasively measured
+  description: The patient's highest diastolic blood pressure during the first hour of their unit stay, invasively measured
   dataType: numeric
   example: None
   unitofmeasure: Millimetres of mercury
@@ -900,7 +900,7 @@ h1_diasbp_invasive_max:
   snomed: None
 h1_mbp_invasive_min:
   category: vitals
-  description: The patient's lowest mean blood pressure during the first 24 hours of their unit stay, invasively measured
+  description: The patient's lowest mean blood pressure during the first hour of their unit stay, invasively measured
   dataType: numeric
   example: None
   unitofmeasure: Millimetres of mercury
@@ -912,7 +912,7 @@ h1_mbp_invasive_min:
   snomed: None
 h1_mbp_invasive_max:
   category: vitals
-  description: The patient's highest mean blood pressure during the first 24 hours of their unit stay, invasively measured
+  description: The patient's highest mean blood pressure during the first hour of their unit stay, invasively measured
   dataType: numeric
   example: None
   unitofmeasure: Millimetres of mercury
@@ -924,7 +924,7 @@ h1_mbp_invasive_max:
   snomed: None
 h1_sysbp_noninvasive_min:
   category: vitals
-  description: The patient's lowest systolic blood pressure during the first 24 hours of their unit stay, non-invasively measured
+  description: The patient's lowest systolic blood pressure during the first hour of their unit stay, non-invasively measured
   dataType: numeric
   example: None
   unitofmeasure: Millimetres of mercury
@@ -936,7 +936,7 @@ h1_sysbp_noninvasive_min:
   snomed: None
 h1_sysbp_noninvasive_max:
   category: vitals
-  description: The patient's highest systolic blood pressure during the first 24 hours of their unit stay, non-invasively measured
+  description: The patient's highest systolic blood pressure during the first hour of their unit stay, non-invasively measured
   dataType: numeric
   example: None
   unitofmeasure: Millimetres of mercury
@@ -948,7 +948,7 @@ h1_sysbp_noninvasive_max:
   snomed: None
 h1_diasbp_noninvasive_min:
   category: vitals
-  description: The patient's lowest diastolic blood pressure during the first 24 hours of their unit stay, non-invasively measured
+  description: The patient's lowest diastolic blood pressure during the first hour of their unit stay, non-invasively measured
   dataType: numeric
   example: None
   unitofmeasure: Millimetres of mercury
@@ -960,7 +960,7 @@ h1_diasbp_noninvasive_min:
   snomed: None
 h1_diasbp_noninvasive_max:
   category: vitals
-  description: The patient's highest diastolic blood pressure during the first 24 hours of their unit stay, non-invasively measured
+  description: The patient's highest diastolic blood pressure during the first hour of their unit stay, non-invasively measured
   dataType: numeric
   example: None
   unitofmeasure: Millimetres of mercury
@@ -972,7 +972,7 @@ h1_diasbp_noninvasive_max:
   snomed: None
 h1_mbp_noninvasive_min:
   category: vitals
-  description: The patient's lowest mean blood pressure during the first 24 hours of their unit stay, non-invasively measured
+  description: The patient's lowest mean blood pressure during the first hour of their unit stay, non-invasively measured
   dataType: numeric
   example: None
   unitofmeasure: Millimetres of mercury
@@ -984,7 +984,7 @@ h1_mbp_noninvasive_min:
   snomed: None
 h1_mbp_noninvasive_max:
   category: vitals
-  description: The patient's highest mean blood pressure during the first 24 hours of their unit stay, non-invasively measured
+  description: The patient's highest mean blood pressure during the first hour of their unit stay, non-invasively measured
   dataType: numeric
   example: None
   unitofmeasure: Millimetres of mercury
@@ -996,7 +996,7 @@ h1_mbp_noninvasive_max:
   snomed: None
 h1_sysbp_min:
   category: vitals
-  description: The patient's lowest systolic blood pressure during the first 24 hours of their unit stay, either non-invasively or invasively measured
+  description: The patient's lowest systolic blood pressure during the first hour of their unit stay, either non-invasively or invasively measured
   dataType: numeric
   example: None
   unitofmeasure: Millimetres of mercury
@@ -1008,7 +1008,7 @@ h1_sysbp_min:
   snomed: None
 h1_sysbp_max:
   category: vitals
-  description: The patient's highest systolic blood pressure during the first 24 hours of their unit stay, either non-invasively or invasively measured
+  description: The patient's highest systolic blood pressure during the first hour of their unit stay, either non-invasively or invasively measured
   dataType: numeric
   example: None
   unitofmeasure: Millimetres of mercury
@@ -1020,7 +1020,7 @@ h1_sysbp_max:
   snomed: None
 h1_diasbp_min:
   category: vitals
-  description: The patient's lowest diastolic blood pressure during the first 24 hours of their unit stay, either non-invasively or invasively measured
+  description: The patient's lowest diastolic blood pressure during the first hour of their unit stay, either non-invasively or invasively measured
   dataType: numeric
   example: None
   unitofmeasure: Millimetres of mercury
@@ -1032,7 +1032,7 @@ h1_diasbp_min:
   snomed: None
 h1_diasbp_max:
   category: vitals
-  description: The patient's highest diastolic blood pressure during the first 24 hours of their unit stay, either non-invasively or invasively measured
+  description: The patient's highest diastolic blood pressure during the first hour of their unit stay, either non-invasively or invasively measured
   dataType: numeric
   example: None
   unitofmeasure: Millimetres of mercury
@@ -1044,7 +1044,7 @@ h1_diasbp_max:
   snomed: None
 h1_mbp_min:
   category: vitals
-  description: The patient's lowest mean blood pressure during the first 24 hours of their unit stay, either non-invasively or invasively measured
+  description: The patient's lowest mean blood pressure during the first hour of their unit stay, either non-invasively or invasively measured
   dataType: numeric
   example: None
   unitofmeasure: Millimetres of mercury
@@ -1056,7 +1056,7 @@ h1_mbp_min:
   snomed: None
 h1_mbp_max:
   category: vitals
-  description: The patient's highest mean blood pressure during the first 24 hours of their unit stay, either non-invasively or invasively measured
+  description: The patient's highest mean blood pressure during the first hour of their unit stay, either non-invasively or invasively measured
   dataType: numeric
   example: None
   unitofmeasure: Millimetres of mercury
@@ -1068,7 +1068,7 @@ h1_mbp_max:
   snomed: None
 h1_pasys_invasive_min:
   category: vitals
-  description: The patient's lowest systolic pulmonary artery pressure during the first 24 hours of their unit stay, invasively measured
+  description: The patient's lowest systolic pulmonary artery pressure during the first hour of their unit stay, invasively measured
   dataType: numeric
   example: 12
   unitofmeasure: Millimetres of mercury
@@ -1080,7 +1080,7 @@ h1_pasys_invasive_min:
   snomed: None
 h1_pasys_invasive_max:
   category: vitals
-  description: The patient's highest systolic pulmonary artery pressure during the first 24 hours of their unit stay, invasively measured
+  description: The patient's highest systolic pulmonary artery pressure during the first hour of their unit stay, invasively measured
   dataType: numeric
   example: 12
   unitofmeasure: Millimetres of mercury
@@ -1092,7 +1092,7 @@ h1_pasys_invasive_max:
   snomed: None
 h1_padias_invasive_min:
   category: vitals
-  description: The patient's lowest diastolic pulmonary artery pressure during the first 24 hours of their unit stay, invasively measured
+  description: The patient's lowest diastolic pulmonary artery pressure during the first hour of their unit stay, invasively measured
   dataType: numeric
   example: 8
   unitofmeasure: Millimetres of mercury
@@ -1104,7 +1104,7 @@ h1_padias_invasive_min:
   snomed: None
 h1_padias_invasive_max:
   category: vitals
-  description: The patient's highest mean pulmonary artery pressure during the first 24 hours of their unit stay, invasively measured
+  description: The patient's highest mean pulmonary artery pressure during the first hour of their unit stay, invasively measured
   dataType: numeric
   example: 8
   unitofmeasure: Millimetres of mercury
@@ -1116,7 +1116,7 @@ h1_padias_invasive_max:
   snomed: None
 h1_pamean_invasive_min:
   category: vitals
-  description: The patient's lowest mean pulmonary artery pressure during the first 24 hours of their unit stay, invasively measured
+  description: The patient's lowest mean pulmonary artery pressure during the first hour of their unit stay, invasively measured
   dataType: numeric
   example: 10
   unitofmeasure: Millimetres of mercury
@@ -1128,7 +1128,7 @@ h1_pamean_invasive_min:
   snomed: None
 h1_pamean_invasive_max:
   category: vitals
-  description: The patient's highest mean pulmonary artery pressure during the first 24 hours of their unit stay, invasively measured
+  description: The patient's highest mean pulmonary artery pressure during the first hour of their unit stay, invasively measured
   dataType: numeric
   example: 10
   unitofmeasure: Millimetres of mercury
