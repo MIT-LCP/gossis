@@ -211,33 +211,33 @@ select
   , cast(null as numeric(5,2)) as h1_pao2fio2ratio_max
 
   -- APS III components
-  , aav.albumin as albumin_apache
-  , aav.bilirubin as bilirubin_apache
-  , aav.creatinine as creatinine_apache
-  , aav.glucose as glucose_apache
-  , aav.hematocrit as hematocrit_apache
-  , aav.heartrate as heart_rate_apache
-  , aav.meanbp as map_apache
-  , aav.sodium as sodium_apache
-  , aav.fio2 as fio2_apache
-  , aav.pco2 as paco2_apache
-  , aav.pao2 as pao2_apache
-  , aav.ph as ph_apache
+  , case when aav.albumin = -1 then NULL else aav.albumin end as albumin_apache
+  , case when aav.bilirubin = -1 then NULL else aav.bilirubin end as bilirubin_apache
+  , case when aav.creatinine = -1 then NULL else aav.creatinine end as creatinine_apache
+  , case when aav.glucose = -1 then NULL else aav.glucose end as glucose_apache
+  , case when aav.hematocrit = -1 then NULL else aav.hematocrit end as hematocrit_apache
+  , case when aav.heartrate = -1 then NULL else aav.heartrate end as heart_rate_apache
+  , case when aav.meanbp = -1 then NULL else aav.meanbp end as map_apache
+  , case when aav.sodium = -1 then NULL else aav.sodium end as sodium_apache
+  , case when aav.fio2 = -1 then NULL else aav.fio2 end as fio2_apache
+  , case when aav.pco2 = -1 then NULL else aav.pco2 end as paco2_apache
+  , case when aav.pao2 = -1 then NULL else aav.pao2 end as pao2_apache
+  , case when aav.ph = -1 then NULL else aav.ph end as ph_apache
   -- note that eICU uses the same PaCO2 for oxygenation and pH scoring
-  , aav.pco2 as paco2_for_ph_apache
-  , aav.respiratoryrate as resprate_apache
-  , aav.temperature as temp_apache
-  , aav.bun as bun_apache
-  , aav.urine as urineoutput_apache
-  , aav.wbc as wbc_apache
-  , aav.eyes as gcs_eyes_apache
-  , aav.motor as gcs_motor_apache
-  , aav.verbal as gcs_verbal_apache
-  , aav.meds as gcs_unable_apache
+  , case when aav.pco2 = -1 then NULL else aav.pco2 end as paco2_for_ph_apache
+  , case when aav.respiratoryrate = -1 then NULL else aav.respiratoryrate end as resprate_apache
+  , case when aav.temperature = -1 then NULL else aav.temperature end as temp_apache
+  , case when aav.bun = -1 then NULL else aav.bun end as bun_apache
+  , case when aav.urine = -1 then NULL else aav.urine end as urineoutput_apache
+  , case when aav.wbc = -1 then NULL else aav.wbc end as wbc_apache
+  , case when aav.eyes = -1 then NULL else aav.eyes end as gcs_eyes_apache
+  , case when aav.motor = -1 then NULL else aav.motor end as gcs_motor_apache
+  , case when aav.verbal = -1 then NULL else aav.verbal end as gcs_verbal_apache
+  , case when aav.meds = -1 then NULL else aav.meds end as gcs_unable_apache
 
-  , aav.dialysis as arf_apache
-  , aav.intubated as intubated_apache
-  , aav.vent as ventilated_apache
+  , case when aav.dialysis = -1 then NULL else aav.dialysis end as arf_apache
+  , case when aav.intubated = -1 then NULL else aav.intubated end as intubated_apache
+  , case when aav.vent = -1 then NULL else aav.vent end as ventilated_apache
 
   -- Other measurements - FIRST DAY
   -- , urine_output
