@@ -35,7 +35,9 @@ select
   , pt.hospitaladmitsource as hospital_admit_source
   , pt.hospitaldischargelocation as hospital_disch_location
   , (pt.hospitaldischargeoffset/60.0/24.0) as hospital_los_days
-  , pt.hospitaldischargestatus as hospital_death
+  , case when pt.hospitaldischargestatus = 'Alive' then 0
+         when pt.hospitaldischargestatus = 'Expired' then 1
+      else null end as hospital_death
 
 
   , pt.unitadmitsource as icu_admit_source
@@ -49,7 +51,6 @@ select
     as ICU_death
 
   , apv.electivesurgery as elective_surgery
-  -- TODO: double check below is a valid field and READMIT == READMITTED (anzics)
   , apv.readmit as readmission_status
 
   -- TODO: Define treatments
