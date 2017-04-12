@@ -25,7 +25,8 @@ select
   , pt.admissionheight as height
   , case when coalesce(pt.admissionweight,pt.admissionheight) is not null
       and pt.admissionheight > 0
-        then pt.admissionweight / (pt.admissionheight*pt.admissionheight)
+        -- 0.0001 converts height from centimetres to metres
+        then pt.admissionweight / (pt.admissionheight*pt.admissionheight*0.0001)
       end as bmi
   , pt.ethnicity
   , cast(NULL as smallint) as pregnant
