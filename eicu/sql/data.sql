@@ -25,7 +25,8 @@ select
   , pt.admissionheight as height
   , case when coalesce(pt.admissionweight,pt.admissionheight) is not null
       and pt.admissionheight > 0
-        then pt.admissionweight / (pt.admissionheight*pt.admissionheight)
+        -- 0.0001 converts height from centimetres to metres
+        then pt.admissionweight / (pt.admissionheight*pt.admissionheight*0.0001)
       end as bmi
   , pt.ethnicity
   , cast(NULL as smallint) as pregnant
@@ -35,7 +36,9 @@ select
   , pt.hospitaladmitsource as hospital_admit_source
   , pt.hospitaldischargelocation as hospital_disch_location
   , (pt.hospitaldischargeoffset/60.0/24.0) as hospital_los_days
-  , pt.hospitaldischargestatus as hospital_death
+  , case when pt.hospitaldischargestatus = 'Alive' then 0
+         when pt.hospitaldischargestatus = 'Expired' then 1
+      else null end as hospital_death
 
 
   , pt.unitadmitsource as icu_admit_source
@@ -49,7 +52,6 @@ select
     as ICU_death
 
   , apv.electivesurgery as elective_surgery
-  -- TODO: double check below is a valid field and READMIT == READMITTED (anzics)
   , apv.readmit as readmission_status
 
   -- TODO: Define treatments

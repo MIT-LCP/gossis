@@ -44,7 +44,7 @@ left join
     , max(systemicmean) as mbp_invasive_max
   from vitalperiodic
   -- during the first day of their ICU stay
-  where observationoffset >= (-60*2) and observationoffset <= (60*24)
+  where observationoffset >= (-60*1) and observationoffset <= (60*24)
   group by patientunitstayid
 ) vp
   on pat.patientunitstayid = vp.patientunitstayid
@@ -60,7 +60,7 @@ left join
     , max(noninvasivediastolic) as diasbp_noninvasive_max
   from vitalaperiodic
   -- during the first day of their ICU stay
-  where observationoffset >= (-60*2) and observationoffset <= (60*24)
+  where observationoffset >= (-60*1) and observationoffset <= (60*24)
   group by patientunitstayid
 ) vap
   on pat.patientunitstayid = vap.patientunitstayid;

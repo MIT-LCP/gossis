@@ -30,21 +30,33 @@ with has_lab as
   group by pt.hospitalid, pt.hospitaldischargeyear
 )
 select pt.PATIENTUNITSTAYID
-, case when age = '> 89' then 0
-      when age = '' then 0
-      when cast(age as numeric) < 16 then 1
+, case when pt.age = '> 89' then 0
+      when pt.age = '' then 0
+      when cast(pt.age as numeric) < 16 then 1
     else 0 end as exclusion_Over16
--- only include first icustay
+-- TODO: compare these readmission flags
+, apv.readmit as readmission_apache
+-- there may be some other ways of defining readmit
 , case when fs.type in ('1','2','3','4','5','6') then 0
-    else 1 end as exclusion_readmission
+    else 1 end as readmission_jesse
+, case
+    when apv.patientunitstayid is null then null
+    when ROW_NUMBER() over (PARTITION BY apv.patientunitstayid ORDER BY pt.hospitaldischargeoffset DESC)
+      > 1 then 1
+  else 0 end as readmission_status
+-- missing hospital death outcome
+, case
+    when coalesce(pt.hospitaldischargestatus,'') = '' then 1
+  else 0 end as exclusion_missingoutcome
+-- APACHE score only exists for first hospital stay
 , case when aiva.apachescore > 1 then 0 else 1 end as exclusion_NoAPACHEIV
 , case when has_vit.numobs > 0 then 0 else 1 end as exclusion_VitalObservations
 , case when has_lab.numobs > 0 then 0 else 1 end as exclusion_LabObservations
 , case when has_med.numobs > 0 then 0 else 1 end as exclusion_MedObservations
 -- excluded column aggregates all the above
 , case
-    when fs.type in ('1','2','3','4','5','6')
-      and aiva.apachescore > 1
+     when aiva.apachescore > 1
+      and coalesce(pt.hospitaldischargestatus,'') != ''
       and has_vit.numobs > 0
       and has_lab.numobs > 0
       and has_med.numobs > 0
@@ -69,6 +81,10 @@ left join has_lab
 left join has_med
   on pt.hospitalid = has_med.hospitalid
   and pt.hospitaldischargeyear = has_med.hospitaldischargeyear
+
+-- filter to first stay
+left join apachepredvar apv
+  on pt.patientunitstayid = apv.patientunitstayid
 
 -- filter to first stay
 left join public.tpubfirststay fs
