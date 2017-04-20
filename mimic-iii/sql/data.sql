@@ -27,7 +27,68 @@ select
       and demo.height > 0
         then demo.weight / (demo.height*2.54*0.01 * demo.height*2.54*0.01)
       end as bmi
-  , adm.ethnicity
+  , case
+      when adm.ethnicity in
+      (
+         'WHITE' --  40996
+        , 'WHITE - RUSSIAN' --    164
+        , 'WHITE - OTHER EUROPEAN' --     81
+        , 'WHITE - BRAZILIAN' --     59
+        , 'WHITE - EASTERN EUROPEAN' --     25
+      ) then 'Caucasian'
+      when adm.ethnicity in
+      (
+          'BLACK/AFRICAN AMERICAN' --   5440
+        , 'BLACK/CAPE VERDEAN' --    200
+        , 'BLACK/HAITIAN' --    101
+        , 'BLACK/AFRICAN' --     44
+        , 'CARIBBEAN ISLAND' --      9
+      ) then 'African American'
+      when adm.ethnicity in
+      (
+          'HISPANIC OR LATINO' --   1696
+        , 'HISPANIC/LATINO - PUERTO RICAN' --    232
+        , 'HISPANIC/LATINO - DOMINICAN' --     78
+        -- portugese can be classified as hispanic according to US census bureau
+        , 'PORTUGUESE' --     61
+        , 'HISPANIC/LATINO - GUATEMALAN' --     40
+        , 'HISPANIC/LATINO - CUBAN' --     24
+        , 'HISPANIC/LATINO - SALVADORAN' --     19
+        , 'HISPANIC/LATINO - CENTRAL AMERICAN (OTHER)' --     13
+        , 'HISPANIC/LATINO - MEXICAN' --     13
+        , 'HISPANIC/LATINO - COLOMBIAN' --      9
+        , 'SOUTH AMERICAN' --      8
+        , 'HISPANIC/LATINO - HONDURAN' --      4
+      ) then 'Hispanic'
+      when adm.ethnicity in
+      (
+          'ASIAN' --   1509
+        , 'ASIAN - CHINESE' --    277
+        , 'ASIAN - ASIAN INDIAN' --     85
+        , 'ASIAN - VIETNAMESE' --     53
+        , 'ASIAN - FILIPINO' --     25
+        , 'ASIAN - CAMBODIAN' --     17
+        , 'ASIAN - OTHER' --     17
+        , 'ASIAN - KOREAN' --     13
+        , 'ASIAN - JAPANESE' --      7
+        , 'ASIAN - THAI' --      4
+      ) then 'Asian'
+      when adm.ethnicity in
+      (
+          'AMERICAN INDIAN/ALASKA NATIVE FEDERALLY RECOGNIZED TRIBE' --      3
+        , 'AMERICAN INDIAN/ALASKA NATIVE' --     51
+      ) then 'Native American'
+    else 'Other/Unknown'
+  end as ethnicity
+  -- ethnicities which we set to other:
+  -- , 'UNKNOWN/NOT SPECIFIED' --   4523
+  -- , 'OTHER' --   1512
+  -- , 'UNABLE TO OBTAIN' --    814
+  -- , 'PATIENT DECLINED TO ANSWER' --    559
+  -- , 'MULTI RACE ETHNICITY' --    130
+  -- , 'MIDDLE EASTERN' --     43
+  -- , 'NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER' --     18
+
   , cast(demo.PREGNANT as smallint) as pregnant
   , cast(demo.SMOKING as smallint) as smoking_status
 
@@ -231,7 +292,11 @@ select
 
   , apsiii.gcseyes as gcs_eyes_apache
   , apsiii.gcsmotor as gcs_motor_apache
-  , apsiii.gcsverbal as gcs_verbal_apache
+  -- 0 represents assuming pt is normal, so re-map it to 5
+  , case
+      when apsiii.gcsverbal = 0 then 5
+    else apsiii.gcsverbal end
+    as gcs_verbal_apache
   , apsiii.gcsunable as gcs_unable_apache
 
   , apsiii.vent as ventilated_apache
