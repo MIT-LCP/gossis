@@ -55,7 +55,11 @@ select
     as ICU_death
 
   , apv.electivesurgery as elective_surgery
-  , apv.readmit as readmission_status
+  -- , apv.readmit as readmission_status
+  , case
+      when ROW_NUMBER() over (PARTITION BY pt.patientunitstayid ORDER BY pt.hospitaldischargeoffset DESC)
+        > 1 then 1
+    else 0 end as readmission_status
 
   -- TODO: Define treatments
 
