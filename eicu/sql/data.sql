@@ -20,7 +20,10 @@ select
 
   -- demographics
   , apv.age
-  , pt.gender
+  , case
+      when pt.gender = 'Female' then 'F'
+      when pt.gender = 'Male' then 'M'
+    else null end as gender
   , pt.admissionweight as weight
   , pt.admissionheight as height
   , case when coalesce(pt.admissionweight,pt.admissionheight) is not null
