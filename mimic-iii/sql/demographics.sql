@@ -95,7 +95,11 @@ SELECT
   , demo.WEIGHT
   , demo.HEIGHT
   , demo.PREGNANT
-  , demo.SMOKING
+  , case
+      when demo.SMOKING = 0 then 'Never Smoked'
+      when demo.SMOKING = 1 then 'Ex-Smoker'
+      when demo.SMOKING = 2 then 'Current Smoker'
+    else 'Unknown' end as smoking
   , serv.first_service
   , case when ROW_NUMBER() over (PARTITION BY ie.hadm_id ORDER BY ie.intime) > 1
       then 1
