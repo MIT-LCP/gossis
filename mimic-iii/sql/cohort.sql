@@ -116,7 +116,7 @@ select
   --   as exclusion_dnr
   -- short stays <= 4 hours removed as done with APACHE
   , case
-      when (outtime_hr - intime_hr) <= interval '4' hour then 1
+      when (outtime_hr - intime_hr) <  interval '4' hour then 1
     else 0 end
     as exclusion_shortstay
   , case
