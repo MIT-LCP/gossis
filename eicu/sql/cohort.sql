@@ -30,20 +30,23 @@ with has_lab as
   group by pt.hospitalid, pt.hospitaldischargeyear
 )
 select pt.PATIENTUNITSTAYID
-, case when pt.age = '> 89' then 0
-      when pt.age = '' then 0
-      when cast(pt.age as numeric) < 16 then 1
-    else 0 end as exclusion_Over16
+
 -- TODO: compare these readmission flags
 , apv.readmit as readmission_apache
 -- there may be some other ways of defining readmit
 , case when fs.type in ('1','2','3','4','5','6') then 0
-    else 1 end as readmission_jesse
+else 1 end as readmission_jesse
 , case
-    when apv.patientunitstayid is null then null
-    when ROW_NUMBER() over (PARTITION BY apv.patientunitstayid ORDER BY pt.hospitaldischargeoffset DESC)
-      > 1 then 1
-  else 0 end as readmission_status
+when apv.patientunitstayid is null then null
+when ROW_NUMBER() over (PARTITION BY apv.patientunitstayid ORDER BY pt.hospitaldischargeoffset DESC)
+  > 1 then 1
+else 0 end as readmission_status
+
+-- EXCLUSION FLAGS --
+, case when pt.age = '> 89' then 0
+      when pt.age = '' then 0
+      when cast(pt.age as numeric) < 16 then 1
+    else 0 end as exclusion_Over16
 -- missing hospital death outcome
 , case
     when coalesce(pt.hospitaldischargestatus,'') = '' then 1
@@ -53,16 +56,19 @@ select pt.PATIENTUNITSTAYID
 , case when has_vit.numobs > 0 then 0 else 1 end as exclusion_VitalObservations
 , case when has_lab.numobs > 0 then 0 else 1 end as exclusion_LabObservations
 , case when has_med.numobs > 0 then 0 else 1 end as exclusion_MedObservations
+
 -- excluded column aggregates all the above
 , case
-     when aiva.apachescore > 1
+     when (pt.age = '> 89' or pt.age = '' or cast(pt.age as numeric) >= 16)
       and coalesce(pt.hospitaldischargestatus,'') != ''
+      and aiva.apachescore > 1
       and has_vit.numobs > 0
       and has_lab.numobs > 0
       and has_med.numobs > 0
     then 0
   else 1 end as excluded
 from patient pt
+
 -- check for apache values
 left join (select patientunitstayid, max(apachescore) as apachescore from APACHEPATIENTRESULT where apacheversion = 'IVa' group by patientunitstayid) aiva
   on pt.patientunitstayid = aiva.patientunitstayid
