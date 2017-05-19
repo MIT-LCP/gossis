@@ -45,7 +45,7 @@ select
 
 
   , pt.unitadmitsource as icu_admit_source
-  , pt.unittype as icu_stay_type
+  --, pt.unittype as icu_stay_type
   , pt.unitdischargelocation as icu_disch_location
   , -(pt.hospitaladmitoffset/60.0/24.0) as pre_icu_los_days
   , (pt.unitdischargeoffset/60.0/24.0) as icu_los_days
