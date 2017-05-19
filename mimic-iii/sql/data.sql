@@ -90,7 +90,7 @@ select
   -- , 'NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER' --     18
 
   , cast(demo.PREGNANT as smallint) as pregnant
-  , cast(demo.SMOKING as smallint) as smoking_status
+  , demo.SMOKING as smoking_status
 
   -- hospital course
   , adm.admission_location as hospital_admit_source
