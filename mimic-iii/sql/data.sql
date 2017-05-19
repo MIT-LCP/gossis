@@ -93,16 +93,46 @@ select
   , demo.SMOKING as smoking_status
 
   -- hospital course
-  , adm.admission_location as hospital_admit_source
-  , adm.discharge_location as hospital_disch_location
+  , case
+     when adm.admission_location = 'EMERGENCY ROOM ADMIT' then 'Emergency Department'
+     when adm.admission_location = 'TRANSFER FROM HOSP/EXTRAM' then 'Other Hospital'
+     when adm.admission_location = 'TRANSFER FROM OTHER HEALT' then 'Other Hospital'
+     when adm.admission_location = 'CLINIC REFERRAL/PREMATURE' then 'Direct Admit'
+     when adm.admission_location = '** INFO NOT AVAILABLE **' then 'Other'
+     when adm.admission_location = 'TRANSFER FROM SKILLED NUR' then 'Direct Admit'
+     when adm.admission_location = 'TRSF WITHIN THIS FACILITY' then 'Acute Care/Floor'
+     when adm.admission_location = 'HMO REFERRAL/SICK' then 'Direct Admit'
+     when adm.admission_location = 'PHYS REFERRAL/NORMAL DELI' then 'Direct Admit'
+    else null end
+  as hospital_admit_source
+
+  , case
+   when adm.discharge_location = 'REHAB/DISTINCT PART HOSP' then 'Rehabilitation'
+   when adm.discharge_location = 'HOME WITH HOME IV PROVIDR' then 'Home'
+   when adm.discharge_location = 'SNF' then 'Skilled Nursing Facility'
+   when adm.discharge_location = 'HOSPICE-MEDICAL FACILITY' then 'Nursing Home'
+   when adm.discharge_location = 'HOME HEALTH CARE' then 'Home'
+   when adm.discharge_location = 'SHORT TERM HOSPITAL' then 'Other Hospital'
+   when adm.discharge_location = 'LONG TERM CARE HOSPITAL' then 'Other Hospital'
+   when adm.discharge_location = 'DISC-TRAN TO FEDERAL HC' then 'Other Hospital'
+   when adm.discharge_location = 'LEFT AGAINST MEDICAL ADVI' then 'Other'
+   when adm.discharge_location = 'OTHER FACILITY' then 'Other External'
+   when adm.discharge_location = 'SNF-MEDICAID ONLY CERTIF' then 'Skilled Nursing Facility'
+   when adm.discharge_location = 'HOME' then 'Home'
+   when adm.discharge_location = 'DEAD/EXPIRED' then 'Death'
+   when adm.discharge_location = 'HOSPICE-HOME' then 'Nursing Home'
+   when adm.discharge_location = 'DISCH-TRAN TO PSYCH HOSP' then 'Other Hospital'
+   when adm.discharge_location = 'DISC-TRAN CANCER/CHLDRN H' then 'Other Hospital'
+   when adm.discharge_location = 'ICF' then 'Other External'
+   else null end as hospital_disch_location
+
   , ROUND( (CAST(adm.dischtime AS DATE) - CAST(adm.admittime AS DATE)) , 4) as hospital_los_days
   , adm.hospital_expire_flag as hospital_death
 
 
   , cast(NULL as varchar(10)) as icu_admit_source
-  , adm.admission_type as icu_admit_type
-  , cast(last_careunit as varchar(10)) as icu_disch_location
-  , ROUND( (CAST(ie.intime AS DATE) - CAST(adm.admittime AS DATE)) , 4) as pre_icu_los_days
+  , cast(NULL as varchar(10)) as icu_disch_location
+  , ROUND(EXTRACT(EPOCH from ie.intime - adm.admittime)::numeric/60.0/60.0/24.0) , 4) as pre_icu_los_days
   , ie.los as icu_los_days
   , case when adm.deathtime <= ie.outtime then 1 else 0 end as ICU_death
 
