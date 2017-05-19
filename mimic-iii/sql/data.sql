@@ -133,7 +133,7 @@ select
 
   , cast(NULL as varchar(10)) as icu_admit_source
   , cast(NULL as varchar(10)) as icu_disch_location
-  , ROUND(EXTRACT(EPOCH from ie.intime - adm.admittime)::numeric/60.0/60.0/24.0) , 4) as pre_icu_los_days
+  , ROUND(EXTRACT(EPOCH from ie.intime - adm.admittime)::numeric/60.0/60.0/24.0 , 4) as pre_icu_los_days
   , ie.los as icu_los_days
   , case when adm.deathtime <= ie.outtime then 1 else 0 end as ICU_death
 
