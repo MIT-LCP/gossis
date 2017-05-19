@@ -65,7 +65,7 @@ select ie.subject_id, ie.hadm_id, ie.icustay_id
       else extract(EPOCH from (fhr.intime_hr - pat.dob))/60.0/60.0/24.0/365.242 end
       as numeric),2) as age
 
-  , ROW_NUMBER() over (partition by ie.hadm_id order by fhr.intime_hr) as icustay_num
+  , ROW_NUMBER() over (partition by ie.subject_id order by fhr.intime_hr) as icustay_num
   , RANK() over (partition by ie.subject_id order by adm.admittime) as rn
   , pat.gender
 
