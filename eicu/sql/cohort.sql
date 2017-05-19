@@ -41,7 +41,7 @@ when apv.patientunitstayid is null then null
 when ROW_NUMBER() over (PARTITION BY apv.patientunitstayid ORDER BY pt.hospitaldischargeoffset DESC)
   > 1 then 1
 else 0 end as readmission_status
-, case when aiva.apachescore > 1 and aiva.predictedhospitalmortality = -1 then readmission_apache_pred
+, case when aiva.apachescore > 1 and aiva.predictedhospitalmortality = -1 then 1 else 0 end readmission_apache_pred
 
 -- EXCLUSION FLAGS --
 , case when pt.age = '> 89' then 0
@@ -73,7 +73,7 @@ else 0 end as readmission_status
 from patient pt
 
 -- check for apache values
-left join (select patientunitstayid, max(apachescore) as apachescore from APACHEPATIENTRESULT where apacheversion = 'IVa' group by patientunitstayid) aiva
+left join (select patientunitstayid, max(apachescore) as apachescore, min(cast(predictedhospitalmortality as numeric)) as predictedhospitalmortality from APACHEPATIENTRESULT where apacheversion = 'IVa' group by patientunitstayid) aiva
   on pt.patientunitstayid = aiva.patientunitstayid
 
 -- check for the hospital having any vitals
