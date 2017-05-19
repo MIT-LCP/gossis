@@ -10,7 +10,7 @@ select
   , cast('USA' as varchar(10)) as country
   , cast(-1 as smallint) as hospital_id
   , cast(1 as smallint) as teaching_hospital
-  , cast(NULL as smallint) as hospital_bed_size
+  , cast('>= 500' as varchar(10)) as hospital_bed_size
   , cast(null as varchar(10)) as hospital_type
 
   -- hierarchical factors - ICU
