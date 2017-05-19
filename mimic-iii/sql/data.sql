@@ -11,6 +11,7 @@ select
   , cast(-1 as smallint) as hospital_id
   , cast(1 as smallint) as teaching_hospital
   , cast('>= 500' as varchar(10)) as hospital_bed_size
+  , cast(651 as smallint) as hospital_bed_size_numeric
   , cast(null as varchar(10)) as hospital_type
 
   -- hierarchical factors - ICU
