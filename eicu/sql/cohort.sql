@@ -54,7 +54,7 @@ else 0 end as readmission_status
   else 0 end as exclusion_missingoutcome
 -- APACHE score only exists for first hospital stay
 , case when aiva.apachescore > 1 then 0 else 1 end as exclusion_np_apache_score
-, case when aiva.predictedhospitalmortality > 1 then 0 else 1 end as exclusion_no_apache_pred
+, case when aiva.predictedhospitalmortality > 0 then 0 else 1 end as exclusion_no_apache_pred
 , case when has_vit.numobs > 0 then 0 else 1 end as exclusion_VitalObservations
 , case when has_lab.numobs > 0 then 0 else 1 end as exclusion_LabObservations
 , case when has_med.numobs > 0 then 0 else 1 end as exclusion_MedObservations
@@ -64,7 +64,7 @@ else 0 end as readmission_status
      when (pt.age = '> 89' or pt.age = '' or cast(pt.age as numeric) >= 16)
       and coalesce(pt.hospitaldischargestatus,'') != ''
       and aiva.apachescore > 1
-      and aiva.predictedhospitalmortality > 1
+      and aiva.predictedhospitalmortality > 0
       and has_vit.numobs > 0
       and has_lab.numobs > 0
       and has_med.numobs > 0
