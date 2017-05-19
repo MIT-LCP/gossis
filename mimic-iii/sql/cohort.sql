@@ -84,8 +84,6 @@ left join dnr
   on ie.icustay_id = dnr.icustay_id
 left join firsthr fhr
   on ie.icustay_id = fhr.icustay_id
--- ORDER BY is important to ensure random() assigns same number to same row
-ORDER BY ie.subject_id, ie.hadm_id, ie.icustay_id
 )
 select
     tt.subject_id, tt.hadm_id, tt.icustay_id
