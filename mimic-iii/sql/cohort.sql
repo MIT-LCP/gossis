@@ -65,7 +65,7 @@ select ie.subject_id, ie.hadm_id, ie.icustay_id
       else extract(EPOCH from (fhr.intime_hr - pat.dob))/60.0/60.0/24.0/365.242 end
       as numeric),2) as age
 
-  , ROW_NUMBER() over (partition by ie.hadm_id order by fhr.intime_hr) as icustay_num
+  , ROW_NUMBER() over (partition by ie.subject_id order by fhr.intime_hr) as icustay_num
   , RANK() over (partition by ie.subject_id order by adm.admittime) as rn
   , pat.gender
 
@@ -84,8 +84,6 @@ left join dnr
   on ie.icustay_id = dnr.icustay_id
 left join firsthr fhr
   on ie.icustay_id = fhr.icustay_id
--- ORDER BY is important to ensure random() assigns same number to same row
-ORDER BY ie.subject_id, ie.hadm_id, ie.icustay_id
 )
 select
     tt.subject_id, tt.hadm_id, tt.icustay_id
@@ -116,7 +114,7 @@ select
   --   as exclusion_dnr
   -- short stays <= 4 hours removed as done with APACHE
   , case
-      when (outtime_hr - intime_hr) <= interval '4' hour then 1
+      when (outtime_hr - intime_hr) <  interval '4' hour then 1
     else 0 end
     as exclusion_shortstay
   , case

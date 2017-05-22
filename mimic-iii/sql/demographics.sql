@@ -81,6 +81,45 @@ with demo_stg as
   from demo_stg
   group by icustay_id
 )
+, smoking_text as
+(
+  SELECT subject_id
+  , CASE
+      --               catches negative terms as 'never smoked', 'non-smoker', 'Pt is not a smoker'
+      WHEN ne.text ~* '(never|not|not a|none|non|no|no history of|no h\/o of|denies|denies any|negative)[\s-]?(smoke|smoking|tabacco|tobacco|cigar|cigs)'
+      --               catches negative terms as: 'Tobacco: denies.', 'Smoking: no;'
+      OR   ne.text ~* '(smoke|smoking|tabacco|tobacco|tabacco abuse|tobacco abuse|cigs|cigarettes):[\s]?(no|never|denies|negative)'
+      --               catches negative terms: 'Cigarettes: Smoked no [x]', 'No EtOH, tobacco', 'He does not drink or smoke'
+      OR   ne.text ~* 'smoked no \[x\]|no etoh, tobacco|not drink alcohol or smoke|not drink or smoke|absence of current tobacco use|absence of tobacco use'
+      then 1
+      else 0
+  end as nonsmoker
+  , CASE
+      WHEN ne.text ~* '(ex-smoker|ex-smok)' then 1
+      else 0
+    end as exsmoker
+  , CASE
+      --               catches all terms related to smoking: 'Pt. with long history of smoking', 'Smokes 10 cigs/day', 'nicotine patch'
+      WHEN ne.text ~* '(smoke|smoking|tabacco|tobacco|cigar|cigs|marijuana|nicotine)'
+      then 1
+      else 0
+  end as smoker
+  FROM noteevents ne
+)
+, smoking_merged as
+(
+-- From multiple notes the query takes the min, so if it's mention the patient is a smoker (1)
+-- and that the patient is a non-smoker (0), the function decides that the patient is a non-smoker (0)
+-- because the negative terms are more explicit and probably not triggered by accident.
+  SELECT subject_id
+    , min(case
+        when nonsmoker = 1 then 0
+        when exsmoker = 1 then 1
+        when smoker = 1 then 2
+      else null end) as smoking
+  FROM smoking_text
+  group by subject_id
+)
 , serv as
 (
   select ie.icustay_id, se.curr_service as first_service
@@ -99,6 +138,9 @@ SELECT
       when demo.SMOKING = 0 then 'Never Smoked'
       when demo.SMOKING = 1 then 'Ex-Smoker'
       when demo.SMOKING = 2 then 'Current Smoker'
+      when smk.smoking = 0 then 'Never Smoked'
+      when smk.smoking = 1 then 'Ex-Smoker'
+      when smk.smoking = 2 then 'Current Smoker'
     else 'Unknown' end as smoking
   , serv.first_service
   , case when ROW_NUMBER() over (PARTITION BY ie.hadm_id ORDER BY ie.intime) > 1
@@ -108,5 +150,8 @@ FROM icustays ie
 LEFT JOIN demo
   on ie.icustay_id = demo.icustay_id
 LEFT JOIN serv
-  on demo.icustay_id = serv.icustay_id
-  and serv.rn = 1;
+  on ie.icustay_id = serv.icustay_id
+  and serv.rn = 1
+LEFT JOIN smoking_merged smk
+  on ie.subject_id = smk.subject_id
+order by ie.icustay_id;

@@ -72,6 +72,18 @@ teaching_hospital:
   snomed: None
 hospital_bed_size:
   category: demographic
+  description: The total number of beds at the admitting hospital, grouped
+  dataType: string
+  example: None
+  unitofmeasure: None
+  permissibleRange:
+    coded: None
+    low: None
+    high: None
+    meaning: None
+  snomed: None
+hospital_bed_size_numeric:
+  category: demographic
   description: The total number of beds at the admitting hospital
   dataType: string
   example: None
