@@ -5,6 +5,7 @@ country
 hospital_id
 teaching_hospital
 hospital_bed_size
+hospital_bed_size_numeric
 hospital_type
 icu_id
 icu_type
@@ -22,7 +23,6 @@ hospital_disch_location
 hospital_los_days
 hospital_death
 icu_admit_source
-icu_admit_type
 icu_disch_location
 pre_icu_los_days
 icu_los_days
@@ -194,6 +194,7 @@ gcs_unable_apache
 arf_apache
 intubated_apache
 ventilated_apache
+apsiii
 apache_3j_score
 apache_3j_hospital_death_prob
 apache_4a_icu_death_prob

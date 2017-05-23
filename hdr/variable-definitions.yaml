@@ -2362,6 +2362,18 @@ ventilated_apache:
     high: 1
     note: None
   snomed: None
+apsiii:
+  category: APACHE prediction
+  description: The Acute Physiology Score III, which describes the severity of the patient's condition
+  dataType: integer
+  example: 34
+  unitofmeasure: None
+  permissibleRange:
+    coded: None
+    low: 0
+    high: 299
+    note: None
+  snomed: None
 apache_3j_score:
   category: APACHE prediction
   description: The composite APACHE III score describing the severity of the patient's condition
