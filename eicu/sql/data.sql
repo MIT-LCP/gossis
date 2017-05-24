@@ -176,7 +176,7 @@ select
   , bg_d1.paco2_min as d1_arterial_pco2_min
   , bg_d1.paco2_max as d1_arterial_pco2_max
   , bg_d1.pao2fio2ratio_min as d1_pao2fio2ratio_min
-  , cast(null as numeric(5,2)) as d1_pao2fio2ratio_max
+  , bg_d1.pao2fio2ratio_max as d1_pao2fio2ratio_max
 
   -- Labs - FIRST HOUR
   , lab_h1.albumin_min as h1_albumin_min
@@ -218,7 +218,7 @@ select
   , bg_h1.paco2_min as h1_arterial_pco2_min
   , bg_h1.paco2_max as h1_arterial_pco2_max
   , bg_h1.pao2fio2ratio_min as h1_pao2fio2ratio_min
-  , cast(null as numeric(5,2)) as h1_pao2fio2ratio_max
+  , bg_h1.pao2fio2ratio_max as h1_pao2fio2ratio_max
 
   -- APS III components
   , case when aav.albumin = -1 then NULL else aav.albumin end as albumin_apache
