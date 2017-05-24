@@ -11,8 +11,8 @@ with vw1 as
     , max(case when labname = 'paO2' then labresult else null end) as PaO2_max
     , min(case when labname = 'paCO2' then labresult else null end) as PaCO2_min
     , max(case when labname = 'paCO2' then labresult else null end) as PaCO2_max
-    , min(case when labname = 'pH' then labresult else null end) as pH_min
-    , max(case when labname = 'pH' then labresult else null end) as pH_max
+    , min(case when labname = 'pH' and labresult < 8 and labresult > 4 then labresult else null end) as pH_min
+    , max(case when labname = 'pH' and labresult < 8 and labresult > 4 then labresult else null end) as pH_max
   from lab
   where labname in
   (
