@@ -51,6 +51,7 @@ else 0 end as readmission_status
 -- missing hospital death outcome
 , case
     when coalesce(pt.hospitaldischargestatus,'') = '' then 1
+    when pt.unitdischargestatus not in ('Expired','Alive') then 1
   else 0 end as exclusion_missingoutcome
 , case
     when aiva.apachescore > 1 and aiva.predictedhospitalmortality = -1 then 1
@@ -68,6 +69,7 @@ else 0 end as readmission_status
 , case
      when (pt.age = '> 89' or pt.age = '' or cast(pt.age as numeric) >= 16)
       and coalesce(pt.hospitaldischargestatus,'') != ''
+      and pt.unitdischargestatus in ('Expired','Alive')
       and aiva.apachescore > 1
       and not aiva.apachescore = -1
       and not apv.readmit = 1
