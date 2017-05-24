@@ -26,28 +26,6 @@ select
 from patient pat
 left join
 (
-
-    when itemid in (211,220045) and valuenum > 0 and valuenum < 300 then 1 -- HeartRate
-    -- below case statements just shown for illustration of getting any BP meas
-    -- including them would supercede the non-invasive/invasive case statements
-    -- when itemid in (51,442,455,6701,220179,220050) and valuenum > 0 and valuenum < 400 then 2 -- SysBP
-    -- when itemid in (8368,8440,8441,8555,220180,220051) and valuenum > 0 and valuenum < 300 then 3 -- DiasBP
-    -- when itemid in (456,52,6702,443,220052,220181,225312) and valuenum > 0 and valuenum < 300 then 4 -- MeanBP
-    when itemid in (615,618,220210,224690) and valuenum > 0 and valuenum < 70 then 5 -- RespRate
-    when itemid in (223761,678) and valuenum > 70 and valuenum < 120  then 6 -- TempF, converted to degC in valuenum call
-    when itemid in (223762,676) and valuenum > 10 and valuenum < 50  then 6 -- TempC
-    when itemid in (646,220277) and valuenum > 0 and valuenum <= 100 then 7 -- SpO2
-    when itemid in (807,811,1529,3745,3744,225664,220621,226537) and valuenum > 0 then 8 -- Glucose
-    when itemid in (51,6701,220050) and valuenum > 0 and valuenum < 400 then 9 -- SysBPInv
-    when itemid in (8368,8555,220051) and valuenum > 0 and valuenum < 300 then 10 -- DiasBPInv
-    when itemid in (442,455,220179) and valuenum > 0 and valuenum < 400 then 11 -- SysBPNI
-    when itemid in (8440,8441,220180) and valuenum > 0 and valuenum < 300 then 12 -- DiasBPNI
-    when itemid in (52,6702,220052,225312) and valuenum > 0 and valuenum < 400 then 13 -- MBPInv
-    when itemid in (456,443,220181) and valuenum > 0 and valuenum < 400 then 14 -- MBPNI
-    when itemid in (492,220059) and valuenum > 0 and valuenum < 80 then 15 -- PAPs
-    when itemid in (8448,220060) and valuenum > 0 and valuenum < 80 then 16 -- PAPd
-    when itemid in (491,220061) and valuenum > 0 and valuenum < 80 then 17 -- PAP mean
-
   select
     patientunitstayid
     , min(case when heartrate > 0 and heartrate < 300 then heartrate else null end) as heartrate_min
