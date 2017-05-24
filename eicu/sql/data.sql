@@ -229,7 +229,7 @@ select
   , case when aav.heartrate = -1 then NULL else aav.heartrate end as heart_rate_apache
   , case when aav.meanbp = -1 then NULL else aav.meanbp end as map_apache
   , case when aav.sodium = -1 then NULL else aav.sodium end as sodium_apache
-  , case when aav.fio2 = -1 then NULL else aav.fio2 end as fio2_apache
+  , case when aav.fio2 = -1 then NULL else aav.fio2/100.0 end as fio2_apache
   , case when aav.pco2 = -1 then NULL else aav.pco2 end as paco2_apache
   , case when aav.pao2 = -1 then NULL else aav.pao2 end as pao2_apache
   , case when aav.ph = -1 then NULL else aav.ph end as ph_apache
