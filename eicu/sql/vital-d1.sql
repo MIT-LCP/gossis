@@ -54,12 +54,12 @@ left join
 (
   select
     patientunitstayid
-    , min(noninvasivemean) as mbp_noninvasive_min
-    , max(noninvasivemean) as mbp_noninvasive_max
-    , min(noninvasivesystolic) as sysbp_noninvasive_min
-    , max(noninvasivesystolic) as sysbp_noninvasive_max
-    , min(noninvasivediastolic) as diasbp_noninvasive_min
-    , max(noninvasivediastolic) as diasbp_noninvasive_max
+    , min(case when noninvasivemean > 0 and noninvasivemean < 300 then noninvasivemean else null end) as mbp_noninvasive_min
+    , max(case when noninvasivemean > 0 and noninvasivemean < 300 then noninvasivemean else null end) as mbp_noninvasive_max
+    , min(case when noninvasivesystolic > 0 and noninvasivesystolic < 400 then noninvasivesystolic else null end) as sysbp_noninvasive_min
+    , max(case when noninvasivesystolic > 0 and noninvasivesystolic < 400 then noninvasivesystolic else null end) as sysbp_noninvasive_max
+    , min(case when noninvasivediastolic > 0 and noninvasivediastolic < 300 then noninvasivediastolic else null end) as diasbp_noninvasive_min
+    , max(case when noninvasivediastolic > 0 and noninvasivediastolic < 300 then noninvasivediastolic else null end) as diasbp_noninvasive_max
   from vitalaperiodic
   -- during the first day of their ICU stay
   where observationoffset >= (-60*1) and observationoffset <= (60*24)
