@@ -34,13 +34,17 @@ with vw1 as
   select
     patientunitstayid
     , labresultoffset
-    , labresult as FiO2
+    , case when labresult > 20 then labresult/100.0
+          else labresult end as FiO2
     -- use row number to get the *last* value after revision
     , ROW_NUMBER() over (PARTITION BY patientunitstayid ORDER BY labresultrevisedoffset DESC) as rn
   from lab
   where labname = 'FiO2'
-  -- patients should breathe at least 20% oxygen since that's how the atmosphere works
-  and labresult >= 20
+  -- less than 20% oxygen is not physiological
+  and labresult > 0.2
+  -- some rules to exclude bad measurements
+  and (labresult <= 1 or labresult > 20)
+  and labresult <= 100
   and labresult is not null
   and labresultoffset >= (-1*60) and labresultoffset <= (1*60)
 )
@@ -49,12 +53,12 @@ select
   , min(
       case
       when FiO2 is null or coalesce(FiO2, PaO2_min) is null then null
-      else PaO2_min/FiO2*100 end
+      else PaO2_min/FiO2 end
     ) as PaO2FiO2Ratio_min
   , max(
       case
       when FiO2 is null or coalesce(FiO2, PaO2_max) is null then null
-      else PaO2_max/FiO2*100 end
+      else PaO2_max/FiO2 end
     ) as PaO2FiO2Ratio_max
   , min(PaO2_min) as PaO2_min
   , max(PaO2_max) as PaO2_max
