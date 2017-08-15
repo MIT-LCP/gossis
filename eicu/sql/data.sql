@@ -67,26 +67,27 @@ select
   -- TODO: Define comorbidities
 
   -- Physiology - FIRST DAY
-  , v_d1.heartrate_min as d1_heartrate_min
-  , v_d1.heartrate_max as d1_heartrate_max
-  , v_d1.resprate_min as d1_resprate_min
-  , v_d1.resprate_max as d1_resprate_max
-  , v_d1.spo2_min as d1_spo2_min
-  , v_d1.spo2_max as d1_spo2_max
-  , v_d1.temp_min as d1_temp_min
-  , v_d1.temp_max as d1_temp_max
-  , v_d1.sysbp_invasive_min as d1_sysbp_invasive_min
-  , v_d1.sysbp_invasive_max as d1_sysbp_invasive_max
-  , v_d1.diasbp_invasive_min as d1_diasbp_invasive_min
-  , v_d1.diasbp_invasive_max as d1_diasbp_invasive_max
-  , v_d1.mbp_invasive_min as d1_mbp_invasive_min
-  , v_d1.mbp_invasive_max as d1_mbp_invasive_max
-  , v_d1.sysbp_noninvasive_min as d1_sysbp_noninvasive_min
-  , v_d1.sysbp_noninvasive_max as d1_sysbp_noninvasive_max
-  , v_d1.diasbp_noninvasive_min as d1_diasbp_noninvasive_min
-  , v_d1.diasbp_noninvasive_max as d1_diasbp_noninvasive_max
-  , v_d1.mbp_noninvasive_min as d1_mbp_noninvasive_min
-  , v_d1.mbp_noninvasive_max as d1_mbp_noninvasive_max
+  -- prioritize nurse charting, but use vitals tables if we don't have charted
+  , coalesce(vnc_d1.heartrate_min, v_d1.heartrate_min) as d1_heartrate_min
+  , coalesce(vnc_d1.heartrate_max, v_d1.heartrate_max) as d1_heartrate_max
+  , coalesce(vnc_d1.resprate_min, v_d1.resprate_min) as d1_resprate_min
+  , coalesce(vnc_d1.resprate_max, v_d1.resprate_max) as d1_resprate_max
+  , coalesce(vnc_d1.spo2_min, v_d1.spo2_min) as d1_spo2_min
+  , coalesce(vnc_d1.spo2_max, v_d1.spo2_max) as d1_spo2_max
+  , coalesce(vnc_d1.temp_min, v_d1.temp_min) as d1_temp_min
+  , coalesce(vnc_d1.temp_max, v_d1.temp_max) as d1_temp_max
+  , coalesce(vnc_d1.sysbp_invasive_min, v_d1.sysbp_invasive_min) as d1_sysbp_invasive_min
+  , coalesce(vnc_d1.sysbp_invasive_max, v_d1.sysbp_invasive_max) as d1_sysbp_invasive_max
+  , coalesce(vnc_d1.diasbp_invasive_min, v_d1.diasbp_invasive_min) as d1_diasbp_invasive_min
+  , coalesce(vnc_d1.diasbp_invasive_max, v_d1.diasbp_invasive_max) as d1_diasbp_invasive_max
+  , coalesce(vnc_d1.mbp_invasive_min, v_d1.mbp_invasive_min) as d1_mbp_invasive_min
+  , coalesce(vnc_d1.mbp_invasive_max, v_d1.mbp_invasive_max) as d1_mbp_invasive_max
+  , coalesce(vnc_d1.sysbp_noninvasive_min, v_d1.sysbp_noninvasive_min) as d1_sysbp_noninvasive_min
+  , coalesce(vnc_d1.sysbp_noninvasive_max, v_d1.sysbp_noninvasive_max) as d1_sysbp_noninvasive_max
+  , coalesce(vnc_d1.diasbp_noninvasive_min, v_d1.diasbp_noninvasive_min) as d1_diasbp_noninvasive_min
+  , coalesce(vnc_d1.diasbp_noninvasive_max, v_d1.diasbp_noninvasive_max) as d1_diasbp_noninvasive_max
+  , coalesce(vnc_d1.mbp_noninvasive_min, v_d1.mbp_noninvasive_min) as d1_mbp_noninvasive_min
+  , coalesce(vnc_d1.mbp_noninvasive_max, v_d1.mbp_noninvasive_max) as d1_mbp_noninvasive_max
 
   , case when v_d1.sysbp_invasive_min  <= v_d1.sysbp_noninvasive_min   then v_d1.sysbp_invasive_min
           else coalesce(v_d1.sysbp_noninvasive_min , v_d1.sysbp_invasive_min)  end as d1_sysbp_min
@@ -102,26 +103,26 @@ select
           else coalesce(v_d1.mbp_noninvasive_max   , v_d1.mbp_invasive_max)    end as d1_mbp_max
 
   -- Physiology - FIRST HOUR
-  , v_h1.heartrate_min as h1_heartrate_min
-  , v_h1.heartrate_max as h1_heartrate_max
-  , v_h1.resprate_min as h1_resprate_min
-  , v_h1.resprate_max as h1_resprate_max
-  , v_h1.spo2_min as h1_spo2_min
-  , v_h1.spo2_max as h1_spo2_max
-  , v_h1.temp_min as h1_temp_min
-  , v_h1.temp_max as h1_temp_max
-  , v_h1.sysbp_invasive_min as h1_sysbp_invasive_min
-  , v_h1.sysbp_invasive_max as h1_sysbp_invasive_max
-  , v_h1.diasbp_invasive_min as h1_diasbp_invasive_min
-  , v_h1.diasbp_invasive_max as h1_diasbp_invasive_max
-  , v_h1.mbp_invasive_min as h1_mbp_invasive_min
-  , v_h1.mbp_invasive_max as h1_mbp_invasive_max
-  , v_h1.sysbp_noninvasive_min as h1_sysbp_noninvasive_min
-  , v_h1.sysbp_noninvasive_max as h1_sysbp_noninvasive_max
-  , v_h1.diasbp_noninvasive_min as h1_diasbp_noninvasive_min
-  , v_h1.diasbp_noninvasive_max as h1_diasbp_noninvasive_max
-  , v_h1.mbp_noninvasive_min as h1_mbp_noninvasive_min
-  , v_h1.mbp_noninvasive_max as h1_mbp_noninvasive_max
+  , coalesce(vnc_h1.heartrate_min, v_h1.heartrate_min) as h1_heartrate_min
+  , coalesce(vnc_h1.heartrate_max, v_h1.heartrate_max) as h1_heartrate_max
+  , coalesce(vnc_h1.resprate_min, v_h1.resprate_min) as h1_resprate_min
+  , coalesce(vnc_h1.resprate_max, v_h1.resprate_max) as h1_resprate_max
+  , coalesce(vnc_h1.spo2_min, v_h1.spo2_min) as h1_spo2_min
+  , coalesce(vnc_h1.spo2_max, v_h1.spo2_max) as h1_spo2_max
+  , coalesce(vnc_h1.temp_min, v_h1.temp_min) as h1_temp_min
+  , coalesce(vnc_h1.temp_max, v_h1.temp_max) as h1_temp_max
+  , coalesce(vnc_h1.sysbp_invasive_min, v_h1.sysbp_invasive_min) as h1_sysbp_invasive_min
+  , coalesce(vnc_h1.sysbp_invasive_max, v_h1.sysbp_invasive_max) as h1_sysbp_invasive_max
+  , coalesce(vnc_h1.diasbp_invasive_min, v_h1.diasbp_invasive_min) as h1_diasbp_invasive_min
+  , coalesce(vnc_h1.diasbp_invasive_max, v_h1.diasbp_invasive_max) as h1_diasbp_invasive_max
+  , coalesce(vnc_h1.mbp_invasive_min, v_h1.mbp_invasive_min) as h1_mbp_invasive_min
+  , coalesce(vnc_h1.mbp_invasive_max, v_h1.mbp_invasive_max) as h1_mbp_invasive_max
+  , coalesce(vnc_h1.sysbp_noninvasive_min, v_h1.sysbp_noninvasive_min) as h1_sysbp_noninvasive_min
+  , coalesce(vnc_h1.sysbp_noninvasive_max, v_h1.sysbp_noninvasive_max) as h1_sysbp_noninvasive_max
+  , coalesce(vnc_h1.diasbp_noninvasive_min, v_h1.diasbp_noninvasive_min) as h1_diasbp_noninvasive_min
+  , coalesce(vnc_h1.diasbp_noninvasive_max, v_h1.diasbp_noninvasive_max) as h1_diasbp_noninvasive_max
+  , coalesce(vnc_h1.mbp_noninvasive_min, v_h1.mbp_noninvasive_min) as h1_mbp_noninvasive_min
+  , coalesce(vnc_h1.mbp_noninvasive_max, v_h1.mbp_noninvasive_max) as h1_mbp_noninvasive_max
 
   , case when v_h1.sysbp_invasive_min  <= v_h1.sysbp_noninvasive_min   then v_h1.sysbp_invasive_min
           else coalesce(v_h1.sysbp_noninvasive_min , v_h1.sysbp_invasive_min)  end as h1_sysbp_min
@@ -283,6 +284,10 @@ left join gosiss_vital_d1 v_d1
   on pt.patientunitstayid = v_d1.patientunitstayid
 left join gosiss_vital_h1 v_h1
   on pt.patientunitstayid = v_h1.patientunitstayid
+left join gosiss_vital_nc_d1 vnc_d1
+  on pt.patientunitstayid = vnc_d1.patientunitstayid
+left join gosiss_vital_nc_h1 vnc_h1
+  on pt.patientunitstayid = vnc_h1.patientunitstayid
 where pt.patientunitstayid in
 (
 select patientunitstayid
