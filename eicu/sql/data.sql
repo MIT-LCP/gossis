@@ -89,18 +89,18 @@ select
   , coalesce(vnc_d1.mbp_noninvasive_min, v_d1.mbp_noninvasive_min) as d1_mbp_noninvasive_min
   , coalesce(vnc_d1.mbp_noninvasive_max, v_d1.mbp_noninvasive_max) as d1_mbp_noninvasive_max
 
-  , case when v_d1.sysbp_invasive_min  <= v_d1.sysbp_noninvasive_min   then v_d1.sysbp_invasive_min
-          else coalesce(v_d1.sysbp_noninvasive_min , v_d1.sysbp_invasive_min)  end as d1_sysbp_min
-  , case when v_d1.sysbp_invasive_max  >= v_d1.sysbp_noninvasive_max   then v_d1.sysbp_invasive_max
-          else coalesce(v_d1.sysbp_noninvasive_max , v_d1.sysbp_invasive_max)  end as d1_sysbp_max
-  , case when v_d1.diasbp_invasive_min <= v_d1.diasbp_noninvasive_min  then v_d1.diasbp_invasive_min
-          else coalesce(v_d1.diasbp_noninvasive_min, v_d1.diasbp_invasive_min) end as d1_diasbp_min
-  , case when v_d1.diasbp_invasive_max >= v_d1.diasbp_noninvasive_max  then v_d1.diasbp_invasive_max
-          else coalesce(v_d1.diasbp_noninvasive_max, v_d1.diasbp_invasive_max) end as d1_diasbp_max
-  , case when v_d1.mbp_invasive_min    <= v_d1.mbp_noninvasive_min     then v_d1.mbp_invasive_min
-          else coalesce(v_d1.mbp_noninvasive_min   , v_d1.mbp_invasive_min)    end as d1_mbp_min
-  , case when v_d1.mbp_invasive_max    >= v_d1.mbp_noninvasive_max     then v_d1.mbp_invasive_max
-          else coalesce(v_d1.mbp_noninvasive_max   , v_d1.mbp_invasive_max)    end as d1_mbp_max
+  , coalesce(vnc_d1.sysbp_noninvasive_min , vnc_d1.sysbp_invasive_min,
+             v_d1.sysbp_noninvasive_min   , v_d1.sysbp_invasive_min)  as d1_sysbp_min
+  , coalesce(vnc_d1.sysbp_noninvasive_max , vnc_d1.sysbp_invasive_max,
+             v_d1.sysbp_noninvasive_max   , v_d1.sysbp_invasive_max)  as d1_sysbp_max
+  , coalesce(vnc_d1.diasbp_noninvasive_min, vnc_d1.diasbp_invasive_min,
+             v_d1.diasbp_noninvasive_min  , v_d1.diasbp_invasive_min) as d1_diasbp_min
+  , coalesce(vnc_d1.diasbp_noninvasive_max, vnc_d1.diasbp_invasive_max,
+             v_d1.diasbp_noninvasive_max  , v_d1.diasbp_invasive_max) as d1_diasbp_max
+  , coalesce(vnc_d1.mbp_noninvasive_min   , vnc_d1.mbp_invasive_min,
+             v_d1.mbp_noninvasive_min     , v_d1.mbp_invasive_min)    as d1_mbp_min
+  , coalesce(vnc_d1.mbp_noninvasive_max   , vnc_d1.mbp_invasive_max,
+             v_d1.mbp_noninvasive_max     , v_d1.mbp_invasive_max)    as d1_mbp_max
 
   -- Physiology - FIRST HOUR
   , coalesce(vnc_h1.heartrate_min, v_h1.heartrate_min) as h1_heartrate_min
@@ -124,18 +124,18 @@ select
   , coalesce(vnc_h1.mbp_noninvasive_min, v_h1.mbp_noninvasive_min) as h1_mbp_noninvasive_min
   , coalesce(vnc_h1.mbp_noninvasive_max, v_h1.mbp_noninvasive_max) as h1_mbp_noninvasive_max
 
-  , case when v_h1.sysbp_invasive_min  <= v_h1.sysbp_noninvasive_min   then v_h1.sysbp_invasive_min
-          else coalesce(v_h1.sysbp_noninvasive_min , v_h1.sysbp_invasive_min)  end as h1_sysbp_min
-  , case when v_h1.sysbp_invasive_max  >= v_h1.sysbp_noninvasive_max   then v_h1.sysbp_invasive_max
-          else coalesce(v_h1.sysbp_noninvasive_max , v_h1.sysbp_invasive_max)  end as h1_sysbp_max
-  , case when v_h1.diasbp_invasive_min <= v_h1.diasbp_noninvasive_min  then v_h1.diasbp_invasive_min
-          else coalesce(v_h1.diasbp_noninvasive_min, v_h1.diasbp_invasive_min) end as h1_diasbp_min
-  , case when v_h1.diasbp_invasive_max >= v_h1.diasbp_noninvasive_max  then v_h1.diasbp_invasive_max
-          else coalesce(v_h1.diasbp_noninvasive_max, v_h1.diasbp_invasive_max) end as h1_diasbp_max
-  , case when v_h1.mbp_invasive_min    <= v_h1.mbp_noninvasive_min     then v_h1.mbp_invasive_min
-          else coalesce(v_h1.mbp_noninvasive_min   , v_h1.mbp_invasive_min)    end as h1_mbp_min
-  , case when v_h1.mbp_invasive_max    >= v_h1.mbp_noninvasive_max     then v_h1.mbp_invasive_max
-          else coalesce(v_h1.mbp_noninvasive_max   , v_h1.mbp_invasive_max)    end as h1_mbp_max
+  , coalesce(vnc_h1.sysbp_noninvasive_min , vnc_h1.sysbp_invasive_min,
+             v_h1.sysbp_noninvasive_min   , v_h1.sysbp_invasive_min)  as h1_sysbp_min
+  , coalesce(vnc_h1.sysbp_noninvasive_max , vnc_h1.sysbp_invasive_max,
+             v_h1.sysbp_noninvasive_max   , v_h1.sysbp_invasive_max)  as h1_sysbp_max
+  , coalesce(vnc_h1.diasbp_noninvasive_min, vnc_h1.diasbp_invasive_min,
+             v_h1.diasbp_noninvasive_min  , v_h1.diasbp_invasive_min) as h1_diasbp_min
+  , coalesce(vnc_h1.diasbp_noninvasive_max, vnc_h1.diasbp_invasive_max,
+             v_h1.diasbp_noninvasive_max  , v_h1.diasbp_invasive_max) as h1_diasbp_max
+  , coalesce(vnc_h1.mbp_noninvasive_min   , vnc_h1.mbp_invasive_min,
+             v_h1.mbp_noninvasive_min     , v_h1.mbp_invasive_min)    as h1_mbp_min
+  , coalesce(vnc_h1.mbp_noninvasive_max   , vnc_h1.mbp_invasive_max,
+             v_h1.mbp_noninvasive_max     , v_h1.mbp_invasive_max)    as h1_mbp_max
 
   -- Labs - FIRST DAY
   , lab_d1.albumin_min as d1_albumin_min
