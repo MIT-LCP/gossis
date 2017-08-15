@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS gosiss CASCADE;
-CREATE TABLE gosiss as
+DROP TABLE IF EXISTS gossis CASCADE;
+CREATE TABLE gossis as
 select
   -- patient identifiers
   pt.patientunitstayid
@@ -272,26 +272,26 @@ left join apachepredvar apv
 left join apachepatientresult apr
   on pt.patientunitstayid = apr.patientunitstayid
   and apr.apacheversion = 'IVa'
-left join gosiss_lab_d1 lab_d1
+left join gossis_lab_d1 lab_d1
   on pt.patientunitstayid = lab_d1.patientunitstayid
-left join gosiss_lab_h1 lab_h1
+left join gossis_lab_h1 lab_h1
   on pt.patientunitstayid = lab_h1.patientunitstayid
-left join gosiss_bg_d1 bg_d1
+left join gossis_bg_d1 bg_d1
   on pt.patientunitstayid = bg_d1.patientunitstayid
-left join gosiss_bg_h1 bg_h1
+left join gossis_bg_h1 bg_h1
   on pt.patientunitstayid = bg_h1.patientunitstayid
-left join gosiss_vital_d1 v_d1
+left join gossis_vital_d1 v_d1
   on pt.patientunitstayid = v_d1.patientunitstayid
-left join gosiss_vital_h1 v_h1
+left join gossis_vital_h1 v_h1
   on pt.patientunitstayid = v_h1.patientunitstayid
-left join gosiss_vital_nc_d1 vnc_d1
+left join gossis_vital_nc_d1 vnc_d1
   on pt.patientunitstayid = vnc_d1.patientunitstayid
-left join gosiss_vital_nc_h1 vnc_h1
+left join gossis_vital_nc_h1 vnc_h1
   on pt.patientunitstayid = vnc_h1.patientunitstayid
 where pt.patientunitstayid in
 (
 select patientunitstayid
-from gosiss_cohort co
+from gossis_cohort co
 where co.excluded = 0
 )
 order by pt.patientunitstayid;

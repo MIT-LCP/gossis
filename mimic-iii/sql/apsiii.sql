@@ -36,8 +36,8 @@
 --  674 | Temp. Site
 --  224642 | Temperature Site
 
-DROP TABLE IF EXISTS gosiss_apsiii CASCADE;
-CREATE TABLE gosiss_apsiii as
+DROP TABLE IF EXISTS gossis_apsiii CASCADE;
+CREATE TABLE gossis_apsiii as
 -- define acute renal failure (ARF) as:
 --  creatinine >=1.5 mg/dl
 --  and urine output <410 cc/day
@@ -78,7 +78,7 @@ with arf as
   select ie.icustay_id
   , max(case when vd.icustay_id is not null then 1 else 0 end) as mechvent
   from icustays ie
-  left join gosiss_ventdurations vd
+  left join gossis_ventdurations vd
     on ie.icustay_id = vd.icustay_id
     and ie.intime >= vd.starttime - interval '1' day
     and ie.intime <= vd.endtime
@@ -160,7 +160,7 @@ inner join patients pat
 -- join to custom tables to get more data....
 left join arf
   on ie.icustay_id = arf.icustay_id
-left join gosiss_bg_d1 bg
+left join gossis_bg_d1 bg
   on  ie.icustay_id = bg.icustay_id
 left join vent
   on ie.icustay_id = vent.icustay_id

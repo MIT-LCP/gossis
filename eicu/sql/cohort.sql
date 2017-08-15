@@ -1,7 +1,7 @@
--- Create a table of exclusions for eICU patients in the GOSISS project
+-- Create a table of exclusions for eICU patients in the gossis project
 
-DROP TABLE IF EXISTS gosiss_cohort CASCADE;
-CREATE TABLE gosiss_cohort as
+DROP TABLE IF EXISTS gossis_cohort CASCADE;
+CREATE TABLE gossis_cohort as
 with has_lab as
 (
   select pt.hospitalid, pt.hospitaldischargeyear

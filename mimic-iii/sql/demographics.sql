@@ -1,7 +1,7 @@
 -- This query gets the demographics of the patients per stay
 
-DROP TABLE IF EXISTS gosiss_demographics CASCADE;
-CREATE TABLE gosiss_demographics AS
+DROP TABLE IF EXISTS gossis_demographics CASCADE;
+CREATE TABLE gossis_demographics AS
 with demo_stg as
 (
   SELECT ie.subject_id, ie.hadm_id, ie.icustay_id

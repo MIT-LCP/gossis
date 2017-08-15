@@ -1,7 +1,7 @@
 -- This script extracts highest/lowest labs, as appropriate, for the first 24 hours of a patient's stay.
 
-DROP TABLE IF EXISTS gosiss_lab_d1 CASCADE;
-CREATE TABLE gosiss_lab_d1 as
+DROP TABLE IF EXISTS gossis_lab_d1 CASCADE;
+CREATE TABLE gossis_lab_d1 as
 select patientunitstayid
 , min(case when labname = 'albumin' then labresult else null end) as albumin_min
 , max(case when labname = 'albumin' then labresult else null end) as albumin_max

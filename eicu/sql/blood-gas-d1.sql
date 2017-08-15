@@ -1,7 +1,7 @@
 -- this query gets the lowest pao2/fio2 ratio
 
-DROP TABLE IF EXISTS gosiss_bg_d1 CASCADE;
-CREATE TABLE gosiss_bg_d1 as
+DROP TABLE IF EXISTS gossis_bg_d1 CASCADE;
+CREATE TABLE gossis_bg_d1 as
 with vw1 as
 (
   select

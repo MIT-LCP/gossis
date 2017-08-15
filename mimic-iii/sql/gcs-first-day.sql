@@ -21,8 +21,8 @@
 --    This was ascertained either from interviewing the physician who ordered the sedation,
 --    or by reviewing the patient's medical record.
 
-DROP TABLE IF EXISTS gosiss_gcs_d1 CASCADE;
-CREATE TABLE gosiss_gcs_d1 as
+DROP TABLE IF EXISTS gossis_gcs_d1 CASCADE;
+CREATE TABLE gossis_gcs_d1 as
 with base as
 (
   SELECT pvt.ICUSTAY_ID

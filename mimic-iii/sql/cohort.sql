@@ -3,8 +3,8 @@
 -- We require:
 --    ventdurations
 
-DROP TABLE IF EXISTS gosiss_cohort CASCADE;
-CREATE TABLE gosiss_cohort as
+DROP TABLE IF EXISTS gossis_cohort CASCADE;
+CREATE TABLE gossis_cohort as
 -- get services associated with each hospital admission
 with serv as
 (

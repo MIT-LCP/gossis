@@ -2,8 +2,8 @@
 -- Purpose: Create a view of the urine output for each ICUSTAY_ID over the first 24 hours.
 -- ------------------------------------------------------------------
 
-DROP TABLE IF EXISTS gosiss_uo_d1 CASCADE;
-create TABLE gosiss_uo_d1 as
+DROP TABLE IF EXISTS gossis_uo_d1 CASCADE;
+create TABLE gossis_uo_d1 as
 select
   -- patient identifiers
   ie.subject_id, ie.hadm_id, ie.icustay_id

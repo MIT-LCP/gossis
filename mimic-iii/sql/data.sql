@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS gosiss CASCADE;
-CREATE TABLE gosiss as
+DROP TABLE IF EXISTS gossis CASCADE;
+CREATE TABLE gossis as
 select
   -- patient identifiers
     ie.dbsource as data_source
@@ -348,26 +348,26 @@ inner join admissions adm
   on ie.hadm_id = adm.hadm_id
 inner join patients pt
   on ie.subject_id = pt.subject_id
-left join gosiss_demographics demo
+left join gossis_demographics demo
   on ie.icustay_id = demo.icustay_id
-left join gosiss_labs_d1 lab_d1
+left join gossis_labs_d1 lab_d1
   on ie.icustay_id = lab_d1.icustay_id
-left join gosiss_labs_h1 lab_h1
+left join gossis_labs_h1 lab_h1
   on ie.icustay_id = lab_h1.icustay_id
-left join gosiss_bg_d1 bg_d1
+left join gossis_bg_d1 bg_d1
   on ie.icustay_id = bg_d1.icustay_id
-left join gosiss_bg_h1 bg_h1
+left join gossis_bg_h1 bg_h1
   on ie.icustay_id = bg_h1.icustay_id
 left join gossis_vitals_d1 v_d1
   on ie.icustay_id = v_d1.icustay_id
 left join gossis_vitals_h1 v_h1
   on ie.icustay_id = v_h1.icustay_id
-left join gosiss_apsiii apsiii
+left join gossis_apsiii apsiii
   on ie.icustay_id = apsiii.icustay_id
 -- Apply exclusion criteria
 where ie.icustay_id in
 (
 select icustay_id
-from gosiss_cohort co
+from gossis_cohort co
 where co.excluded = 0
 );

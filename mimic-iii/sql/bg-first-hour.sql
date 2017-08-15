@@ -1,12 +1,12 @@
 -- The aim of this query is to pivot entries related to blood gases and
 -- chemistry values which were found in LABEVENTS
 
-DROP TABLE IF EXISTS gosiss_bg_h1 CASCADE;
-CREATE TABLE gosiss_bg_h1 AS
+DROP TABLE IF EXISTS gossis_bg_h1 CASCADE;
+CREATE TABLE gossis_bg_h1 AS
 with bg as
 (
   select bg.*
-  from gosiss_bg bg
+  from gossis_bg bg
   inner join icustays ie
     on bg.icustay_id = ie.icustay_id
   where bg.charttime <= ie.intime + interval '1' hour

@@ -1,6 +1,6 @@
 -- This script extracts highest/lowest vital signs, as appropriate, for the first 24 hours of a patient's stay.
-DROP TABLE IF EXISTS gosiss_vital_d1 CASCADE;
-CREATE TABLE gosiss_vital_d1 as
+DROP TABLE IF EXISTS gossis_vital_d1 CASCADE;
+CREATE TABLE gossis_vital_d1 as
 select
   pat.patientunitstayid
   , vp.heartrate_min

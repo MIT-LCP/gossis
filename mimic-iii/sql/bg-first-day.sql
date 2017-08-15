@@ -2,13 +2,13 @@
 -- chemistry values which were found in LABEVENTS
 
 -- now generate arterial only blood gas samples
-DROP TABLE IF EXISTS gosiss_bg_d1 CASCADE;
-CREATE TABLE gosiss_bg_d1 AS
+DROP TABLE IF EXISTS gossis_bg_d1 CASCADE;
+CREATE TABLE gossis_bg_d1 AS
 -- filter down to first day
 with bg as
 (
   select bg.*
-  from gosiss_bg bg
+  from gossis_bg bg
   inner join icustays ie
     on bg.icustay_id = ie.icustay_id
   where bg.charttime <= ie.intime + interval '1' day
