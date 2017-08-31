@@ -3,8 +3,8 @@ CREATE TABLE gossis as
 select
   -- patient identifiers
     ie.dbsource as data_source
-  , 'mimic_' || cast(ie.icustay_id as varchar(40)) as encounter_id
-  , 'mimic_' || cast(ie.subject_id as varchar(40)) as patient_id
+  , cast(ie.icustay_id as varchar(40)) as encounter_id
+  , cast(ie.subject_id as varchar(40)) as patient_id
 
   -- hierarchical factors - hospital
   , cast('USA' as varchar(10)) as country
