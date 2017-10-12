@@ -506,7 +506,7 @@ d1_diasbp_invasive_min:
   category: vitals
   description: The patient's lowest diastolic blood pressure during the first 24 hours of their unit stay, invasively measured
   dataType: numeric
-  example: None
+  example: 60
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -518,7 +518,7 @@ d1_diasbp_invasive_max:
   category: vitals
   description: The patient's highest diastolic blood pressure during the first 24 hours of their unit stay, invasively measured
   dataType: numeric
-  example: None
+  example: 60
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -530,7 +530,7 @@ d1_mbp_invasive_min:
   category: vitals
   description: The patient's lowest mean blood pressure during the first 24 hours of their unit stay, invasively measured
   dataType: numeric
-  example: None
+  example: 80
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -542,7 +542,7 @@ d1_mbp_invasive_max:
   category: vitals
   description: The patient's highest mean blood pressure during the first 24 hours of their unit stay, invasively measured
   dataType: numeric
-  example: None
+  example: 80
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -554,7 +554,7 @@ d1_sysbp_noninvasive_min:
   category: vitals
   description: The patient's lowest systolic blood pressure during the first 24 hours of their unit stay, non-invasively measured
   dataType: numeric
-  example: None
+  example: 120
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -566,7 +566,7 @@ d1_sysbp_noninvasive_max:
   category: vitals
   description: The patient's highest systolic blood pressure during the first 24 hours of their unit stay, non-invasively measured
   dataType: numeric
-  example: None
+  example: 120
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -578,7 +578,7 @@ d1_diasbp_noninvasive_min:
   category: vitals
   description: The patient's lowest diastolic blood pressure during the first 24 hours of their unit stay, non-invasively measured
   dataType: numeric
-  example: None
+  example: 60
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -590,7 +590,7 @@ d1_diasbp_noninvasive_max:
   category: vitals
   description: The patient's highest diastolic blood pressure during the first 24 hours of their unit stay, non-invasively measured
   dataType: numeric
-  example: None
+  example: 60
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -602,7 +602,7 @@ d1_mbp_noninvasive_min:
   category: vitals
   description: The patient's lowest mean blood pressure during the first 24 hours of their unit stay, non-invasively measured
   dataType: numeric
-  example: None
+  example: 80
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -614,7 +614,7 @@ d1_mbp_noninvasive_max:
   category: vitals
   description: The patient's highest mean blood pressure during the first 24 hours of their unit stay, non-invasively measured
   dataType: numeric
-  example: None
+  example: 80
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -626,7 +626,7 @@ d1_sysbp_min:
   category: vitals
   description: The patient's lowest systolic blood pressure during the first 24 hours of their unit stay, either non-invasively or invasively measured
   dataType: numeric
-  example: None
+  example: 120
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -638,7 +638,7 @@ d1_sysbp_max:
   category: vitals
   description: The patient's highest systolic blood pressure during the first 24 hours of their unit stay, either non-invasively or invasively measured
   dataType: numeric
-  example: None
+  example: 120
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -650,7 +650,7 @@ d1_diasbp_min:
   category: vitals
   description: The patient's lowest diastolic blood pressure during the first 24 hours of their unit stay, either non-invasively or invasively measured
   dataType: numeric
-  example: None
+  example: 60
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -662,7 +662,7 @@ d1_diasbp_max:
   category: vitals
   description: The patient's highest diastolic blood pressure during the first 24 hours of their unit stay, either non-invasively or invasively measured
   dataType: numeric
-  example: None
+  example: 60
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -674,7 +674,7 @@ d1_mbp_min:
   category: vitals
   description: The patient's lowest mean blood pressure during the first 24 hours of their unit stay, either non-invasively or invasively measured
   dataType: numeric
-  example: None
+  example: 80
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -686,7 +686,7 @@ d1_mbp_max:
   category: vitals
   description: The patient's highest mean blood pressure during the first 24 hours of their unit stay, either non-invasively or invasively measured
   dataType: numeric
-  example: None
+  example: 80
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -890,7 +890,7 @@ h1_diasbp_invasive_min:
   category: vitals
   description: The patient's lowest diastolic blood pressure during the first hour of their unit stay, invasively measured
   dataType: numeric
-  example: None
+  example: 60
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -902,7 +902,7 @@ h1_diasbp_invasive_max:
   category: vitals
   description: The patient's highest diastolic blood pressure during the first hour of their unit stay, invasively measured
   dataType: numeric
-  example: None
+  example: 60
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -914,7 +914,7 @@ h1_mbp_invasive_min:
   category: vitals
   description: The patient's lowest mean blood pressure during the first hour of their unit stay, invasively measured
   dataType: numeric
-  example: None
+  example: 80
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -926,7 +926,7 @@ h1_mbp_invasive_max:
   category: vitals
   description: The patient's highest mean blood pressure during the first hour of their unit stay, invasively measured
   dataType: numeric
-  example: None
+  example: 80
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -938,7 +938,7 @@ h1_sysbp_noninvasive_min:
   category: vitals
   description: The patient's lowest systolic blood pressure during the first hour of their unit stay, non-invasively measured
   dataType: numeric
-  example: None
+  example: 120
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -950,7 +950,7 @@ h1_sysbp_noninvasive_max:
   category: vitals
   description: The patient's highest systolic blood pressure during the first hour of their unit stay, non-invasively measured
   dataType: numeric
-  example: None
+  example: 120
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -962,7 +962,7 @@ h1_diasbp_noninvasive_min:
   category: vitals
   description: The patient's lowest diastolic blood pressure during the first hour of their unit stay, non-invasively measured
   dataType: numeric
-  example: None
+  example: 60
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -974,7 +974,7 @@ h1_diasbp_noninvasive_max:
   category: vitals
   description: The patient's highest diastolic blood pressure during the first hour of their unit stay, non-invasively measured
   dataType: numeric
-  example: None
+  example: 60
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -986,7 +986,7 @@ h1_mbp_noninvasive_min:
   category: vitals
   description: The patient's lowest mean blood pressure during the first hour of their unit stay, non-invasively measured
   dataType: numeric
-  example: None
+  example: 80
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -998,7 +998,7 @@ h1_mbp_noninvasive_max:
   category: vitals
   description: The patient's highest mean blood pressure during the first hour of their unit stay, non-invasively measured
   dataType: numeric
-  example: None
+  example: 80
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -1010,7 +1010,7 @@ h1_sysbp_min:
   category: vitals
   description: The patient's lowest systolic blood pressure during the first hour of their unit stay, either non-invasively or invasively measured
   dataType: numeric
-  example: None
+  example: 120
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -1022,7 +1022,7 @@ h1_sysbp_max:
   category: vitals
   description: The patient's highest systolic blood pressure during the first hour of their unit stay, either non-invasively or invasively measured
   dataType: numeric
-  example: None
+  example: 120
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -1034,7 +1034,7 @@ h1_diasbp_min:
   category: vitals
   description: The patient's lowest diastolic blood pressure during the first hour of their unit stay, either non-invasively or invasively measured
   dataType: numeric
-  example: None
+  example: 60
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -1046,7 +1046,7 @@ h1_diasbp_max:
   category: vitals
   description: The patient's highest diastolic blood pressure during the first hour of their unit stay, either non-invasively or invasively measured
   dataType: numeric
-  example: None
+  example: 60
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -1058,7 +1058,7 @@ h1_mbp_min:
   category: vitals
   description: The patient's lowest mean blood pressure during the first hour of their unit stay, either non-invasively or invasively measured
   dataType: numeric
-  example: None
+  example: 80
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
@@ -1070,7 +1070,7 @@ h1_mbp_max:
   category: vitals
   description: The patient's highest mean blood pressure during the first hour of their unit stay, either non-invasively or invasively measured
   dataType: numeric
-  example: None
+  example: 80
   unitofmeasure: Millimetres of mercury
   permissibleRange:
     coded: None
