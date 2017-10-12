@@ -1419,7 +1419,7 @@ d1_platelets_min:
   description: The lowest platelet count for the patient during the first 24 hours of their unit stay
   dataType: numeric
   example: 200.0
-  unitofmeasure: None
+  unitofmeasure: 10^9/L
   permissibleRange:
     coded: None
     low: 0
@@ -1875,7 +1875,7 @@ h1_platelets_min:
   description: The lowest platelet count for the patient during the first hour of their unit stay
   dataType: numeric
   example: 200.0
-  unitofmeasure: None
+  unitofmeasure: 10^9/L
   permissibleRange:
     coded: None
     low: 0
