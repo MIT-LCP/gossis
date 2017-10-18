@@ -41,17 +41,45 @@ with pvt as
         end as label
         , charttime
         , value
-        -- add in some sanity checks on the values
+        -- add in the *least* restrictive data collection rules found
         , case
+          -- laboratory values cannot be equal to or below 0
           when valuenum <= 0 then null
-          when itemid = 50810 and valuenum > 100 then null -- hematocrit
-          when itemid = 50816 and valuenum > 100 then null -- FiO2
+          -- when itemid = 50801 then 'AADO2'
+          -- when itemid = 50802 then 'BASEEXCESS'
+          when itemid = 50803 and (valuenum < 2 OR valuenum > 60) then null -- 'BICARBONATE'
+          when itemid = 50804 and (valuenum < 2 OR valuenum > 60) then null -- 'TOTALCO2'
+          -- when itemid = 50805 and valuenum > X then null -- 'CARBOXYHEMOGLOBIN'
+          -- when itemid = 50806 and valuenum > X then null -- 'CHLORIDE'
+          -- when itemid = 50808 and valuenum > X then null -- 'CALCIUM'
+          when itemid = 50809 and (valuenum < 1.80 OR valuenum > 1621) then null -- 'GLUCOSE'
+          when itemid = 50810 and (valuenum < 5 OR valuenum > 75) then null -- 'HEMATOCRIT'
+          -- convert hematocrit to fraction
+          when itemid = 50810 then valuenum/100.0
+          -- when itemid = 50811 and valuenum > X then null -- 'HEMOGLOBIN'
+          -- when itemid = 50812 and valuenum > X then null -- 'INTUBATED'
+          -- when itemid = 50813 and valuenum > X then null -- 'LACTATE'
+          -- when itemid = 50814 and valuenum > 100 then null -- 'METHEMOGLOBIN'
+          -- when itemid = 50815 and valuenum > 100 then null -- 'O2FLOW'
+          -- convert fio2 values to fraction
+          -- mistakes are rare (<100 obs out of ~100,000)
+          -- there are 862 obs of valuenum == 20 - some people round down!
+          -- rather than risk imputing garbage data for FiO2, we simply NULL invalid values
           when itemid = 50816 and valuenum <=  0 then null -- FiO2
-          when itemid = 50816 and valuenum <=  1 then valuenum * 100
-          when itemid = 50817 and valuenum > 100 then null -- O2 sat
-          when itemid = 50815 and valuenum >  70 then null -- O2 flow
-          when itemid = 50821 and valuenum > 800 then null -- PO2
-           -- conservative upper limit
+          when itemid = 50816 and valuenum > 100 then null -- FiO2
+          when itemid = 50816 and valuenum >= 20 and valuenum <= 100 then valuenum/100.0
+          when itemid = 50817 and valuenum > 100 then null -- OXYGENSATURATION
+          when itemid = 50818 and (valuenum < 5 OR valuenum > 250) then null -- 'PCO2'
+          -- when itemid = 50819 and valuenum > X then null -- 'PEEP'
+          when itemid = 50820 and (valuenum < 6.5 OR valuenum > 8.5) then null -- 'PH'
+          when itemid = 50821 and (valuenum < 15 OR valuenum > 720) then null -- 'PO2'
+          when itemid = 50822 and (valuenum < 0.05 OR valuenum > 12) then null -- 'POTASSIUM'
+          -- when itemid = 50823 and valuenum > X then null -- 'REQUIREDO2'
+          when itemid = 50824 and (valuenum < 100 OR valuenum > 215) then null -- 'SODIUM'
+          when itemid = 50825 and (valuenum < 25 OR valuenum > 46) then null -- 'TEMPERATURE'
+          -- when itemid = 50826 and valuenum > 10000 then null -- 'TIDALVOLUME'
+          -- when itemid = 50827 and valuenum > 10000 then null -- 'VENTILATIONRATE'
+          -- when itemid = 50828 and valuenum > 10000 then null -- 'VENTILATOR'
         else valuenum
         end as valuenum
 
@@ -120,26 +148,26 @@ with pvt as
 )
 , stg_fio2 as
 (
-  select SUBJECT_ID, HADM_ID, ICUSTAY_ID, CHARTTIME
-    -- pre-process the FiO2s to ensure they are between 21-100%
+  select ICUSTAY_ID, CHARTTIME
+    -- pre-process the FiO2s to ensure they are between 0.21-1
     , max(
         case
           when itemid in (223835,727)
             then case
-              when valuenum > 0.2 and valuenum <= 1
-                then valuenum * 100
               -- improperly input data - looks like O2 flow in litres
               when valuenum > 1 and valuenum < 21
                 then null
-              when valuenum >= 21 and valuenum <= 100
+              when valuenum > 0.2 and valuenum <= 1
                 then valuenum
+              when valuenum > 20 and valuenum <= 100
+                then valuenum / 100.0
               else null end -- unphysiological
-        when itemid in (3420, 3422)
-        -- all these values are well formatted
-            then valuenum
+        -- checked: all these values are in percentage
+        when itemid in (3420, 3422) and valuenum > 20 and valuenum <= 100
+            then valuenum / 100.0
+        -- checked: all these values are in fraction
         when itemid = 190 and valuenum > 0.20 and valuenum <= 1
-        -- well formatted but not in %
-            then valuenum * 100
+            then valuenum
       else null end
     ) as fio2_chartevents
   from CHARTEVENTS
@@ -153,7 +181,7 @@ with pvt as
   )
   -- exclude rows marked as error
   and error IS DISTINCT FROM 1
-  group by SUBJECT_ID, HADM_ID, ICUSTAY_ID, CHARTTIME
+  group by ICUSTAY_ID, CHARTTIME
 )
 , stg2 as
 (
@@ -178,11 +206,11 @@ select bg.*
   ,  1/(1+exp(-(-0.02544
   +    0.04598 * po2
   + coalesce(-0.15356 * spo2             , -0.15356 *   97.49420 +    0.13429)
-  + coalesce( 0.00621 * fio2_chartevents ,  0.00621 *   51.49550 +   -0.24958)
+  + coalesce( 0.62100 * fio2_chartevents ,  0.00621 *   51.49550 +   -0.24958)
   + coalesce( 0.10559 * hemoglobin       ,  0.10559 *   10.32307 +    0.05954)
   + coalesce( 0.13251 * so2              ,  0.13251 *   93.66539 +   -0.23172)
   + coalesce(-0.01511 * pco2             , -0.01511 *   42.08866 +   -0.01630)
-  + coalesce( 0.01480 * fio2             ,  0.01480 *   63.97836 +   -0.31142)
+  + coalesce( 1.48000 * fio2             ,  0.01480 *   63.97836 +   -0.31142)
   + coalesce(-0.00200 * aado2            , -0.00200 *  442.21186 +   -0.01328)
   + coalesce(-0.03220 * bicarbonate      , -0.03220 *   22.96894 +   -0.06535)
   + coalesce( 0.05384 * totalco2         ,  0.05384 *   24.72632 +   -0.01405)
@@ -216,21 +244,19 @@ select SUBJECT_ID, HADM_ID, ICUSTAY_ID
 , PCO2
 
 -- fio2 as a fraction
-, coalesce(FIO2, fio2_chartevents)/100 as fio2
+, coalesce(FIO2, fio2_chartevents) as fio2
 , AADO2
 -- also calculate AADO2
 , case
     when  PO2 is not null
       and pco2 is not null
       and coalesce(FIO2, fio2_chartevents) is not null
-     -- multiple by 100 because FiO2 is in a % but should be a fraction
-      then (coalesce(FIO2, fio2_chartevents)/100) * (760 - 47) - (pco2/0.8) - po2
+      then (coalesce(FIO2, fio2_chartevents) * (760 - 47) - (pco2/0.8)) - po2
     else null
   end as AADO2_calc
 , case
     when PO2 is not null and coalesce(FIO2, fio2_chartevents) is not null
-     -- multiply by 100 because FiO2 is in a % but should be a fraction
-      then 100*PO2/(coalesce(FIO2, fio2_chartevents))
+      then PO2/(coalesce(FIO2, fio2_chartevents))
     else null
   end as PaO2FiO2
 
