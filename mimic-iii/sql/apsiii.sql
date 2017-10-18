@@ -54,9 +54,9 @@ with arf as
           then 1
       else 0 end as arf
   from icustays ie
-  left join uofirstday uo
+  left join gossis_uo_d1 uo
     on ie.icustay_id = uo.icustay_id
-  left join labsfirstday labs
+  left join gossis_labs_d1 labs
     on ie.icustay_id = labs.icustay_id
   left join
   (
@@ -78,7 +78,7 @@ with arf as
   select ie.icustay_id
   , max(case when vd.icustay_id is not null then 1 else 0 end) as mechvent
   from icustays ie
-  left join gossis_ventdurations vd
+  left join ventdurations vd
     on ie.icustay_id = vd.icustay_id
     and ie.intime >= vd.starttime - interval '1' day
     and ie.intime <= vd.endtime
