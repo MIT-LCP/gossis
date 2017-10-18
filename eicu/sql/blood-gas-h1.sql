@@ -2,16 +2,8 @@ DROP TABLE IF EXISTS gossis_bg_h1 CASCADE;
 CREATE TABLE gossis_bg_h1 as
 select
     bg.patientunitstayid
-  , min(
-      case
-      when coalesce(FiO2, PaO2) is null then null
-      else PaO2/FiO2 end
-    ) as PaO2FiO2Ratio_min
-  , max(
-      case
-      when coalesce(FiO2, PaO2) is null then null
-      else PaO2/FiO2 end
-    ) as PaO2FiO2Ratio_max
+  , min(PaO2/fio2) as PaO2FiO2Ratio_min
+  , max(PaO2/fio2) as PaO2FiO2Ratio_max
   , min(PaO2) as PaO2_min
   , max(PaO2) as PaO2_max
   , min(PaCO2) as PaCO2_min
