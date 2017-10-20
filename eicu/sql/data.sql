@@ -62,6 +62,7 @@ select
         > 1 then 1
     else 0 end as readmission_status
 
+
   -- TODO: Define treatments
 
   -- TODO: Define comorbidities
@@ -252,6 +253,10 @@ select
 
   -- Other measurements - FIRST DAY
   -- , urine_output
+
+  -- Diagnosis
+  -- this is the short phrase, 427 possible diagnoses
+  , apv.admitdiagnosis as diagnosis_apache
 
   -- Scoring systems
   , apr.acutephysiologyscore as apsiii
