@@ -4,9 +4,9 @@ import os
 import pandas as pd
 
 
-df = pd.read_csv('GOSISS_VARIABLE_LIST - all variables.csv',header=0)
+df = pd.read_csv('GOSISS_VARIABLE_DEFINITIONS.csv',header=0)
 
-hdr = df['Final field name'].dropna()
+hdr = df['varname'].dropna()
 # all variables are lower case
 hdr = hdr.apply(lambda x: x.lower())
 
