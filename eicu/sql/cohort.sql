@@ -72,7 +72,7 @@ else 0 end as readmission_status
 -- APACHE score only exists for first hospital stay
 , case when st.rn = 1 then 0 else 1 end as exclusion_short_or_secondary_stay
 , case
-    when has_vit.numobs > 0 and has_lab.numobs > 0
+    when has_vit.numobs > 0 and has_lab.numobs > 0 then 0
   else 1 end as exclusion_missing_data
 
 -- excluded column aggregates all the above
