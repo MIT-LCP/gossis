@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS gossis CASCADE;
 CREATE TABLE gossis as
-with wtht as
+with htwt as
 (
 select pt.patientunitstayid
   , case when pt.admissionweight < 25 then null
@@ -36,8 +36,8 @@ select
       when pt.gender = 'Female' then 'F'
       when pt.gender = 'Male' then 'M'
     else null end as gender
-  , wtht.weight
-  , wtht.height
+  , htwt.weight
+  , htwt.height
   , case when coalesce(htwt.weight,htwt.height) is not null
       -- 0.0001 converts height from centimetres to metres
       then htwt.weight / (htwt.height*htwt.height*0.0001)
@@ -286,8 +286,8 @@ left join apachepredvar apv
 left join apachepatientresult apr
   on pt.patientunitstayid = apr.patientunitstayid
   and apr.apacheversion = 'IVa'
-left join wtht
-  on pt.patientunitstayid = wtht.patientunitstayid
+left join htwt
+  on pt.patientunitstayid = htwt.patientunitstayid
 left join gossis_lab_d1 lab_d1
   on pt.patientunitstayid = lab_d1.patientunitstayid
 left join gossis_lab_h1 lab_h1
