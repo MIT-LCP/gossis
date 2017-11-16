@@ -29,6 +29,17 @@ with has_lab as
     on pt.patientunitstayid = med.patientunitstayid
   group by pt.hospitalid, pt.hospitaldischargeyear
 )
+, stays as
+(
+  select pt.patientunitstayid
+  , ROW_NUMBER() OVER (PARTITION BY pt.uniquepid
+    ORDER BY pt.hospitaldischargeyear, pt.hospitaldischargeoffset DESC,
+    pt.patienthealthsystemstayid) as rn
+  from patient pt
+  where pt.unitdischargeoffset >= (60*4)
+  -- sometimes patient is downgraded in an ICU location
+  and pt.unitstaytype != 'stepdown/other'
+)
 select pt.PATIENTUNITSTAYID
 
 -- TODO: compare these readmission flags
@@ -43,6 +54,11 @@ when ROW_NUMBER() over (PARTITION BY apv.patientunitstayid ORDER BY pt.hospitald
 else 0 end as readmission_status
 , case when aiva.apachescore > 1 and aiva.predictedhospitalmortality = -1 then 1 else 0 end readmission_apache_pred
 
+, case
+  when aiva.apachescore > 1 and aiva.predictedhospitalmortality = -1 then 1
+  when apv.readmit = 1 then 1
+  else 0 end as readmission_apache_combined
+
 -- EXCLUSION FLAGS --
 , case when pt.age = '> 89' then 0
       when pt.age = '' then 0
@@ -53,16 +69,10 @@ else 0 end as readmission_status
     when coalesce(pt.hospitaldischargestatus,'') = '' then 1
     when pt.unitdischargestatus not in ('Expired','Alive') then 1
   else 0 end as exclusion_missingoutcome
-, case
-    when aiva.apachescore > 1 and aiva.predictedhospitalmortality = -1 then 1
-    when apv.readmit = 1 then 1
-    when ROW_NUMBER() over (PARTITION BY apv.patientunitstayid ORDER BY pt.hospitaldischargeoffset DESC)
-      > 1 then 1
-    else 0 end as exclusion_readmission
 -- APACHE score only exists for first hospital stay
-, case when aiva.apachescore > 1 then 0 else 1 end as exclusion_np_apache_score
+, case when st.rn = 1 then 0 else 1 end as exclusion_short_or_secondary_stay
 , case
-    when has_vit.numobs > 0 and has_lab.numobs > 0 and has_med.numobs > 0 then 0
+    when has_vit.numobs > 0 and has_lab.numobs > 0
   else 1 end as exclusion_missing_data
 
 -- excluded column aggregates all the above
@@ -70,13 +80,10 @@ else 0 end as readmission_status
      when (pt.age = '> 89' or pt.age = '' or cast(pt.age as numeric) >= 16)
       and coalesce(pt.hospitaldischargestatus,'') != ''
       and pt.unitdischargestatus in ('Expired','Alive')
-      and aiva.apachescore > 1
-      and not aiva.apachescore = -1
-      and not apv.readmit = 1
-      and ROW_NUMBER() over (PARTITION BY apv.patientunitstayid ORDER BY pt.hospitaldischargeoffset DESC) = 1
+      -- first stay for patient of those stays > 4 hours
+      and st.rn = 1
       and has_vit.numobs > 0
       and has_lab.numobs > 0
-      and has_med.numobs > 0
     then 0
   else 1 end as excluded
 from patient pt
@@ -108,4 +115,6 @@ left join apachepredvar apv
 left join public.tpubfirststay fs
   on pt.patientunitstayid = fs.patientunitstayid
 
+left join stays st
+  on pt.patientunitstayid = st.patientunitstayid
 order by pt.patientunitstayid;
