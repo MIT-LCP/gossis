@@ -1,5 +1,17 @@
 DROP TABLE IF EXISTS gossis CASCADE;
 CREATE TABLE gossis as
+with wtht as
+(
+select pt.patientunitstayid
+  , case when pt.admissionweight < 25 then null
+         else pt.admissionweight end as weight
+  , case when pt.admissionheight < 0.5 then null
+       when pt.admissionheight < 3.0 then pt.admissionheight*100
+       when pt.admissionheight < 50 then null
+       when pt.admissionheight > 300 then null
+      else pt.admissionheight end as height
+from patient pt
+)
 select
   -- patient identifiers
   pt.patientunitstayid
@@ -24,14 +36,12 @@ select
       when pt.gender = 'Female' then 'F'
       when pt.gender = 'Male' then 'M'
     else null end as gender
-  , pt.admissionweight as weight
-  , pt.admissionheight as height
-  , case when coalesce(pt.admissionweight,pt.admissionheight) is not null
-      and pt.admissionheight > 50 and pt.admissionheight < 300
-      and pt.admissionweight > 10 and pt.admissionweight < 800
-        -- 0.0001 converts height from centimetres to metres
-        then pt.admissionweight / (pt.admissionheight*pt.admissionheight*0.0001)
-      end as bmi
+  , wtht.weight
+  , wtht.height
+  , case when coalesce(htwt.weight,htwt.height) is not null
+      -- 0.0001 converts height from centimetres to metres
+      then htwt.weight / (htwt.height*htwt.height*0.0001)
+    end as bmi
   , pt.ethnicity
   , cast(NULL as smallint) as pregnant
   , cast(NULL as smallint) as smoking_status
@@ -61,7 +71,6 @@ select
       when ROW_NUMBER() over (PARTITION BY pt.patientunitstayid ORDER BY pt.hospitaldischargeoffset DESC)
         > 1 then 1
     else 0 end as readmission_status
-
 
   -- TODO: Define treatments
 
@@ -277,6 +286,8 @@ left join apachepredvar apv
 left join apachepatientresult apr
   on pt.patientunitstayid = apr.patientunitstayid
   and apr.apacheversion = 'IVa'
+left join wtht
+  on pt.patientunitstayid = wtht.patientunitstayid
 left join gossis_lab_d1 lab_d1
   on pt.patientunitstayid = lab_d1.patientunitstayid
 left join gossis_lab_h1 lab_h1
