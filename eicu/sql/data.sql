@@ -258,7 +258,8 @@ select
 
   , case when aav.dialysis = -1 then NULL else aav.dialysis end as arf_apache
   , case when aav.intubated = -1 then NULL else aav.intubated end as intubated_apache
-  , case when aav.vent = -1 then NULL else aav.vent end as ventilated_apache
+  , case when apv.oobventday1 = -1 then NULL else apv.oobventday1 end as ventilated_apache
+  -- , case when aav.vent = -1 then NULL else aav.vent end as ventilated_for_rr_apache
 
   -- Other measurements - FIRST DAY
   -- , urine_output
