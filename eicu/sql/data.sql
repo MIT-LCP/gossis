@@ -256,7 +256,7 @@ select
 
   -- Diagnosis
   -- this is the short phrase, 427 possible diagnoses
-  , apv.admitdiagnosis as diagnosis_apache
+  , apv.admitdiagnosis
 
   -- Scoring systems
   , apr.acutephysiologyscore as apsiii
