@@ -15,7 +15,6 @@
 "Undefined",1,"0.14","Transplant, lung bilateral, surgery for","1","S-LNGSTRAN","admission diagnosis|All Diagnosis|Operative|Diagnosis|Transplant|Lung transplant, bilateral",6,,
 "Undefined",1,"0.15","Transplant, lung single, surgery for","1","S-LUNGTRAN","admission diagnosis|All Diagnosis|Operative|Diagnosis|Transplant|Lung transplant, single",9,,
 "Undefined",1,"0.16","Transplant, bone marrow, surgery for","1","S-BMARTRAN","admission diagnosis|All Diagnosis|Operative|Diagnosis|Transplant|Bone marrow transplant",0,,
-"Undefined",0,"0.17","Cancer, lung","1","LUNGCA","admission diagnosis|All Diagnosis|Non-operative|Diagnosis|Respiratory|Cancer, lung",522,312,
 "Undefined",0,"0.18","Leukemia, other","1","LEUKOTHER","admission diagnosis|All Diagnosis|Non-operative|Diagnosis|Hematology|Leukemia, other",9,802,
 "Undefined",0,"0.19","Complications of previous open heart surgery (i.e. bleeding, infection etc.)","1","CARDCOMP","admission diagnosis|All Diagnosis|Non-operative|Diagnosis|Cardiovascular|Complications of previous open heart surgery (i.e. bleeding, infection etc.)",78,1208,"presumably ANZICS only allows the surgical version of this code"
 "Undefined",0,"0.20","Hematologic medical, other","1","M-HEMOTHER","admission diagnosis|All Diagnosis|Non-operative|Diagnosis|Hematology|Hematologic medical, other",75,802,
@@ -63,6 +62,7 @@
 "Respiratory",0,"202.01","Cancer of the following: laryngeal, lung, oral, tracheal","1","LARYNXCA","admission diagnosis|All Diagnosis|Non-operative|Diagnosis|Respiratory|Cancer, laryngeal",43,,"fuzzy match"
 "Respiratory",0,"202.01","Cancer of the following: laryngeal, lung, oral, tracheal","2","ORALCA","admission diagnosis|All Diagnosis|Non-operative|Diagnosis|Respiratory|Cancer, oral",29,,
 "Respiratory",0,"202.01","Cancer of the following: laryngeal, lung, oral, tracheal","3","TRACHCA","admission diagnosis|All Diagnosis|Non-operative|Diagnosis|Respiratory|Cancer, tracheal",9,,
+"Respiratory",0,"202.01","Cancer of the following: laryngeal, lung, oral, tracheal","4","LUNGCA","admission diagnosis|All Diagnosis|Non-operative|Diagnosis|Respiratory|Cancer, lung",522,312,
 "Respiratory",0,"203.01","Arrest, respiratory (without cardiac arrest)","1","RESPARREST","admission diagnosis|All Diagnosis|Non-operative|Diagnosis|Respiratory|Arrest, respiratory (without cardiac arrest)",2395,,
 "Respiratory",0,"204.01","ARDS-adult respiratory distress syndrome, non-cardiogenic pulmonary edema","1","ARDS","admission diagnosis|All Diagnosis|Non-operative|Diagnosis|Respiratory|ARDS-adult respiratory distress syndrome, non-cardiogenic pulmonary edema",734,,
 "Respiratory",0,"206.01","Emphysema/Bronchitis","1","EMPHYSBRON","admission diagnosis|All Diagnosis|Non-operative|Diagnosis|Respiratory|Emphysema/bronchitis",4128,,
