@@ -31,4 +31,4 @@ col_print = ['category','varname','unitofmeasure','dataType','description','exam
 df.sort_values(['category_order','varname'],inplace=True)
 
 # output the data to csv
-df[col_print].to_csv('GOSISS_VARIABLE_DEFINITIONS.csv',index=False)
+df[col_print].to_csv('GOSSIS_VARIABLE_DEFINITIONS.csv',index=False)

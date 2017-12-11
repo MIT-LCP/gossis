@@ -4,7 +4,7 @@ import os
 import pandas as pd
 
 
-df = pd.read_csv('GOSISS_VARIABLE_DEFINITIONS.csv',header=0)
+df = pd.read_csv('GOSSIS_VARIABLE_DEFINITIONS.csv',header=0)
 
 hdr = df['varname'].dropna()
 # all variables are lower case
@@ -12,5 +12,3 @@ hdr = hdr.apply(lambda x: x.lower())
 
 # write out to file
 hdr.to_csv('header.csv',index=False,header=None)
-
-
