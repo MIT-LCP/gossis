@@ -2379,7 +2379,7 @@ apache_2_diagnosis:
   description: The APACHE II diagnosis for the ICU admission
   dataType: string
   example: 308
-  unitofmeasure: ANZICS Ontology
+  unitofmeasure: None
   permissibleRange:
     coded: None
     low: None
@@ -2388,7 +2388,7 @@ apache_2_diagnosis:
   snomed: None
 apache_3j_diagnosis:
   category: APACHE covariate
-  description: The APACHE III-J sub-diagnosis which best describes the reason for the ICU admission
+  description: The APACHE III-J sub-diagnosis code which best describes the reason for the ICU admission
   dataType: string
   example: 1405
   unitofmeasure: None
