@@ -31,11 +31,12 @@ smoking_status
 teaching_hospital
 weight
 albumin_apache
+apache_2_diagnosis
+apache_3j_diagnosis
 arf_apache
 bilirubin_apache
 bun_apache
 creatinine_apache
-diagnosis_apache
 fio2_apache
 gcs_eyes_apache
 gcs_motor_apache
