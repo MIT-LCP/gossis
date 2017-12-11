@@ -2362,18 +2362,6 @@ ventilated_apache:
     high: 1
     note: None
   snomed: None
-diagnosis_apache:
-  category: APACHE covariate
-  description: The APACHE III-J sub-diagnosis which best describes the reason for the ICU admission
-  dataType: string
-  example: Anaphylaxis
-  unitofmeasure: None
-  permissibleRange:
-    coded: None
-    low: None
-    high: None
-    note: None
-  snomed: None
 apsiii:
   category: APACHE prediction
   description: The Acute Physiology Score III, which describes the severity of the patient's condition
@@ -2384,6 +2372,30 @@ apsiii:
     coded: None
     low: 0
     high: 299
+    note: None
+  snomed: None
+apache_2_diagnosis:
+  category: APACHE covariate
+  description: The APACHE II diagnosis for the ICU admission
+  dataType: string
+  example: 308
+  unitofmeasure: ANZICS Ontology
+  permissibleRange:
+    coded: None
+    low: None
+    high: None
+    note: None
+  snomed: None
+apache_3j_diagnosis:
+  category: APACHE covariate
+  description: The APACHE III-J sub-diagnosis which best describes the reason for the ICU admission
+  dataType: string
+  example: 1405
+  unitofmeasure: None
+  permissibleRange:
+    coded: None
+    low: None
+    high: None
     note: None
   snomed: None
 apache_3j_score:
