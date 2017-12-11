@@ -74,9 +74,6 @@ select
     patientunitstayid
   , labresultoffset
   -- the aggregate (max()) only ever applies to 1 value due to the where clause
-  , MAX(case
-        when labname != 'Hct' then null
-      else labresult/100.0 end) as fio2
   , MAX(case when labname = 'albumin' then labresult else null end) as albumin
   , MAX(case when labname = 'total bilirubin' then labresult else null end) as bilirubin
   , MAX(case when labname = 'BUN' then labresult else null end) as BUN
