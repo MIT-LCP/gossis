@@ -55,7 +55,38 @@ select
       else null end as hospital_death
 
 
-  , pt.unitadmitsource as icu_admit_source
+  , case
+      when pt.unitadmitsource in
+      (
+        , 'Direct Admit'
+        , 'Emergency Department'
+      ) then 'Accident & Emergency'
+      when pt.unitadmitsource in
+      (
+          'Operating Room'
+        , 'Recovery Room'
+        , 'PACU'
+      ) then 'Operating Room / Recovery'
+      when pt.unitadmitsource in
+      (
+          'Acute Care/Floor'
+        , 'Chest Pain Center'
+        , 'Floor'
+        , 'Step-Down Unit (SDU)'
+        , 'Observation'
+        , 'Other'
+      ) then 'Floor'
+      when pt.unitadmitsource in
+      (
+          'ICU'
+        , 'ICU to SDU'
+        , 'Other ICU'
+      ) then 'Other ICU'
+      when pt.unitadmitsource in
+      (
+          'Other Hospital'
+      ) then 'Other Hospital'
+    else null end as icu_admit_source
   --, pt.unittype as icu_stay_type
   , pt.unitdischargelocation as icu_disch_location
   , -(pt.hospitaladmitoffset/60.0/24.0) as pre_icu_los_days
