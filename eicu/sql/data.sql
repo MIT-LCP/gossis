@@ -58,7 +58,7 @@ select
   , case
       when pt.unitadmitsource in
       (
-        , 'Direct Admit'
+          'Direct Admit'
         , 'Emergency Department'
       ) then 'Accident & Emergency'
       when pt.unitadmitsource in
