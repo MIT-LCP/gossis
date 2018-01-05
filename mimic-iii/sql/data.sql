@@ -142,7 +142,15 @@ select
 
   -- TODO: Define treatments
 
-  -- TODO: Define comorbidities
+  -- Comorbidities
+  -- , cm.aids
+  -- , cm.diabetes_mellitus
+  -- , cm.cirrhosis
+  -- , cm.hepatic_failure
+  -- , cm.lymphoma
+  -- , cm.leukemia
+  -- , cm.solid_tumor_with_metastasis
+  -- , cm.immunosuppression
 
   -- Physiology - FIRST DAY
   , v_d1.HeartRate_Min as d1_heartrate_min
