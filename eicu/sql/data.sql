@@ -105,7 +105,15 @@ select
 
   -- TODO: Define treatments
 
-  -- TODO: Define comorbidities
+  -- Define comorbidities
+  , apv.aids as aids
+  , apv.diabetes as diabetes_mellitus
+  , apv.cirrhosis as cirrhosis
+  , apv.hepaticfailure as hepatic_failure
+  , apv.lymphoma as lymphoma
+  , apv.leukemia as leukemia
+  , apv.metastaticcancer as solid_tumor_with_metastasis
+  , apv.immunosuppression as immunosuppression
 
   -- Physiology - FIRST DAY
   -- prioritize nurse charting, but use vitals tables if we don't have charted

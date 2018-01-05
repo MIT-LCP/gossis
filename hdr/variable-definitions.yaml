@@ -2436,9 +2436,105 @@ apache_4a_icu_death_prob:
   snomed: None
 apache_4a_hospital_death_prob:
   category: APACHE prediction
-  description: The APACHE IVa probabilistic prediction of in-hospital mortality for the patient which utilizes the APACHE III score and other covariates, including diagnosis
+  description: The APACHE IVa probabilistic prediction of in-hospital mortality for the patient which utilizes the APACHE III score and other covariates, including diagnosis.
   dataType: numeric
   example: 0.31
+  unitofmeasure: None
+  permissibleRange:
+    coded: None
+    low: 0
+    high: 1
+    note: None
+  snomed: None
+aids:
+  category: APACHE comorbidity
+  description: Whether the patient has a definitive diagnosis of acquired immune deficiency syndrome (AIDS) (not HIV positive alone)
+  dataType: binary
+  example: 1
+  unitofmeasure: None
+  permissibleRange:
+    coded: None
+    low: 0
+    high: 1
+    note: None
+  snomed: None
+cirrhosis:
+  category: APACHE comorbidity
+  description: Whether the patient has a history of heavy alcohol use with portal hypertension and varices, other causes of cirrhosis with evidence of portal hypertension and varices, or biopsy proven cirrhosis. This comorbidity does not apply to patients with a functioning liver transplant.
+  dataType: binary
+  example: 1
+  unitofmeasure: None
+  permissibleRange:
+    coded: None
+    low: 0
+    high: 1
+    note: None
+  snomed: None
+diabetes_mellitus:
+  category: APACHE comorbidity
+  description: Whether the patient has been diagnosed with diabetes, either juvenile or adult onset, which requires medication.
+  dataType: binary
+  example: 1
+  unitofmeasure: None
+  permissibleRange:
+    coded: None
+    low: 0
+    high: 1
+    note: None
+  snomed: None
+hepatic_failure:
+  category: APACHE comorbidity
+  description: Whether the patient has cirrhosis and additional complications including jaundice and ascites, upper GI bleeding, hepatic encephalopathy, or coma.
+  dataType: binary
+  example: 1
+  unitofmeasure: None
+  permissibleRange:
+    coded: None
+    low: 0
+    high: 1
+    note: None
+  snomed: None
+immunosuppression:
+  category: APACHE comorbidity
+  description: Whether the patient has their immune system suppressed within six months prior to ICU admission for any of the following reasons; radiation therapy, chemotherapy, use of non-cytotoxic immunosuppressive drugs, high dose steroids (at least 0.3 mg/kg/day of methylprednisolone or equivalent for at least 6 months).
+  dataType: binary
+  example: 1
+  unitofmeasure: None
+  permissibleRange:
+    coded: None
+    low: 0
+    high: 1
+    note: None
+  snomed: None
+leukemia:
+  category: APACHE comorbidity
+  description: Whether the patient has been diagnosed with acute or chronic myelogenous leukemia, acute or chronic lymphocytic leukemia, or multiple myeloma.
+  dataType: binary
+  example: 1
+  unitofmeasure: None
+  permissibleRange:
+    coded: None
+    low: 0
+    high: 1
+    note: None
+  snomed: None
+lymphoma:
+  category: APACHE comorbidity
+  description: Whether the patient has been diagnosed with non-Hodgkin lymphoma.
+  dataType: binary
+  example: 1
+  unitofmeasure: None
+  permissibleRange:
+    coded: None
+    low: 0
+    high: 1
+    note: None
+  snomed: None
+solid_tumor_with_metastasis:
+  category: APACHE comorbidity
+  description: Whether the patient has been diagnosed with any solid tumor carcinoma (including malignant melanoma) which has evidence of metastasis.
+  dataType: binary
+  example: 1
   unitofmeasure: None
   permissibleRange:
     coded: None

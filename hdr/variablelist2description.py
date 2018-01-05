@@ -8,7 +8,8 @@ with open("variable-definitions.yaml", 'r') as stream:
     try:
         varlist = yaml.load(stream)
     except yaml.YAMLError as exc:
-        print(exc)
+        #print(exc)
+        raise
 
 # convert to dataframe
 df = pd.DataFrame.from_dict(varlist, orient='index')
