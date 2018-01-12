@@ -1,0 +1,21 @@
+<!--#set var="TITLE" value="Global Open Source Severity of Illness Score"-->
+<!--#include virtual="/users/shared/pnw-head.shtml"-->
+
+<div class="notice">
+<p>The GOSSIS project aims to build a mortality prediction model which is capable of benchmarking hospitals internationally.</p>
+</div>
+
+<h2>Downloads:</h2>
+
+All files are listed below:
+
+<ol>
+<li><a href="version_0_1/gossis-data.csv.gz">gossis-data.csv.gz</a> Main data file (100 MB compressed)</li>
+</ol>
+<br />
+
+<p>&nbsp;</p>
+
+</div>
+</body>
+</html>
