@@ -2374,6 +2374,18 @@ apsiii:
     high: 299
     note: None
   snomed: None
+apache_post_operative:
+  category: APACHE covariate
+  description: The APACHE operative status; 1 for post-operative, 0 for non-operative
+  dataType: binary
+  example: 1
+  unitofmeasure: None
+  permissibleRange:
+    coded: None
+    low: 0
+    high: 1
+    note: None
+  snomed: None
 apache_2_diagnosis:
   category: APACHE covariate
   description: The APACHE II diagnosis for the ICU admission
