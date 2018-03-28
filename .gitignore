@@ -1,7 +1,9 @@
-# ignore csv, xlsx, and pdf files by default
-*.csv
+# ignore xlsx and pdf files by default
 *.pdf
 *.xlsx
+
+# ignore data files output as csv.gz
+*.csv.gz
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
