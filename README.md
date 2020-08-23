@@ -1,5 +1,11 @@
-# gossis
-Extracting consistent concepts from multiple databases
+# GOSSIS: The Global Open Source Severity of Illness Score
+
+For more information about the GOSSIS consortium, please visit https://gossis.mit.edu/
+
+This repository is focused on the extraction part of the GOSSIS pipeline.  It extract consistent concepts from multiple databases.
+Currently only the ANZICS and eICU-CRD datasets are used to build the GOSSIS-1 model.
+
+For code used to compute GOSSIS predictions, please see: https://github.com/jraffa/rGOSSIS1
 
 ## Adding variables
 
