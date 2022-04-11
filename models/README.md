@@ -1,3 +1,3 @@
-This is a directory with models in.
+# Model Info
 
-Currently there is only one model: plain logistic regression with df=2 natural cubic splines.add
+Please check out https://github.com/jraffa/rGOSSIS1 for the imputation/prediction models for GOSSIS-1.
