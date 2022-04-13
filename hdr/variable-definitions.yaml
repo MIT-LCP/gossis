@@ -12,6 +12,7 @@ data_source:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 encounter_id:
   category: identifier
   description: Unique identifier associated with a patient unit stay
@@ -26,6 +27,7 @@ encounter_id:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 patient_id:
   category: identifier
   description: Unique identifier associated with a patient
@@ -40,6 +42,7 @@ patient_id:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 country:
   category: demographic
   description: Country in which this patient was admitted
@@ -54,6 +57,7 @@ country:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 hospital_id:
   category: identifier
   description: Unique identifier associated with a hospital
@@ -68,6 +72,7 @@ hospital_id:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 teaching_hospital:
   category: demographic
   description: Whether the admitting hospital provides teaching services to medical students
@@ -82,6 +87,7 @@ teaching_hospital:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 hospital_bed_size:
   category: demographic
   description: The total number of beds at the admitting hospital, grouped
@@ -96,6 +102,7 @@ hospital_bed_size:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 hospital_bed_size_numeric:
   category: demographic
   description: The total number of beds at the admitting hospital
@@ -110,6 +117,7 @@ hospital_bed_size_numeric:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 hospital_type:
   category: demographic
   description: A classification which indicates the level of care the hospital is capable of providing
@@ -124,6 +132,7 @@ hospital_type:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 icu_id:
   category: demographic
   description: A unique identifier for the unit to which the patient was admitted
@@ -138,6 +147,7 @@ icu_id:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 icu_type:
   category: demographic
   description: A classification which indicates the type of care the unit is capable of providing
@@ -152,6 +162,7 @@ icu_type:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 icu_stay_type:
   category: demographic
   description: The circumstances of how the patient arrived in the ICU and type of care received.
@@ -166,6 +177,7 @@ icu_stay_type:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 age:
   category: demographic
   description: The age of the patient on unit admission
@@ -179,7 +191,8 @@ age:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 gender:
   category: demographic
   description: The genotypical sex of the patient
@@ -194,6 +207,7 @@ gender:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 weight:
   category: demographic
   description: The weight (body mass) of the person on unit admission
@@ -208,6 +222,7 @@ weight:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 height:
   category: demographic
   description: The height of the person on unit admission
@@ -222,6 +237,7 @@ height:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 bmi:
   category: demographic
   description: The body mass index of the person on unit admission
@@ -236,6 +252,7 @@ bmi:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 ethnicity:
   category: demographic
   description: The common national or cultural tradition which the person belongs to
@@ -250,6 +267,7 @@ ethnicity:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 pregnant:
   category: demographic
   description: Whether the person is currently pregnant
@@ -264,6 +282,7 @@ pregnant:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 smoking_status:
   category: demographic
   description: Whether the patient is currently an active smoker
@@ -278,6 +297,7 @@ smoking_status:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 hospital_admit_source:
   category: demographic
   description: The location of the patient prior to being admitted to the hospital
@@ -292,6 +312,7 @@ hospital_admit_source:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 hospital_disch_location:
   category: demographic
   description: The location of the patient after being discharged from the hospital
@@ -306,6 +327,7 @@ hospital_disch_location:
   snomed: None
   imputation: No
   prediction: No
+  outcome: Yes
 hospital_los_days:
   category: demographic
   description: The length of stay of the patient at the hospital
@@ -320,6 +342,7 @@ hospital_los_days:
   snomed: None
   imputation: No
   prediction: No
+  outcome: Yes
 hospital_death:
   category: demographic
   description: Whether the patient died during this hospitalization
@@ -334,6 +357,7 @@ hospital_death:
   snomed: None
   imputation: No
   prediction: No
+  outcome: Yes
 icu_admit_source:
   category: demographic
   description: The location of the patient prior to being admitted to the unit
@@ -347,7 +371,8 @@ icu_admit_source:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 icu_admit_type:
   category: demographic
   description: The type of unit admission for the patient
@@ -362,6 +387,7 @@ icu_admit_type:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 icu_disch_location:
   category: demographic
   description: The location of the patient after discharge from the unit
@@ -376,6 +402,7 @@ icu_disch_location:
   snomed: None
   imputation: No
   prediction: No
+  outcome: Yes
 pre_icu_los_days:
   category: demographic
   description: The length of stay of the patient between hospital admission and unit admission
@@ -390,6 +417,7 @@ pre_icu_los_days:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 icu_los_days:
   category: demographic
   description: The length of stay of the patient in the unit
@@ -404,6 +432,7 @@ icu_los_days:
   snomed: None
   imputation: No
   prediction: No
+  outcome: Yes
 icu_death:
   category: demographic
   description: Whether the patient died during this unit stay
@@ -418,6 +447,7 @@ icu_death:
   snomed: None
   imputation: No
   prediction: No
+  outcome: Yes
 elective_surgery:
   category: demographic
   description: Whether the patient was admitted to the hospital for an elective surgical operation
@@ -431,7 +461,8 @@ elective_surgery:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 readmission_status:
   category: demographic
   description: Whether the current unit stay is the second (or greater) stay at an ICU within the same hospitalization
@@ -446,6 +477,7 @@ readmission_status:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_heartrate_min:
   category: vitals
   description: The patient's lowest heart rate during the first 24 hours of their unit stay
@@ -459,7 +491,8 @@ d1_heartrate_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_heartrate_max:
   category: vitals
   description: The patient's highest heart rate during the first 24 hours of their unit stay
@@ -473,7 +506,8 @@ d1_heartrate_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_resprate_min:
   category: vitals
   description: The patient's lowest respiratory rate during the first 24 hours of their unit stay
@@ -487,7 +521,8 @@ d1_resprate_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_resprate_max:
   category: vitals
   description: The patient's highest respiratory rate during the first 24 hours of their unit stay
@@ -501,7 +536,8 @@ d1_resprate_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_spo2_min:
   category: vitals
   description: The patient's lowest peripheral oxygen saturation during the first 24 hours of their unit stay
@@ -515,7 +551,8 @@ d1_spo2_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_spo2_max:
   category: vitals
   description: The patient's highest peripheral oxygen saturation during the first 24 hours of their unit stay
@@ -529,7 +566,8 @@ d1_spo2_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_temp_min:
   category: vitals
   description: The patient's lowest core temperature during the first 24 hours of their unit stay
@@ -543,7 +581,8 @@ d1_temp_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_temp_max:
   category: vitals
   description: The patient's highest core temperature during the first 24 hours of their unit stay, invasively measured
@@ -557,7 +596,8 @@ d1_temp_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_sysbp_invasive_min:
   category: vitals
   description: The patient's lowest systolic blood pressure during the first 24 hours of their unit stay, invasively measured
@@ -572,6 +612,7 @@ d1_sysbp_invasive_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_sysbp_invasive_max:
   category: vitals
   description: The patient's highest systolic blood pressure during the first 24 hours of their unit stay, invasively measured
@@ -586,6 +627,7 @@ d1_sysbp_invasive_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_diasbp_invasive_min:
   category: vitals
   description: The patient's lowest diastolic blood pressure during the first 24 hours of their unit stay, invasively measured
@@ -600,6 +642,7 @@ d1_diasbp_invasive_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_diasbp_invasive_max:
   category: vitals
   description: The patient's highest diastolic blood pressure during the first 24 hours of their unit stay, invasively measured
@@ -614,6 +657,7 @@ d1_diasbp_invasive_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_mbp_invasive_min:
   category: vitals
   description: The patient's lowest mean blood pressure during the first 24 hours of their unit stay, invasively measured
@@ -628,6 +672,7 @@ d1_mbp_invasive_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_mbp_invasive_max:
   category: vitals
   description: The patient's highest mean blood pressure during the first 24 hours of their unit stay, invasively measured
@@ -642,6 +687,7 @@ d1_mbp_invasive_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_sysbp_noninvasive_min:
   category: vitals
   description: The patient's lowest systolic blood pressure during the first 24 hours of their unit stay, non-invasively measured
@@ -656,6 +702,7 @@ d1_sysbp_noninvasive_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_sysbp_noninvasive_max:
   category: vitals
   description: The patient's highest systolic blood pressure during the first 24 hours of their unit stay, non-invasively measured
@@ -670,6 +717,7 @@ d1_sysbp_noninvasive_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_diasbp_noninvasive_min:
   category: vitals
   description: The patient's lowest diastolic blood pressure during the first 24 hours of their unit stay, non-invasively measured
@@ -684,6 +732,7 @@ d1_diasbp_noninvasive_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_diasbp_noninvasive_max:
   category: vitals
   description: The patient's highest diastolic blood pressure during the first 24 hours of their unit stay, non-invasively measured
@@ -698,6 +747,7 @@ d1_diasbp_noninvasive_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_mbp_noninvasive_min:
   category: vitals
   description: The patient's lowest mean blood pressure during the first 24 hours of their unit stay, non-invasively measured
@@ -712,6 +762,7 @@ d1_mbp_noninvasive_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_mbp_noninvasive_max:
   category: vitals
   description: The patient's highest mean blood pressure during the first 24 hours of their unit stay, non-invasively measured
@@ -726,6 +777,7 @@ d1_mbp_noninvasive_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_sysbp_min:
   category: vitals
   description: The patient's lowest systolic blood pressure during the first 24 hours of their unit stay, either non-invasively or invasively measured
@@ -739,7 +791,8 @@ d1_sysbp_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_sysbp_max:
   category: vitals
   description: The patient's highest systolic blood pressure during the first 24 hours of their unit stay, either non-invasively or invasively measured
@@ -753,7 +806,8 @@ d1_sysbp_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_diasbp_min:
   category: vitals
   description: The patient's lowest diastolic blood pressure during the first 24 hours of their unit stay, either non-invasively or invasively measured
@@ -767,7 +821,8 @@ d1_diasbp_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_diasbp_max:
   category: vitals
   description: The patient's highest diastolic blood pressure during the first 24 hours of their unit stay, either non-invasively or invasively measured
@@ -781,7 +836,8 @@ d1_diasbp_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_mbp_min:
   category: vitals
   description: The patient's lowest mean blood pressure during the first 24 hours of their unit stay, either non-invasively or invasively measured
@@ -795,7 +851,8 @@ d1_mbp_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_mbp_max:
   category: vitals
   description: The patient's highest mean blood pressure during the first 24 hours of their unit stay, either non-invasively or invasively measured
@@ -809,7 +866,8 @@ d1_mbp_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_pasys_invasive_min:
   category: vitals
   description: The patient's lowest systolic pulmonary artery pressure during the first 24 hours of their unit stay, invasively measured
@@ -824,6 +882,7 @@ d1_pasys_invasive_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_pasys_invasive_max:
   category: vitals
   description: The patient's highest systolic pulmonary artery pressure during the first 24 hours of their unit stay, invasively measured
@@ -838,6 +897,7 @@ d1_pasys_invasive_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_padias_invasive_min:
   category: vitals
   description: The patient's lowest diastolic pulmonary artery pressure during the first 24 hours of their unit stay, invasively measured
@@ -852,6 +912,7 @@ d1_padias_invasive_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_padias_invasive_max:
   category: vitals
   description: The patient's highest mean pulmonary artery pressure during the first 24 hours of their unit stay, invasively measured
@@ -866,6 +927,7 @@ d1_padias_invasive_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_pamean_invasive_min:
   category: vitals
   description: The patient's lowest mean pulmonary artery pressure during the first 24 hours of their unit stay, invasively measured
@@ -880,6 +942,7 @@ d1_pamean_invasive_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_pamean_invasive_max:
   category: vitals
   description: The patient's highest mean pulmonary artery pressure during the first 24 hours of their unit stay, invasively measured
@@ -894,6 +957,7 @@ d1_pamean_invasive_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_heartrate_min:
   category: vitals
   description: The patient's lowest heart rate during the first hour of their unit stay
@@ -908,6 +972,7 @@ h1_heartrate_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_heartrate_max:
   category: vitals
   description: The patient's highest heart rate during the first hour of their unit stay
@@ -922,6 +987,7 @@ h1_heartrate_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_resprate_min:
   category: vitals
   description: The patient's lowest respiratory rate during the first hour of their unit stay
@@ -936,6 +1002,7 @@ h1_resprate_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_resprate_max:
   category: vitals
   description: The patient's highest respiratory rate during the first hour of their unit stay
@@ -950,6 +1017,7 @@ h1_resprate_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_spo2_min:
   category: vitals
   description: The patient's lowest peripheral oxygen saturation during the first hour of their unit stay
@@ -964,6 +1032,7 @@ h1_spo2_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_spo2_max:
   category: vitals
   description: The patient's highest peripheral oxygen saturation during the first hour of their unit stay
@@ -978,6 +1047,7 @@ h1_spo2_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_temp_min:
   category: vitals
   description: The patient's lowest core temperature during the first hour of their unit stay
@@ -992,6 +1062,7 @@ h1_temp_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_temp_max:
   category: vitals
   description: The patient's highest core temperature during the first hour of their unit stay, invasively measured
@@ -1006,6 +1077,7 @@ h1_temp_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_sysbp_invasive_min:
   category: vitals
   description: The patient's lowest systolic blood pressure during the first hour of their unit stay, invasively measured
@@ -1020,6 +1092,7 @@ h1_sysbp_invasive_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_sysbp_invasive_max:
   category: vitals
   description: The patient's highest systolic blood pressure during the first hour of their unit stay, invasively measured
@@ -1034,6 +1107,7 @@ h1_sysbp_invasive_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_diasbp_invasive_min:
   category: vitals
   description: The patient's lowest diastolic blood pressure during the first hour of their unit stay, invasively measured
@@ -1048,6 +1122,7 @@ h1_diasbp_invasive_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_diasbp_invasive_max:
   category: vitals
   description: The patient's highest diastolic blood pressure during the first hour of their unit stay, invasively measured
@@ -1062,6 +1137,7 @@ h1_diasbp_invasive_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_mbp_invasive_min:
   category: vitals
   description: The patient's lowest mean blood pressure during the first hour of their unit stay, invasively measured
@@ -1076,6 +1152,7 @@ h1_mbp_invasive_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_mbp_invasive_max:
   category: vitals
   description: The patient's highest mean blood pressure during the first hour of their unit stay, invasively measured
@@ -1090,6 +1167,7 @@ h1_mbp_invasive_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_sysbp_noninvasive_min:
   category: vitals
   description: The patient's lowest systolic blood pressure during the first hour of their unit stay, non-invasively measured
@@ -1104,6 +1182,7 @@ h1_sysbp_noninvasive_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_sysbp_noninvasive_max:
   category: vitals
   description: The patient's highest systolic blood pressure during the first hour of their unit stay, non-invasively measured
@@ -1118,6 +1197,7 @@ h1_sysbp_noninvasive_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_diasbp_noninvasive_min:
   category: vitals
   description: The patient's lowest diastolic blood pressure during the first hour of their unit stay, non-invasively measured
@@ -1132,6 +1212,7 @@ h1_diasbp_noninvasive_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_diasbp_noninvasive_max:
   category: vitals
   description: The patient's highest diastolic blood pressure during the first hour of their unit stay, non-invasively measured
@@ -1146,6 +1227,7 @@ h1_diasbp_noninvasive_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_mbp_noninvasive_min:
   category: vitals
   description: The patient's lowest mean blood pressure during the first hour of their unit stay, non-invasively measured
@@ -1160,6 +1242,7 @@ h1_mbp_noninvasive_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_mbp_noninvasive_max:
   category: vitals
   description: The patient's highest mean blood pressure during the first hour of their unit stay, non-invasively measured
@@ -1174,6 +1257,7 @@ h1_mbp_noninvasive_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_sysbp_min:
   category: vitals
   description: The patient's lowest systolic blood pressure during the first hour of their unit stay, either non-invasively or invasively measured
@@ -1188,6 +1272,7 @@ h1_sysbp_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_sysbp_max:
   category: vitals
   description: The patient's highest systolic blood pressure during the first hour of their unit stay, either non-invasively or invasively measured
@@ -1202,6 +1287,7 @@ h1_sysbp_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_diasbp_min:
   category: vitals
   description: The patient's lowest diastolic blood pressure during the first hour of their unit stay, either non-invasively or invasively measured
@@ -1216,6 +1302,7 @@ h1_diasbp_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_diasbp_max:
   category: vitals
   description: The patient's highest diastolic blood pressure during the first hour of their unit stay, either non-invasively or invasively measured
@@ -1230,6 +1317,7 @@ h1_diasbp_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_mbp_min:
   category: vitals
   description: The patient's lowest mean blood pressure during the first hour of their unit stay, either non-invasively or invasively measured
@@ -1244,6 +1332,7 @@ h1_mbp_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_mbp_max:
   category: vitals
   description: The patient's highest mean blood pressure during the first hour of their unit stay, either non-invasively or invasively measured
@@ -1258,6 +1347,7 @@ h1_mbp_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_pasys_invasive_min:
   category: vitals
   description: The patient's lowest systolic pulmonary artery pressure during the first hour of their unit stay, invasively measured
@@ -1272,6 +1362,7 @@ h1_pasys_invasive_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_pasys_invasive_max:
   category: vitals
   description: The patient's highest systolic pulmonary artery pressure during the first hour of their unit stay, invasively measured
@@ -1286,6 +1377,7 @@ h1_pasys_invasive_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_padias_invasive_min:
   category: vitals
   description: The patient's lowest diastolic pulmonary artery pressure during the first hour of their unit stay, invasively measured
@@ -1300,6 +1392,7 @@ h1_padias_invasive_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_padias_invasive_max:
   category: vitals
   description: The patient's highest mean pulmonary artery pressure during the first hour of their unit stay, invasively measured
@@ -1314,6 +1407,7 @@ h1_padias_invasive_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_pamean_invasive_min:
   category: vitals
   description: The patient's lowest mean pulmonary artery pressure during the first hour of their unit stay, invasively measured
@@ -1328,6 +1422,7 @@ h1_pamean_invasive_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_pamean_invasive_max:
   category: vitals
   description: The patient's highest mean pulmonary artery pressure during the first hour of their unit stay, invasively measured
@@ -1342,6 +1437,7 @@ h1_pamean_invasive_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 d1_albumin_min:
   category: labs
   description: The lowest albumin concentration of the patient in their serum during the first 24 hours of their unit stay
@@ -1355,7 +1451,8 @@ d1_albumin_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_albumin_max:
   category: labs
   description: The lowest albumin concentration of the patient in their serum during the first 24 hours of their unit stay
@@ -1369,7 +1466,8 @@ d1_albumin_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_bilirubin_min:
   category: labs
   description: The lowest bilirubin concentration of the patient in their serum or plasma during the first 24 hours of their unit stay
@@ -1383,7 +1481,8 @@ d1_bilirubin_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_bilirubin_max:
   category: labs
   description: The highest bilirubin concentration of the patient in their serum or plasma during the first 24 hours of their unit stay
@@ -1397,7 +1496,8 @@ d1_bilirubin_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_bun_min:
   category: labs
   description: The lowest blood urea nitrogen concentration of the patient in their serum or plasma during the first 24 hours of their unit stay
@@ -1411,7 +1511,8 @@ d1_bun_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_bun_max:
   category: labs
   description: The highest blood urea nitrogen concentration of the patient in their serum or plasma during the first 24 hours of their unit stay
@@ -1425,7 +1526,8 @@ d1_bun_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_calcium_min:
   category: labs
   description: The lowest calcium concentration of the patient in their serum during the first 24 hours of their unit stay
@@ -1439,7 +1541,8 @@ d1_calcium_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_calcium_max:
   category: labs
   description: The highest calcium concentration of the patient in their serum during the first 24 hours of their unit stay
@@ -1453,7 +1556,8 @@ d1_calcium_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_creatinine_min:
   category: labs
   description: The lowest creatinine concentration of the patient in their serum or plasma during the first 24 hours of their unit stay
@@ -1467,7 +1571,8 @@ d1_creatinine_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_creatinine_max:
   category: labs
   description: The highest creatinine concentration of the patient in their serum or plasma during the first 24 hours of their unit stay
@@ -1481,7 +1586,8 @@ d1_creatinine_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_glucose_min:
   category: labs
   description: The lowest glucose concentration of the patient in their serum or plasma during the first 24 hours of their unit stay
@@ -1495,7 +1601,8 @@ d1_glucose_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_glucose_max:
   category: labs
   description: The highest glucose concentration of the patient in their serum or plasma during the first 24 hours of their unit stay
@@ -1509,7 +1616,8 @@ d1_glucose_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_inr_min:
   category: labs
   description: The lowest international normalized ratio for the patient during the first 24 hours of their unit stay
@@ -1523,7 +1631,8 @@ d1_inr_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_inr_max:
   category: labs
   description: The highest international normalized ratio for the patient during the first 24 hours of their unit stay
@@ -1537,7 +1646,8 @@ d1_inr_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_hco3_min:
   category: labs
   description: The lowest bicarbonate concentration for the patient in their serum or plasma during the first 24 hours of their unit stay
@@ -1551,7 +1661,8 @@ d1_hco3_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_hco3_max:
   category: labs
   description: The highest bicarbonate concentration for the patient in their serum or plasma during the first 24 hours of their unit stay
@@ -1565,7 +1676,8 @@ d1_hco3_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_hematocrit_min:
   category: labs
   description: The lowest volume proportion of red blood cells in a patient's blood during the first 24 hours of their unit stay, expressed as a fraction
@@ -1579,7 +1691,8 @@ d1_hematocrit_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_hematocrit_max:
   category: labs
   description: The highest volume proportion of red blood cells in a patient's blood during the first 24 hours of their unit stay, expressed as a fraction
@@ -1593,7 +1706,8 @@ d1_hematocrit_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_hemaglobin_min:
   category: labs
   description: The lowest hemoglobin concentration for the patient during the first 24 hours of their unit stay
@@ -1607,7 +1721,8 @@ d1_hemaglobin_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_hemaglobin_max:
   category: labs
   description: The highest hemoglobin concentration for the patient during the first 24 hours of their unit stay
@@ -1621,7 +1736,8 @@ d1_hemaglobin_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_lactate_min:
   category: labs
   description: The lowest lactate concentration for the patient in their serum or plasma during the first 24 hours of their unit stay
@@ -1635,7 +1751,8 @@ d1_lactate_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_lactate_max:
   category: labs
   description: The highest lactate concentration for the patient in their serum or plasma during the first 24 hours of their unit stay
@@ -1649,7 +1766,8 @@ d1_lactate_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_platelets_min:
   category: labs
   description: The lowest platelet count for the patient during the first 24 hours of their unit stay
@@ -1663,7 +1781,8 @@ d1_platelets_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_platelets_max:
   category: labs
   description: The highest platelet count for the patient during the first 24 hours of their unit stay
@@ -1677,7 +1796,8 @@ d1_platelets_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_potassium_min:
   category: labs
   description: The lowest potassium concentration for the patient in their serum or plasma during the first 24 hours of their unit stay
@@ -1691,7 +1811,8 @@ d1_potassium_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_potassium_max:
   category: labs
   description: The highest potassium concentration for the patient in their serum or plasma during the first 24 hours of their unit stay
@@ -1705,7 +1826,8 @@ d1_potassium_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_sodium_min:
   category: labs
   description: The lowest sodium concentration for the patient in their serum or plasma during the first 24 hours of their unit stay
@@ -1719,7 +1841,8 @@ d1_sodium_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_sodium_max:
   category: labs
   description: The highest sodium concentration for the patient in their serum or plasma during the first 24 hours of their unit stay
@@ -1733,7 +1856,8 @@ d1_sodium_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_wbc_min:
   category: labs
   description: The lowest white blood cell count for the patient during the first 24 hours of their unit stay
@@ -1747,7 +1871,8 @@ d1_wbc_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_wbc_max:
   category: labs
   description: The highest white blood cell count for the patient during the first 24 hours of their unit stay
@@ -1761,7 +1886,8 @@ d1_wbc_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_arterial_ph_min:
   category: labs blood gas
   description: The lowest arterial pH for the patient during the first 24 hours of their unit stay
@@ -1775,7 +1901,8 @@ d1_arterial_ph_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_arterial_ph_max:
   category: labs blood gas
   description: The highest arterial pH for the patient during the first 24 hours of their unit stay
@@ -1789,7 +1916,8 @@ d1_arterial_ph_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_arterial_po2_min:
   category: labs blood gas
   description: The lowest arterial partial pressure of oxygen for the patient during the first 24 hours of their unit stay
@@ -1803,7 +1931,8 @@ d1_arterial_po2_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_arterial_po2_max:
   category: labs blood gas
   description: The highest arterial partial pressure of oxygen for the patient during the first 24 hours of their unit stay
@@ -1817,7 +1946,8 @@ d1_arterial_po2_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_arterial_pco2_min:
   category: labs blood gas
   description: The lowest arterial partial pressure of carbon dioxide for the patient during the first 24 hours of their unit stay
@@ -1831,7 +1961,8 @@ d1_arterial_pco2_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_arterial_pco2_max:
   category: labs blood gas
   description: The highest arterial partial pressure of carbon dioxide for the patient during the first 24 hours of their unit stay
@@ -1845,7 +1976,8 @@ d1_arterial_pco2_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_pao2fio2ratio_min:
   category: labs blood gas
   description: The lowest fraction of inspired oxygen for the patient during the first 24 hours of their unit stay
@@ -1859,7 +1991,8 @@ d1_pao2fio2ratio_min:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 d1_pao2fio2ratio_max:
   category: labs blood gas
   description: The highest fraction of inspired oxygen for the patient during the first 24 hours of their unit stay
@@ -1873,7 +2006,8 @@ d1_pao2fio2ratio_max:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 h1_albumin_min:
   category: labs
   description: The lowest albumin concentration of the patient in their serum during the first hour of their unit stay
@@ -1888,6 +2022,7 @@ h1_albumin_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_albumin_max:
   category: labs
   description: The lowest albumin concentration of the patient in their serum during the first hour of their unit stay
@@ -1902,6 +2037,7 @@ h1_albumin_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_bilirubin_min:
   category: labs
   description: The lowest bilirubin concentration of the patient in their serum or plasma during the first hour of their unit stay
@@ -1916,6 +2052,7 @@ h1_bilirubin_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_bilirubin_max:
   category: labs
   description: The highest bilirubin concentration of the patient in their serum or plasma during the first hour of their unit stay
@@ -1930,6 +2067,7 @@ h1_bilirubin_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_bun_min:
   category: labs
   description: The lowest blood urea nitrogen concentration of the patient in their serum or plasma during the first hour of their unit stay
@@ -1944,6 +2082,7 @@ h1_bun_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_bun_max:
   category: labs
   description: The highest blood urea nitrogen concentration of the patient in their serum or plasma during the first hour of their unit stay
@@ -1958,6 +2097,7 @@ h1_bun_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_calcium_min:
   category: labs
   description: The lowest calcium concentration of the patient in their serum during the first hour of their unit stay
@@ -1972,6 +2112,7 @@ h1_calcium_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_calcium_max:
   category: labs
   description: The highest calcium concentration of the patient in their serum during the first hour of their unit stay
@@ -1986,6 +2127,7 @@ h1_calcium_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_creatinine_min:
   category: labs
   description: The lowest creatinine concentration of the patient in their serum or plasma during the first hour of their unit stay
@@ -2000,6 +2142,7 @@ h1_creatinine_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_creatinine_max:
   category: labs
   description: The highest creatinine concentration of the patient in their serum or plasma during the first hour of their unit stay
@@ -2014,6 +2157,7 @@ h1_creatinine_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_glucose_min:
   category: labs
   description: The lowest glucose concentration of the patient in their serum or plasma during the first hour of their unit stay
@@ -2028,6 +2172,7 @@ h1_glucose_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_glucose_max:
   category: labs
   description: The highest glucose concentration of the patient in their serum or plasma during the first hour of their unit stay
@@ -2042,6 +2187,7 @@ h1_glucose_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_inr_min:
   category: labs
   description: The lowest international normalized ratio for the patient during the first hour of their unit stay
@@ -2056,6 +2202,7 @@ h1_inr_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_inr_max:
   category: labs
   description: The highest international normalized ratio for the patient during the first hour of their unit stay
@@ -2070,6 +2217,7 @@ h1_inr_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_hco3_min:
   category: labs
   description: The lowest bicarbonate concentration for the patient in their serum or plasma during the first hour of their unit stay
@@ -2084,6 +2232,7 @@ h1_hco3_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_hco3_max:
   category: labs
   description: The highest bicarbonate concentration for the patient in their serum or plasma during the first hour of their unit stay
@@ -2098,6 +2247,7 @@ h1_hco3_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_hematocrit_min:
   category: labs
   description: The lowest volume proportion of red blood cells in a patient's blood during the first hour of their unit stay, expressed as a fraction
@@ -2112,6 +2262,7 @@ h1_hematocrit_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_hematocrit_max:
   category: labs
   description: The highest volume proportion of red blood cells in a patient's blood during the first hour of their unit stay, expressed as a fraction
@@ -2126,6 +2277,7 @@ h1_hematocrit_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_hemaglobin_min:
   category: labs
   description: The lowest hemoglobin concentration for the patient during the first hour of their unit stay
@@ -2140,6 +2292,7 @@ h1_hemaglobin_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_hemaglobin_max:
   category: labs
   description: The highest hemoglobin concentration for the patient during the first hour of their unit stay
@@ -2154,6 +2307,7 @@ h1_hemaglobin_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_lactate_min:
   category: labs
   description: The lowest lactate concentration for the patient in their serum or plasma during the first hour of their unit stay
@@ -2168,6 +2322,7 @@ h1_lactate_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_lactate_max:
   category: labs
   description: The highest lactate concentration for the patient in their serum or plasma during the first hour of their unit stay
@@ -2182,6 +2337,7 @@ h1_lactate_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_platelets_min:
   category: labs
   description: The lowest platelet count for the patient during the first hour of their unit stay
@@ -2196,6 +2352,7 @@ h1_platelets_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_platelets_max:
   category: labs
   description: The highest platelet count for the patient during the first hour of their unit stay
@@ -2210,6 +2367,7 @@ h1_platelets_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_potassium_min:
   category: labs
   description: The lowest potassium concentration for the patient in their serum or plasma during the first hour of their unit stay
@@ -2224,6 +2382,7 @@ h1_potassium_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_potassium_max:
   category: labs
   description: The highest potassium concentration for the patient in their serum or plasma during the first hour of their unit stay
@@ -2238,6 +2397,7 @@ h1_potassium_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_sodium_min:
   category: labs
   description: The lowest sodium concentration for the patient in their serum or plasma during the first hour of their unit stay
@@ -2252,6 +2412,7 @@ h1_sodium_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_sodium_max:
   category: labs
   description: The highest sodium concentration for the patient in their serum or plasma during the first hour of their unit stay
@@ -2266,6 +2427,7 @@ h1_sodium_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_wbc_min:
   category: labs
   description: The lowest white blood cell count for the patient during the first hour of their unit stay
@@ -2280,6 +2442,7 @@ h1_wbc_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_wbc_max:
   category: labs
   description: The highest white blood cell count for the patient during the first hour of their unit stay
@@ -2294,6 +2457,7 @@ h1_wbc_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_arterial_ph_min:
   category: labs blood gas
   description: The lowest arterial pH for the patient during the first hour of their unit stay
@@ -2308,6 +2472,7 @@ h1_arterial_ph_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_arterial_ph_max:
   category: labs blood gas
   description: The highest arterial pH for the patient during the first hour of their unit stay
@@ -2322,6 +2487,7 @@ h1_arterial_ph_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_arterial_po2_min:
   category: labs blood gas
   description: The lowest arterial partial pressure of oxygen for the patient during the first hour of their unit stay
@@ -2336,6 +2502,7 @@ h1_arterial_po2_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_arterial_po2_max:
   category: labs blood gas
   description: The highest arterial partial pressure of oxygen for the patient during the first hour of their unit stay
@@ -2350,6 +2517,7 @@ h1_arterial_po2_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_arterial_pco2_min:
   category: labs blood gas
   description: The lowest arterial partial pressure of carbon dioxide for the patient during the first hour of their unit stay
@@ -2364,6 +2532,7 @@ h1_arterial_pco2_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_arterial_pco2_max:
   category: labs blood gas
   description: The highest arterial partial pressure of carbon dioxide for the patient during the first hour of their unit stay
@@ -2378,6 +2547,7 @@ h1_arterial_pco2_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_pao2fio2ratio_min:
   category: labs blood gas
   description: The lowest fraction of inspired oxygen for the patient during the first hour of their unit stay
@@ -2392,6 +2562,7 @@ h1_pao2fio2ratio_min:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 h1_pao2fio2ratio_max:
   category: labs blood gas
   description: The highest fraction of inspired oxygen for the patient during the first hour of their unit stay
@@ -2406,6 +2577,7 @@ h1_pao2fio2ratio_max:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 albumin_apache:
   category: APACHE covariate
   description: The albumin concentration measured during the first 24 hours which results in the highest APACHE III score
@@ -2420,6 +2592,7 @@ albumin_apache:
   snomed: None
   imputation: Yes
   prediction: No
+  outcome: No
 bilirubin_apache:
   category: APACHE covariate
   description: The bilirubin concentration measured during the first 24 hours which results in the highest APACHE III score
@@ -2434,6 +2607,7 @@ bilirubin_apache:
   snomed: None
   imputation: Yes
   prediction: No
+  outcome: No
 creatinine_apache:
   category: APACHE covariate
   description: The creatinine concentration measured during the first 24 hours which results in the highest APACHE III score
@@ -2448,6 +2622,7 @@ creatinine_apache:
   snomed: None
   imputation: Yes
   prediction: No
+  outcome: No
 glucose_apache:
   category: APACHE covariate
   description: The glucose concentration measured during the first 24 hours which results in the highest APACHE III score
@@ -2462,6 +2637,7 @@ glucose_apache:
   snomed: None
   imputation: Yes
   prediction: No
+  outcome: No
 hematocrit_apache:
   category: APACHE covariate
   description: The hematocrit measured during the first 24 hours which results in the highest APACHE III score
@@ -2476,6 +2652,7 @@ hematocrit_apache:
   snomed: None
   imputation: Yes
   prediction: No
+  outcome: No
 heart_rate_apache:
   category: APACHE covariate
   description: The heart rate measured during the first 24 hours which results in the highest APACHE III score
@@ -2490,6 +2667,7 @@ heart_rate_apache:
   snomed: None
   imputation: Yes
   prediction: No
+  outcome: No
 map_apache:
   category: APACHE covariate
   description: The mean arterial pressure measured during the first 24 hours which results in the highest APACHE III score
@@ -2504,6 +2682,7 @@ map_apache:
   snomed: None
   imputation: Yes
   prediction: No
+  outcome: No
 sodium_apache:
   category: APACHE covariate
   description: The sodium concentration measured during the first 24 hours which results in the highest APACHE III score
@@ -2518,6 +2697,7 @@ sodium_apache:
   snomed: None
   imputation: Yes
   prediction: No
+  outcome: No
 fio2_apache:
   category: APACHE covariate
   description: The fraction of inspired oxygen from the arterial blood gas taken during the first 24 hours of unit admission which produces the highest APACHE III score for oxygenation
@@ -2532,6 +2712,7 @@ fio2_apache:
   snomed: None
   imputation: Yes
   prediction: No
+  outcome: No
 paco2_apache:
   category: APACHE covariate
   description: The partial pressure of carbon dioxide from the arterial blood gas taken during the first 24 hours of unit admission which produces the highest APACHE III score for oxygenation
@@ -2546,6 +2727,7 @@ paco2_apache:
   snomed: None
   imputation: Yes
   prediction: No
+  outcome: No
 pao2_apache:
   category: APACHE covariate
   description: The partial pressure of oxygen from the arterial blood gas taken during the first 24 hours of unit admission which produces the highest APACHE III score for oxygenation
@@ -2560,6 +2742,7 @@ pao2_apache:
   snomed: None
   imputation: Yes
   prediction: No
+  outcome: No
 ph_apache:
   category: APACHE covariate
   description: The pH from the arterial blood gas taken during the first 24 hours of unit admission which produces the highest APACHE III score for acid-base disturbance
@@ -2574,6 +2757,7 @@ ph_apache:
   snomed: None
   imputation: Yes
   prediction: No
+  outcome: No
 paco2_for_ph_apache:
   category: APACHE covariate
   description: The partial pressure of carbon dioxide from the arterial blood gas taken during the first 24 hours of unit admission which produces the highest APACHE III score for acid-base disturbance
@@ -2588,6 +2772,7 @@ paco2_for_ph_apache:
   snomed: None
   imputation: Yes
   prediction: No
+  outcome: No
 resprate_apache:
   category: APACHE covariate
   description: The respiratory rate measured during the first 24 hours which results in the highest APACHE III score
@@ -2602,6 +2787,7 @@ resprate_apache:
   snomed: None
   imputation: Yes
   prediction: No
+  outcome: No
 temp_apache:
   category: APACHE covariate
   description: The temperature measured during the first 24 hours which results in the highest APACHE III score
@@ -2616,6 +2802,7 @@ temp_apache:
   snomed: None
   imputation: Yes
   prediction: No
+  outcome: No
 bun_apache:
   category: APACHE covariate
   description: The blood urea nitrogen concentration measured during the first 24 hours which results in the highest APACHE III score
@@ -2630,6 +2817,7 @@ bun_apache:
   snomed: None
   imputation: Yes
   prediction: No
+  outcome: No
 urineoutput_apache:
   category: APACHE covariate
   description: The total urine output for the first 24 hours
@@ -2644,6 +2832,7 @@ urineoutput_apache:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 wbc_apache:
   category: APACHE covariate
   description: The white blood cell count measured during the first 24 hours which results in the highest APACHE III score
@@ -2658,6 +2847,7 @@ wbc_apache:
   snomed: None
   imputation: Yes
   prediction: No
+  outcome: No
 gcs_eyes_apache:
   category: APACHE covariate
   description: The eye opening component of the Glasgow Coma Scale measured during the first 24 hours which results in the highest APACHE III score
@@ -2671,7 +2861,8 @@ gcs_eyes_apache:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 gcs_motor_apache:
   category: APACHE covariate
   description: The motor component of the Glasgow Coma Scale measured during the first 24 hours which results in the highest APACHE III score
@@ -2685,7 +2876,8 @@ gcs_motor_apache:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 gcs_verbal_apache:
   category: APACHE covariate
   description: The verbal component of the Glasgow Coma Scale measured during the first 24 hours which results in the highest APACHE III score
@@ -2699,7 +2891,8 @@ gcs_verbal_apache:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 gcs_unable_apache:
   category: APACHE covariate
   description: Whether the Glasgow Coma Scale was unable to be assessed due to patient sedation
@@ -2713,7 +2906,8 @@ gcs_unable_apache:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 arf_apache:
   category: APACHE covariate
   description: Whether the patient had acute renal failure during the first 24 hours of their unit stay, defined as a 24 hour urine output <410ml, creatinine >=133 micromol/L and no chronic dialysis
@@ -2727,7 +2921,8 @@ arf_apache:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 intubated_apache:
   category: APACHE covariate
   description: Whether the patient was intubated at the time of the highest scoring arterial blood gas used in the oxygenation score
@@ -2741,7 +2936,8 @@ intubated_apache:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 ventilated_apache:
   category: APACHE covariate
   description: Whether the patient was invasively ventilated at the time of the highest scoring arterial blood gas using the oxygenation scoring algorithm, including any mode of positive pressure ventilation delivered through a circuit attached to an endo-tracheal tube or tracheostomy
@@ -2755,7 +2951,8 @@ ventilated_apache:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 apsiii:
   category: APACHE prediction
   description: The Acute Physiology Score III, which describes the severity of the patient's condition
@@ -2770,6 +2967,7 @@ apsiii:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 apache_post_operative:
   category: APACHE covariate
   description: The APACHE operative status; 1 for post-operative, 0 for non-operative
@@ -2784,6 +2982,7 @@ apache_post_operative:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 apache_2_bodysystem:
   category: APACHE covariate
   description: The APACHE II diagnosis bodysystem for the ICU admission
@@ -2798,6 +2997,7 @@ apache_2_bodysystem:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 apache_3_bodysystem:
   category: APACHE covariate
   description: The APACHE III-J diagnosis bodysystem which best describes the reason for the ICU admission
@@ -2811,7 +3011,8 @@ apache_3_bodysystem:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 apache_2_diagnosis:
   category: APACHE covariate
   description: The APACHE II diagnosis for the ICU admission
@@ -2826,6 +3027,7 @@ apache_2_diagnosis:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 apache_3j_diagnosis:
   category: APACHE covariate
   description: The APACHE III-J sub-diagnosis code which best describes the reason for the ICU admission
@@ -2839,7 +3041,8 @@ apache_3j_diagnosis:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 apache_3j_score:
   category: APACHE prediction
   description: The composite APACHE III score describing the severity of the patient's condition
@@ -2854,6 +3057,7 @@ apache_3j_score:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 apache_3j_hospital_death_prob:
   category: APACHE prediction
   description: The APACHE III-J probabilistic prediction of in-hospital mortality for the patient which utilizes the APACHE III score and other covariates, including diagnosis
@@ -2868,6 +3072,7 @@ apache_3j_hospital_death_prob:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 apache_4a_icu_death_prob:
   category: APACHE prediction
   description: The APACHE IVa probabilistic prediction of in ICU mortality for the patient which utilizes the APACHE III score and other covariates, including diagnosis
@@ -2882,6 +3087,7 @@ apache_4a_icu_death_prob:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 apache_4a_hospital_death_prob:
   category: APACHE prediction
   description: The APACHE IVa probabilistic prediction of in-hospital mortality for the patient which utilizes the APACHE III score and other covariates, including diagnosis.
@@ -2896,6 +3102,7 @@ apache_4a_hospital_death_prob:
   snomed: None
   imputation: No
   prediction: No
+  outcome: No
 aids:
   category: APACHE comorbidity
   description: Whether the patient has a definitive diagnosis of acquired immune deficiency syndrome (AIDS) (not HIV positive alone)
@@ -2909,7 +3116,8 @@ aids:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 cirrhosis:
   category: APACHE comorbidity
   description: Whether the patient has a history of heavy alcohol use with portal hypertension and varices, other causes of cirrhosis with evidence of portal hypertension and varices, or biopsy proven cirrhosis. This comorbidity does not apply to patients with a functioning liver transplant.
@@ -2923,7 +3131,8 @@ cirrhosis:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 diabetes_mellitus:
   category: APACHE comorbidity
   description: Whether the patient has been diagnosed with diabetes, either juvenile or adult onset, which requires medication.
@@ -2937,7 +3146,8 @@ diabetes_mellitus:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 hepatic_failure:
   category: APACHE comorbidity
   description: Whether the patient has cirrhosis and additional complications including jaundice and ascites, upper GI bleeding, hepatic encephalopathy, or coma.
@@ -2951,7 +3161,8 @@ hepatic_failure:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 immunosuppression:
   category: APACHE comorbidity
   description: Whether the patient has their immune system suppressed within six months prior to ICU admission for any of the following reasons; radiation therapy, chemotherapy, use of non-cytotoxic immunosuppressive drugs, high dose steroids (at least 0.3 mg/kg/day of methylprednisolone or equivalent for at least 6 months).
@@ -2965,7 +3176,8 @@ immunosuppression:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 leukemia:
   category: APACHE comorbidity
   description: Whether the patient has been diagnosed with acute or chronic myelogenous leukemia, acute or chronic lymphocytic leukemia, or multiple myeloma.
@@ -2979,7 +3191,8 @@ leukemia:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 lymphoma:
   category: APACHE comorbidity
   description: Whether the patient has been diagnosed with non-Hodgkin lymphoma.
@@ -2993,7 +3206,8 @@ lymphoma:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
 solid_tumor_with_metastasis:
   category: APACHE comorbidity
   description: Whether the patient has been diagnosed with any solid tumor carcinoma (including malignant melanoma) which has evidence of metastasis.
@@ -3007,4 +3221,5 @@ solid_tumor_with_metastasis:
     note: None
   snomed: None
   imputation: Yes
-  prediction: Yes
+  prediction: No
+  outcome: No
