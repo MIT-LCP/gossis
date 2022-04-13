@@ -2998,7 +2998,7 @@ apache_2_bodysystem:
   imputation: No
   prediction: No
   outcome: No
-apache_3_bodysystem:
+apache_3j_bodysystem:
   category: APACHE covariate
   description: The APACHE III-J diagnosis bodysystem which best describes the reason for the ICU admission
   dataType: string
