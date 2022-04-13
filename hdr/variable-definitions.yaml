@@ -8,7 +8,7 @@ data_source:
     coded: ["eicu","mimic-iii","anzics"]
     low: None
     high: None
-    meaning: None
+    note: None
   snomed: None
   imputation: No
   prediction: No
@@ -22,7 +22,7 @@ encounter_id:
     coded: None
     low: None
     high: None
-    meaning: None
+    note: None
   snomed: None
   imputation: No
   prediction: No
@@ -36,7 +36,7 @@ patient_id:
     coded: None
     low: None
     high: None
-    meaning: None
+    note: None
   snomed: None
   imputation: No
   prediction: No
@@ -50,7 +50,7 @@ country:
     coded: ["Australia", "New Zealand", "USA"]
     low: None
     high: None
-    meaning: None
+    note: None
   snomed: None
   imputation: No
   prediction: No
@@ -64,7 +64,7 @@ hospital_id:
     coded: None
     low: None
     high: None
-    meaning: None
+    note: None
   snomed: None
   imputation: No
   prediction: No
@@ -78,7 +78,7 @@ teaching_hospital:
     coded: None
     low: 0
     high: 1
-    meaning: Inclusive
+    note: Inclusive
   snomed: None
   imputation: No
   prediction: No
@@ -92,7 +92,7 @@ hospital_bed_size:
     coded: ["", "<100", "100 - 249", "250 - 499", ">= 500"]
     low: None
     high: None
-    meaning: None
+    note: None
   snomed: None
   imputation: No
   prediction: No
@@ -106,7 +106,7 @@ hospital_bed_size_numeric:
     coded: None
     low: 0
     high: None
-    meaning: None
+    note: None
   snomed: None
   imputation: No
   prediction: No
